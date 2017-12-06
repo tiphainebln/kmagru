@@ -1,33 +1,50 @@
 <?php
-	require 'config/database.php';
+	// require 'config/database.php';
 	session_start();
 /* User login process, checks if user exists and password is correct */
+
+    if (isset($_POST['login'])) {
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+    try {
+            $query = $connect->prepare('SELECT id, username, password FROM pdo WHERE username = :username');
+            $query->execute(array(
+                ':username' => $username
+                ));
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+
+            if ($data == false){
+                $e = "User $username not found.";
+            }
+            else {
+                if ($password == $data['password']) {
+                    $_SESSION['username'] = $data['username'];
+                    $_SESSION['password'] = $data['password'];
+                    $_SESSION['active'] = $user['active'];
+
+                    $_SESSION['logged)_in'] = true;
+                    header('Location: profile.php');
+                }
+                else {
+                    $_SESSION['message'] = "You have entered wrong password, try again!";
+                    header("location: error.php");
+                }
+            }
+        }
+        catch(PDOException $e) {
+        $e->getMessage();
+    }
+}
 
 // Escape email to protect against SQL injections
 	// $result = $dbh->prepare("SELECT * FROM users WHERE email='$email'");
 	// $result = execute( array(':email' => $_REQUEST['email']) );
 
-if ( $result->num_rows == 0 ){ // User doesn't exist
-    $_SESSION['message'] = "User with that email doesn't exist!";
-    // header("location: error.php");
-}
-else { // User exists
-    	$user = $result->fetch_assoc(); //retourne un tableau indexé par le nom de la colonne comme retourné dans le jeu de résultats
-    	if ( password_verify($_POST['password'], $user['password']) ) {
-        	$_SESSION['email'] = $user['email'];
-        	$_SESSION['first_name'] = $user['first_name'];
-        	$_SESSION['last_name'] = $user['last_name'];
-        	$_SESSION['active'] = $user['active'];
-        
-        // This is how we'll know the user is logged in
-        $_SESSION['logged_in'] = true;
-        header("location: profile.php");
-    }
-    else {
-        $_SESSION['message'] = "You have entered wrong password, try again!";
-        // header("location: error.php");
-    }
-}
+// if ( $result->num_rows == 0 ){ // User doesn't exist
+//     $_SESSION['message'] = "User with that email doesn't exist!";
+//     // header("location: error.php");
+// }
 ?>
 <!DOCTYPE html>
 <html>

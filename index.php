@@ -9,16 +9,6 @@ session_start();
 	<title>Camagru</title>
 	<link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
-<?php
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
- 		if (isset($_POST['login'])) {
- 			require 'login.php';
- 		}
- 		else if (isset($_POST['register'])) {
- 			require 'register.php';
- 		}
- 	}
-?>
 <body>
 <a href="index.php"><h1>Camagru</h1></a>
 <div class="connect">

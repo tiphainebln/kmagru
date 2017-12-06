@@ -1,23 +1,43 @@
 <?php
+	
+	require 'config/database.php';
+
+	if (isset($_POST['register'])){
+
 	// Set session variables to be used on profile.php page
 	$_SESSION['email'] = $_POST['email'];
-	$_SESSION['first_name'] = $_POST['firstname'];
-	$_SESSION['last_name'] = $_POST['lastname'];
+	$_SESSION['username'] = $_POST['username'];
+	$_SESSION['password'] = $_POST['lastname'];
 
+	try{
+		$query = $connect->prepare('INSERT INTO pdo (email, username, password) VALUES(:email, :username, :password)');
+		$query->execute(array(
+			':email' => $email,
+			':username' => $username,
+			':password' => $password
+			));
+		header('Location: register.php?action=joined');
+		exit;
+	}
+	catch(PDOException $e){
+		echo $e->getMessage();
+	}
+
+}
 	//protect against sql injections
-	// $result = $dbh->prepare("SELECT * FROM users WHERE username='$username'");
+	// $result = $dbh->prepare("SELECT * FROM user WHERE first_name='$first_name'");
 	// $result = execute( array(':username' => $_REQUEST['username']) );
 
 	// check if email exists
-	$query = $dbh->prepare( "SELECT `email` FROM `users` WHERE `email` = ?" ) or die($dbh->error());
-	$query->execute();
-	if ($query->rowCount() > 0) { # If rows are found for query
-	    echo "Email found!";
-	}
-	else {
- 	    echo "Email not found!";
+	// $query = $dbh->prepare( "SELECT `email` FROM `users` WHERE `email` = ?" ) or die($dbh->error());
+	// $query->execute();
+	// if ($query->rowCount() > 0) { # If rows are found for query
+	//     echo "Email found!";
+	// }
+	// else {
+ // 	    echo "Email not found!";
  	    // email doesn't exist in the database, need to proceed
-	}
+	// }
 ?>
 <!DOCTYPE html>
 <html>

@@ -8,9 +8,7 @@ if ( $_SESSION['logged_in'] != 1 ) {
   // header("location: error.php");    
 }
 else {
-    // Makes it easier to read
-    $first_name = $_SESSION['first_name'];
-    $last_name = $_SESSION['last_name'];
+    $username = $_SESSION['username'];
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
 }
