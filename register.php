@@ -3,26 +3,28 @@
 	require 'config/database.php';
 
 	if (isset($_POST['register'])){
-
-	// Set session variables to be used on profile.php page
-	$_SESSION['email'] = $_POST['email'];
-	$_SESSION['username'] = $_POST['username'];
-	$_SESSION['password'] = $_POST['lastname'];
-
-	try{
-		$query = $connect->prepare('INSERT INTO pdo (email, username, password) VALUES(:email, :username, :password)');
-		$query->execute(array(
-			':email' => $email,
-			':username' => $username,
-			':password' => $password
-			));
-		header('Location: register.php?action=joined');
-		exit;
+	$email = !empty($_POST['email']) ? trim($_POST['email']) : null;
+	$username = !empty($_POST['username']) ? trim($_POST['username']) : null;
+    $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
+    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+    if($row['num'] > 0){
+    	$_SESSION['message'] = 'User with this email already exists!';
+    	header("location: error.php");
+    }else{
+		$sql = "INSERT INTO user (email, username, password) VALUES(:email, :username, :password)";
+		$query = $db->prepare($sql);
+		$query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email));
+		$result = $query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email));
+		}
+	if ($result){
+		echo "Thank you for registering.";
+		//need to verify if email account exists here
+		header("Location: profile.php");
 	}
-	catch(PDOException $e){
-		echo $e->getMessage();
+	else {
+		echo "There has been a problem inserting your details.";
+		header("Location: error.php");
 	}
-
 }
 	//protect against sql injections
 	// $result = $dbh->prepare("SELECT * FROM user WHERE first_name='$first_name'");
@@ -70,10 +72,9 @@
 	<div class="errorMsg">
 		<?php echo $errorMsgReg; ?>
 	</div>
-    <button type="button" class="registerbtn"> Register
+    <button type="button" class="registerbtn" value ="ok"> Register
 	</button>
 	</div>
-	</form>
 	</div>
 	<div class="footer">
 		<p>Footer</p>

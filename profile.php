@@ -3,7 +3,7 @@
 session_start();
 
 // Check if user is logged in using the session variable
-if ( $_SESSION['logged_in'] != 1 ) {
+if ($_SESSION['logged_in'] != 1 ) {
   $_SESSION['message'] = "You must log in before viewing your profile page!";
   // header("location: error.php");    
 }
@@ -11,6 +11,7 @@ else {
     $username = $_SESSION['username'];
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
+    $_SESSION['message'] = "Thanks for registering";
 }
 ?>
 <!DOCTYPE html>
