@@ -1,46 +1,35 @@
 <?php
+	include 'config/database.php';
 	
-	require 'config/database.php';
+	try {
+    	if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])){
+		$email = ($_POST['email']);
+		$username = ($_POST['username']);
+    	$password = ($_POST['password']); }
+    	$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	if (isset($_POST['register'])){
-	$email = !empty($_POST['email']) ? trim($_POST['email']) : null;
-	$username = !empty($_POST['username']) ? trim($_POST['username']) : null;
-    $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
-    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-    if($row['num'] > 0){
-    	$_SESSION['message'] = 'User with this email already exists!';
-    	header("location: error.php");
-    }else{
-		$sql = "INSERT INTO user (email, username, password) VALUES(:email, :username, :password)";
-		$query = $db->prepare($sql);
+    	$query= $dbh->prepare("SELECT id FROM users WHERE username=:username OR email=:email");
+    	$query->execute(array(':username' => $username, ':email' => $email));
+    	if ($data = $query->fetch(PDO::FETCH_ASSOC)) {
+    		echo "user already exist.";
+    		$query->closeCursor();
+    	}
+
+        $password = password_hash($password, PASSWORD_BCRYPT);
+		$sql = "INSERT INTO users (email, username, password) VALUES(:email, :username, :password)";
+		$query = $dbh->prepare($sql);
 		$query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email));
-		$result = $query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email));
-		}
-	if ($result){
+		var_dump('expression');
 		echo "Thank you for registering.";
+		$_SESSION['registered'] = true;
 		//need to verify if email account exists here
-		header("Location: profile.php");
-	}
-	else {
-		echo "There has been a problem inserting your details.";
-		header("Location: error.php");
-	}
-}
-	//protect against sql injections
-	// $result = $dbh->prepare("SELECT * FROM user WHERE first_name='$first_name'");
-	// $result = execute( array(':username' => $_REQUEST['username']) );
-
-	// check if email exists
-	// $query = $dbh->prepare( "SELECT `email` FROM `users` WHERE `email` = ?" ) or die($dbh->error());
-	// $query->execute();
-	// if ($query->rowCount() > 0) { # If rows are found for query
-	//     echo "Email found!";
-	// }
-	// else {
- // 	    echo "Email not found!";
- 	    // email doesn't exist in the database, need to proceed
-	// }
+	} catch (PDOException $e) {
+		var_dump($e->getMessage());
+          $_SESSION['error'] = "ERROR: ".$e->getMessage();
+      }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,28 +45,27 @@
 		<a href="register.php">Register</a>
 	</div>
 	<div id="signup">
-	<div class="container">
-	<label>
-		Email
-	</label>
-	<input type="text" placeholder="Enter Email" name="emailReg" autocomplete="off" />
-	<label>
-		Username
-	</label>
-	<input type="text" placeholder="Enter Username" name="usernameReg" autocomplete="off" />
-	<label>
-		Password
-	</label>
-	<input type="password" placeholder="Enter Password" name="passwordReg" autocomplete="off"/>
-	<div class="errorMsg">
-		<?php echo $errorMsgReg; ?>
-	</div>
-    <button type="button" class="registerbtn" value ="ok"> Register
-	</button>
-	</div>
+		<div class="container">
+			<form method="post">		
+				<label>
+					Email
+				</label>
+				<input type="text" placeholder="Enter Email" name="email" autocomplete="off"/>
+				<label>
+					Username
+				</label>
+				<input type="text" placeholder="Enter Username" name="username" autocomplete="off"/>
+				<label>
+					Password
+				</label>
+				<input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="test" />
+				 <button type="submit" class="registerbtn" value="ok"> Register </button>
+			</form>
+		</div>
 	</div>
 	<div class="footer">
 		<p>Footer</p>
 	</div>
+
 </body>
 </html>

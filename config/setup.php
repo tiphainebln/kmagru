@@ -11,11 +11,11 @@ try {
         echo "ERROR CREATING DB: \n".$e->getMessage();
         exit(-1);
     }
-// CREATE TABLE USER
+// CREATE TABLE USERS
 try {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "CREATE TABLE `user` (
+        $sql = "CREATE TABLE `users` (
           `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
           `username` VARCHAR(50) NOT NULL,
           `email` VARCHAR(100) NOT NULL,

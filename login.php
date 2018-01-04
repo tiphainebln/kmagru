@@ -1,41 +1,27 @@
 <?php
-	// require 'config/database.php';
+	include 'config/database.php';
 	session_start();
-/* User login process, checks if user exists and password is correct */
-
-    if (isset($_POST['login'])) {
-
-        $username = $_POST['username'];
-        $password = $_POST['password'];
     try {
-            $query = $connect->prepare('SELECT id, username, password FROM pdo WHERE username = :username');
-            $query->execute(array(
-                ':username' => $username
-                ));
-            $data = $query->fetch(PDO::FETCH_ASSOC);
+        if ($_SESSION['registered'] = true) {
+        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            if ($data == false){
-                $e = "User $username not found.";
-            }
-            else {
-                if ($password == $data['password']) {
-                    $_SESSION['username'] = $data['username'];
-                    $_SESSION['password'] = $data['password'];
-                    $_SESSION['active'] = $user['active'];
-
-                    $_SESSION['logged)_in'] = true;
-                    header('Location: profile.php');
-                }
-                else {
-                    $_SESSION['message'] = "You have entered wrong password, try again!";
-                    header("location: error.php");
-                }
+        $query= $dbh->prepare("SELECT id, username FROM users WHERE email=:email AND password=:password AND active=:1");
+        $query->execute(array(':email' => $email, 'password' => $password));
+        
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+        if ($data == null){
+            $query->closeCursor();
+            $e = "User $username not found.";
+           } else {
+                $query->closeCursor();
+                $_SESSION['active'] = 1;
+                header('Location: profile.php');
             }
         }
-        catch(PDOException $e) {
+        }catch(PDOException $e) {
         $e->getMessage();
     }
-}
 
 // Escape email to protect against SQL injections
 	// $result = $dbh->prepare("SELECT * FROM users WHERE email='$email'");
