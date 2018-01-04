@@ -16,10 +16,10 @@
     		$query->closeCursor();
     	}
 
-        $password = password_hash($password, PASSWORD_BCRYPT);
-		$sql = "INSERT INTO users (email, username, password) VALUES(:email, :username, :password)";
+        $hash = password_hash($password, PASSWORD_BCRYPT);
+		$sql = "INSERT INTO users (email, username, password, hash) VALUES(:email, :username, :password, :hash)";
 		$query = $dbh->prepare($sql);
-		$query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email));
+		$query->execute(array(':username'=>$username,':password'=>$password,':email'=>$email, ':hash' => $hash));
 		var_dump('expression');
 		echo "Thank you for registering.";
 		$_SESSION['registered'] = true;
