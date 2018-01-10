@@ -3,15 +3,10 @@
 session_start();
 
 // Check if user is logged in using the session variable
-if ($_SESSION['active'] != 1) {
-  $_SESSION['message'] = "You must log in before viewing your profile page!";
-  // header("location: error.php");    
+if ($_SESSION['active'] = 1) {
+     
 }
 else {
-    $username = $_SESSION['username'];
-    $email = $_SESSION['email'];
-    $active = $_SESSION['active'];
-    $_SESSION['message'] = "Thanks for registering";
     // the user can modify his password, his email and his name
     // access to the main section
     // logout must be visible everywhere
@@ -25,20 +20,29 @@ else {
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
-  <div class="connect">
-    <a href="login.php">Login</a>
+  <div class="logout">
+    <a href="logout.php">Logout</a>
   </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
+<nav>
+  <li>
+  <div class="admin">
+    <a href="">Admin</a>
+     <ul class="hidden">
+        <li><a href="">Settings</a></li>
+        <li><a href="">Comments</a></li>
+      </ul>
+    </li>
   </div>
-<body>
+</nav>
   <p>
-    <?php echo "You must log in before viewing your profile page!" ?>
+    <?php if ($_SESSION['active'] = 1) {
+   echo "Thanks for registering"; 
+}
+else {
+   echo "You must log in before viewing your profile page!";} ?>
   </p>
+    <a href="main_section.php"><h2>Start !</h2></a>
   <div class="form">
-  <?php if ($_SESSION['registered'] != true)       
-  <a href="login.php"><button class="button button-block" name="login"/>Login</button></a>
-  ?>
 </div>
 </body>
 </html>

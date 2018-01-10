@@ -6,11 +6,11 @@
 </head>
 <body>
 	<a href="index.php"><h1>Camagru</h1></a>
-	<div class="connect">
-		<a href="login.php">Login</a>
+	<div class="logout">
+		<a href="logout.php">Logout</a>
 	</div>
-	<div class="signin">
-		<a href="register.php">Register</a>
+	<div class="admin">
+		<a href="">Admin</a>
 	</div>
     <video id="video"></video>
     <button id="startbutton">Prendre une photo</button>
