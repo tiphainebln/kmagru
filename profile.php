@@ -23,20 +23,20 @@ else {
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-<nav>
-  <li>
-  <div class="admin">
-    <a href="">Admin</a>
-     <ul class="hidden">
-        <li><a href="">Settings</a></li>
-        <li><a href="">Comments</a></li>
+  <ul id="menu">
+    <li class="panel">
+    <span><a href="">Admin</a></span>
+     <ul class="choix">
+        <li><a class="grey" href="#">Settings</a></li>
+        <li><a class="grey" href="#">Comments</a></li>
       </ul>
+    </ul>
     </li>
   </div>
-</nav>
   <p>
     <?php if ($_SESSION['active'] = 1) {
-   echo "Thanks for registering"; 
+    echo "Welcome '" . $username . "'";
+    echo "Thanks for registering"; 
 }
 else {
    echo "You must log in before viewing your profile page!";} ?>
