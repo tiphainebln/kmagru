@@ -23,19 +23,23 @@ else {
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-  <ul id="menu">
-    <li class="panel">
-    <span><a href="">Admin</a></span>
-     <ul class="choix">
-        <li><a class="grey" href="#">Settings</a></li>
+  <span><a href="#" class="admin">Admin</a></span>
+    <ul id="menu">
+     <ul id="choix">
+        <li><a class="grey" href="#">Settings ▾</a>
+      <ul>
+        <li><a href="reset_username.php" class="grey">Change username</a></li>
+        <li><a href="reset_password.php" class="grey">Change password</a></li>
+        <li><a href="reset_email.php" class="grey">Change email</a></li>
+          </ul>
+        </li>
         <li><a class="grey" href="#">Comments</a></li>
+        <li><a class="grey" href="#">Gallery</a></li>
       </ul>
     </ul>
-    </li>
   </div>
   <p>
     <?php if ($_SESSION['active'] = 1) {
-    echo "Welcome '" . $username . "'";
     echo "Thanks for registering"; 
 }
 else {
@@ -44,5 +48,9 @@ else {
     <a href="main_section.php"><h2>Start !</h2></a>
   <div class="form">
 </div>
+  <div class="footer">
+    <p>Footer</p>
+  </div>
+</body>
 </body>
 </html>

@@ -41,7 +41,7 @@ try {
         $dbh->exec($sql);
         echo "Table gallery created.\n";
     } catch (PDOException $e) {
-        echo "ERROR CREATING TABLE: ".$e->getMessage().;
+        echo "ERROR CREATING TABLE: ".$e->getMessage();
     }
 // CREATE TABLE LIKE
 try {

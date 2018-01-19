@@ -9,9 +9,14 @@
 	<div class="logout">
 		<a href="logout.php">Logout</a>
 	</div>
-	<div class="admin">
-		<a href="">Admin</a>
-	</div>
+  <span><a href="#" class="admin">Admin</a></span>
+    <ul id="menu">
+     <ul id="choix">
+        <li><a class="grey" href="#">Settings</a></li>
+        <li><a class="grey" href="#">Comments</a></li>
+      </ul>
+    </ul>
+  </div>
     <video id="video"></video>
     <button id="startbutton">Prendre une photo</button>
     <canvas id="canvas"></canvas>

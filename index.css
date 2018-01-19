@@ -155,7 +155,7 @@ span.psw {
     text-decoration: none;
 }
 
-#menu {
+.admin{
     color: #bbc3c8;
     background: #292929;
     font-family: 'Georgia', serif;
@@ -165,26 +165,48 @@ span.psw {
     left: 70%;
     padding: 10px 6px 8px;
     position: absolute;
-    top: 74px;
+    top: 7%;
     text-decoration: none;
 }
 
+#menu {
+    color: #bbc3c8;
+    background: #292929;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 22px;
+    left: 67%;
+    padding: 10px 6px 8px;
+    position: absolute;
+    top: 8%;
+    text-decoration: none;
+    visibility: hidden;
+}
+
 #menu li{
+    margin-left: 0%;
     display: inline-block;
-    margin-right: 10%;
+    text-decoration: none;
+
 }
 #menu ul li{
     display: inherit;
+
 }
 
 #menu li:hover ul{
     display: block;
+    text-decoration: none;
 }
 
 .grey {
-    background-color: #4CAF50;
+    background-color: #292929;
 }
 
 #menu .grey:hover{
-    color: #4CAF50;
+    background-color: #bbc3c8;
+    color: #292929;
 }
+
+
