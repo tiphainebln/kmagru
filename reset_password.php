@@ -1,80 +1,75 @@
 <?php
-session_start();
- 
-if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['q']) && isset($_POST['password'])){
-   $stmt = $dbh->query("SELECT * FROM users WHERE username=$username");
-   $stmt->execute(array(':username' => $username));
-   $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-   if($stmt->rowCount() == 1)
-   {
-      if(isset($_POST['resetpass'])) {
-        $pass = $_POST['pass'];
-        $cpass = $_POST['confirm-pass'];
-        if($cpass!==$pass)
-        {
-          echo "Sorry! Password Mismatch. ";
-        } else {
-      $stmt = $dbh->query("UPDATE users SET password=$password WHERE username=$username");
-      $stmt->execute(array(':pass' => $cpass));
-      echo "Password changed successefully."; }
-    } 
- } else {
-  exit; }
- }
-    // the user can modify his password, his email and his name
-    // access to the main section
-    // logout must be visible everywhere
+
+if (isset($_POST['username']) && isset($_POST['q']) && isset($_POST['password'])){
+
+  $username = $db->quote($_POST['username']);
+  $select = $db->query("SELECT * FROM users WHERE username=$username");
+  if ($select->rowCount() == 0) {
+
+    // No User Found
+    
+
+  } else {
+
+    // User Found
+    $user = $select->fetch();
+    $salt = 'r9P+*p3CBT^qP^t@Y1|{~g9F[jOL)3_qlj>O)vPXymMyGiPQW(:aYkk^x?I63/.y';
+
+    $p = hash('sha512', $salt.$user['email']);
+
+    if ($p == $_POST['q']) {
+
+      // hash Email and link matches
+      $password = $db->quote(hash('sha1',$_POST['password']));
+      $db->query("UPDATE users SET password=$password WHERE username=$username");
+      mail( $_POST['email'] , "new count" , $_POST['username'].", your password was successefully changed. lets start !!" );
+      header('Location:'.WEBROOT.'login.php');
+
+    } else {
+
+      // hash Email and link doesn't match
+     
+
+    }
+  }
+}
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Camagru</title>
-  <link rel="stylesheet" href="index.css" href="main_section.php" charset="utf-8">
+  <link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
-  <div class="logout">
-    <a href="logout.php">Logout</a>
+  <div class="connect">
+    <a href="login.php">Login</a>
   </div>
-  <span><a href="#" class="admin">Admin</a></span>
-    <ul id="menu">
-     <ul id="choix">
-        <li><a class="grey" href="#">Settings ▾</a>
-      <ul>
-        <li><a href="reset_username.php" class="grey">Change username</a></li>
-        <li><a href="reset_password.php" class="grey">Change password</a></li>
-        <li><a href="reset_email.php" class="grey">Change email</a></li>
-          </ul>
-        </li>
-        <li><a class="grey" href="#">Comments</a></li>
-        <li><a class="grey" href="#">Gallery</a></li>
-      </ul>
-    </ul>
-  </div></div>
-  <div id="username">
-  <div class="container">
-        <form method="post">
-          <label>
-            <b>Password</b>
-          </label>
-            <input type="text" placeholder="Enter your current password" name="pass" autocomplete="off" required>
-            <label>
-             <b>New password</b>
-            </label>
-            <input type="password" placeholder="Enter your new password" name="confirm-pass" autocomplete="off" required>
-            <label>
-             <b>Repeat new password</b>
-            </label>
-            <input type="password" placeholder="Enter your password again" name="confirm-pass" autocomplete="off" required>
-            <button type="submit" name="changeusername">
-                Reset your password
-            </button>
-        </form>
+  <div class="signin">
+    <a href="register.php">Register</a>
+  </div>
+  <div id="signup">
+    <div class="container">
+      <form method="post">    
+        <label>
+          Username
+        </label>
+        <input type="text" placeholder="Enter Username" name="username" autocomplete="off"/>
+        <label>
+          Password
+        </label>
+          <input type="hidden" name="q" value='<?php if (isset($_GET["q"])) { echo $_GET["q"];} ?>' />
+        <input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="test" />
+         <button type="submit" class="registerbtn" value="ok"> submit </button>
+      </form>
     </div>
   </div>
-    <div class="footer">
+  <div class="footer">
     <p>Footer</p>
   </div>
+
 </body>
-</body>
-</html>
+
+?>

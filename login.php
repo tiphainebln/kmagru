@@ -71,7 +71,7 @@
         	   Cancel
             </button>
             <span class="psw">
-            	Forgot <a href=" ">password?</a>
+            	Forgot <a href="forgot.php">password?</a>
             </span>
         </form>
   	</div>
