@@ -1,28 +1,25 @@
 <?php
 session_start();
-if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['q']) && isset($_POST['password'])){
-   $stmt = $dbh->query("SELECT * FROM users WHERE username=$username");
-   $stmt->execute(array(':username' => $username));
-   $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-   if($stmt->rowCount() == 1)
+if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
+   $query = $dbh->query("SELECT * FROM users WHERE username=$username");
+   $query->execute(array(':username' => $username));
+   $rows = $query->fetch(PDO::FETCH_ASSOC);
+   if($query->rowCount() == 1)
    {
-      if(isset($_POST['resetpass'])) {
-        $pass = $_POST['pass'];
-        $cpass = $_POST['confirm-pass'];
-        if($cpass!==$pass)
+      if(isset($_POST['newusernamebis'])) {
+        $user = $_POST['newusername'];
+        $cuser = $_POST['newusernamebis'];
+        if($cuser!==$user)
         {
-          echo "Sorry! Password Mismatch. ";
+          echo "Sorry! Username Mismatch. ";
         } else {
-      $stmt = $dbh->query("UPDATE users SET password=$password WHERE username=$username");
-      $stmt->execute(array(':pass' => $cpass));
-      echo "Password changed successefully."; }
+      $query = $dbh->query("UPDATE users SET username=$username WHERE email=$email");
+      $query->execute(array(':user' => $cuser));
+      echo "Username changed successefully."; }
     } 
  } else {
   exit; }
  }
-    // the user can modify his password, his email and his name
-    // access to the main section
-    // logout must be visible everywhere
 ?>
 
 <!DOCTYPE html>
@@ -61,11 +58,11 @@ if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['q']) &&
             <label>
              <b>New username</b>
             </label>
-            <input type="password" placeholder="Enter your new username" name="new username" autocomplete="off" required>
+            <input type="password" placeholder="Enter your new username" name="newusername" autocomplete="off" required>
             <label>
              <b>Repeat new username</b>
             </label>
-            <input type="password" placeholder="Enter your new username again" name="new username" autocomplete="off" required>
+            <input type="password" placeholder="Enter your new username again" name="newusernamebis" autocomplete="off" required>
             <button type="submit" name="changeusername">
                 Submit
             </button>

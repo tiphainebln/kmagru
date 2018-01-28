@@ -1,26 +1,61 @@
 <?php
-if (isset($_POST['email'])) {
 
-    if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+    require('config/database.php');
+    
+    try {
+    //email validation
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+        $error[] = 'Please enter a valid email address';
+    } else {
+        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $query = $dbh->prepare('SELECT email FROM users WHERE email = :email');
+        $query->execute(array(':email' => $_POST['email']));
+        $row = $query->fetch(PDO::FETCH_ASSOC);
 
-        // Email is Valid
-        $email = $db->quote($_POST['email']);
-        $row = $db->query("SELECT * FROM users WHERE email=$email");
-
-        if ($row->rowCount() > 0) {
-            $salt = 'r9P+*p3CBT^qP^t@Y1|{~g9F[jOL)3_qlj>O)vPXymMyGiPQW(:aYkk^x?I63/.y';
-            $password = hash('sha512', $salt.$_POST['email']);
-            $forgotpwdurl = 'localhost:8100'.'Camagru/'.'reset.php?q='.$password;
-
-            $bodymail = "Hello,\nIf you really want to reset your password follow this link ".$forgotpwdurl."\n";
-            mail( $_POST['email'] , "Forget password" , $bodymail);
-
-        } else {
-            // No User Found
+        if(empty($row['email'])){
+            $error[] = 'Email provided is not on recognised.';
         }
     }
-}
 
+    //create the activation code
+    $token = md5(uniqid(rand(),true));
+
+    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $query = $dbh->prepare("UPDATE users SET resetToken = :token, resetComplete='No' WHERE email = :email");
+    $query->execute(array(
+        ':email' => $row['email'],
+        ':token' => $token
+    ));
+    
+    if ($_POST['email']) {
+    $to = $_row['email'];
+    $subject = "Password Reset";
+    $body = "
+    <html>
+    <head>
+        <title>Someone requested that the password be reset.</title>
+    </head>
+    <body>
+        <p>To reset your password, please click on this <a href='http://localhost:8100/camagru/resetPassword.php?key=$token'>link.</a></p>
+    </body>
+    </html>"; 
+    // To send HTML mail, the Content-type header must be set
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    // Additionnal headers
+    $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
+         'Reply-To: tbouline@student.42.fr' . "\r\n" .
+         'X-Mailer: PHP/' . phpversion();
+    mail($to, $subject, $body, $headers);
+    //redirect to index page
+    header('Location: login.php?action=reset');
+    exit; }
+    } catch(PDOException $e) {
+        $error[] = $e->getMessage();
+        print_r( $e );
+    }
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +79,7 @@ if (isset($_POST['email'])) {
                     Email
                 </label>
                 <input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="<?php if(isset($error)){ echo $_POST['email']; } ?>" tabindex="2"/>
-           <button type="submit" name="login">
+           <button type="submit" name="login" value="ok">
                   Submit
             </button>
             </div>
@@ -54,3 +89,18 @@ if (isset($_POST['email'])) {
     </div>
 </body>
 </html>
+
+<?php
+if(isset($_GET['action'])){
+
+    //check the action
+    switch ($_GET['action']) {
+        case 'active':
+            echo "<h2 class='bg-success'>Your account is now active you may now log in.</h2>";
+            break;
+        case 'reset':
+            echo "<h2 class='bg-success'>Please check your inbox for a reset link.</h2>";
+            break;
+    }
+}
+?>

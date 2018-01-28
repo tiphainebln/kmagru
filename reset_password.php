@@ -1,37 +1,52 @@
 <?php
+  require('config/database.php');
 
-if (isset($_POST['username']) && isset($_POST['q']) && isset($_POST['password'])){
+  try { $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $query = $dbh->prepare('SELECT resetToken, resetComplete FROM users WHERE resetToken = :token');
+  $query->execute(array(':token' => $_GET['key']));
+  $row = $query->fetch(PDO::FETCH_ASSOC);
 
-  $username = $db->quote($_POST['username']);
-  $select = $db->query("SELECT * FROM users WHERE username=$username");
-  if ($select->rowCount() == 0) {
-
-    // No User Found
-    
-
-  } else {
-
-    // User Found
-    $user = $select->fetch();
-    $salt = 'r9P+*p3CBT^qP^t@Y1|{~g9F[jOL)3_qlj>O)vPXymMyGiPQW(:aYkk^x?I63/.y';
-
-    $p = hash('sha512', $salt.$user['email']);
-
-    if ($p == $_POST['q']) {
-
-      // hash Email and link matches
-      $password = $db->quote(hash('sha1',$_POST['password']));
-      $db->query("UPDATE users SET password=$password WHERE username=$username");
-      mail( $_POST['email'] , "new count" , $_POST['username'].", your password was successefully changed. lets start !!" );
-      header('Location:'.WEBROOT.'login.php');
-
-    } else {
-
-      // hash Email and link doesn't match
-     
-
-    }
+  //if no token from db then kill the page
+  if(empty($row['resetToken'])){
+      $stop = 'Invalid token provided, please use the link provided in the reset email.';
+  } elseif($row['resetComplete'] == 'Yes') {
+      $stop = 'Your password has already been changed!';
   }
+
+  if(isset($stop)){
+      echo "<p class='bg-danger'>$stop</p>";
+  }
+
+  if(isset($_POST['submit'])){
+      //basic validation
+      if(strlen($_POST['password']) < 3){
+          $error[] = 'Password is too short.';
+      }
+      if(strlen($_POST['passwordConfirm']) < 3){
+          $error[] = 'Confirm password is too short.';
+      }
+      if($_POST['password'] != $_POST['passwordConfirm']){
+          $error[] = 'Passwords do not match.';
+      }
+
+    //if no errors have been created carry on
+    if(!isset($error)){
+        $hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $query = $dbh->prepare("UPDATE users SET password = :hash, resetComplete = 'Yes'  WHERE resetToken = :token");
+        $query->execute(array(
+            ':hash' => $hash,
+            ':token' => $row['resetToken']
+        ));
+        //redirect to index page
+        header('Location: login.php?action=resetAccount');
+        exit;
+        //else catch the exception and show the error.
+      } catch(PDOException $e) {
+        $error[] = $e->getMessage();
+        print_r( $e );
+        }
+    }
 }
 
 ?>

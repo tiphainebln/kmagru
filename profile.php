@@ -10,6 +10,9 @@ else {
     // the user can modify his password, his email and his name
     // access to the main section
     // logout must be visible everywhere
+    //   Lorsque une image reçoit un nouveau commentaire, l’auteur de cette image doit
+    // en être informé par mail. Cette préférence est activée par défaut, mais peut être
+    // désactivée dans les préférences de l’utilisateur
 }
 ?>
 <!DOCTYPE html>
@@ -23,20 +26,24 @@ else {
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-  <span><a href="#" class="admin">Admin</a></span>
-    <ul id="menu">
-     <ul id="choix">
-        <li><a class="grey" href="#">Settings ▾</a>
-      <ul>
-        <li><a href="reset_username.php" class="grey">Change username</a></li>
-        <li><a href="reset_password.php" class="grey">Change password</a></li>
-        <li><a href="reset_email.php" class="grey">Change email</a></li>
-          </ul>
-        </li>
-        <li><a class="grey" href="#">Comments</a></li>
-        <li><a class="grey" href="#">Gallery</a></li>
-      </ul>
-    </ul>
+
+  <div class="dropdown">
+    <button><a button class="admin">Admin</a></button>
+    <div class="dropdown-content">
+      <a href="reset_username.php">Change username</a>
+      <a href="reset_password.php">Change password</a>
+      <a href="reset_email.php">Change email</a>
+    </div>
+  </div>
+
+  <div class="all">
+     <a href="#">All</a>
+  </div>
+  <div class="mygallery">
+      <a href="#">My Gallery</a>
+  </div>
+  <div class="newcreation">
+     <a href="main_section.php">New creation</a>
   </div>
   <p>
     <?php if ($_SESSION['active'] = 1) {
@@ -45,7 +52,6 @@ else {
 else {
    echo "You must log in before viewing your profile page!";} ?>
   </p>
-    <a href="main_section.php"><h2>Start !</h2></a>
   <div class="form">
 </div>
   <div class="footer">

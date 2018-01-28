@@ -4,18 +4,26 @@ session_start();
 session_unset();
 session_destroy();
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Error</title>
-<!--   <?php //include 'css/css.html'; ?> -->
+  <title>Camagru</title>
+  <link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
-    <div class="form">
-    <h1>Thanks for stopping by</h1>
-    <p><?= 'You have been logged out!'; ?></p>
-    <a href="index.php"><button class="button button-block"/>Home</button></a>
+  <a href="index.php"><h1>Camagru</h1></a>
+  <div class="connect">
+    <a href="login.php">Login</a>
+  </div>
+  <div class="signin">
+    <a href="register.php">Register</a>
+  </div>
+      <p><?= 'You have been logged out!'; ?></p>
     </div>
+  </div>
+  <div class="footer">
+    <p>Footer</p>
+  </div>
+
 </body>
-</html>

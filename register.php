@@ -60,7 +60,8 @@
 			<title>Thank you for registering at Camagru.</title>
 			</head>
 		<body>
-			<p>To activate your account, please click on this <a href='activate.php?x='.$id&y='.$active'>link.</a></p>
+			<p>To activate your account, please click on this <a href='http://localhost:8100/camagru/activate.php?x=.$id&y=.$active'>link.</a></p>
+			
 			</body>
 		</html>";
 		// To send HTML mail, the Content-type header must be set
