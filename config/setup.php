@@ -23,7 +23,7 @@ try {
           `hash` VARCHAR(60) NOT NULL,
           `active` VARCHAR(255) NOT NULL DEFAULT 0,
           `resetToken` varchar(255) DEFAULT NULL,
-          `resetComplete` varchar(3) DEFAULT 'No',
+          `resetComplete` varchar(3) DEFAULT 'No'
         )";
         $dbh->exec($sql);
         echo "Table user created.\n";
@@ -35,9 +35,10 @@ try {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "CREATE TABLE `gallery` (
-          `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          `galleryid` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
           `userid` INT(11) NOT NULL,
           `img_name` VARCHAR(100) NOT NULL,
+          `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (userid) REFERENCES users(id)
         )";
         $dbh->exec($sql);
