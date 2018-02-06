@@ -10,23 +10,26 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
   imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
 }
 
-if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
-  checkCsrf();
+// https://stackoverflow.com/questions/30389392/capture-image-from-webcam-and-save-in-folder-using-php-and-javascript
 
-  print('bob');
+if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
+ 
+var_dump(expression);
+ 
   // get the content of the captured image from the webcam put it in a tmp img
+
   list($type, $data) = explode(';', $_POST['cpt_1']);
   list(, $data) = explode(',', $data);
   $data = base64_decode($data);
   file_put_contents('img/tmp1.png', $data);
 
   // creat image from this temporary
-  $im = imagecreatefrompng('img/tmp1.png');
+  // $im = imagecreatefrompng('img/tmp1.png');
 
   // get selected alpha
-  $image = imagecreatefrompng('img/'.$_POST['img'].'.png');
+  // $image = imagecreatefrompng('img/'.$_POST['img'].'.png');
 
-  imagecopymerge_alpha($im, $image, 0, 0, 0, 0, imagesx($image), imagesy($image), 100);
+  // imagecopymerge_alpha($im, $image, 0, 0, 0, 0, imagesx($image), imagesy($image), 100);
 
   // Create file name and register the image in database
   $query = $dbh->query("SELECT `$username` FROM `$users` WHERE $id='".$id."'");
@@ -47,6 +50,43 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
 
 }
 
+// if (isset($_FILES['image']) && isset($_POST['img'])) {
+  
+
+//   $image = $_FILES['image'];
+//   $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+
+//   if (in_array($extension, array('jpg', 'png'))){
+
+//     // Le format du fichier est correct
+//     $user = $_SESSION['Auth'];
+//     $user_id = $db->quote($user['id']);
+//     $db->query("INSERT INTO gallery SET user_id=$user_id");
+//     $image_id = $db->lastInsertId();
+
+//     $image_name = $user['username'].'_'. $image_id . '.' . $extension;
+//     move_uploaded_file($image['tmp_name'], IMAGES .'/'. $image_name);
+
+//     if ($extension == 'jpg')
+//       $im = imagecreatefromjpeg('img/'. $image_name);
+//     else if ($extension == 'png')
+//       $im = imagecreatefrompng('img/'. $image_name);
+
+//     $img = imagecreatefrompng('img/alpha/'.$_POST['img'].'.png');
+
+//     imagecopymerge_alpha($im, $img, 0, 0, 0, 0, imagesx($img), imagesy($img), 100);
+
+//     imagepng($im,  '/img/'. $image_name);
+//     // free memory
+//     imagedestroy($im);
+
+//     $image_name = $db->quote($image_name);
+//     $db->query("UPDATE gallery SET name=$img_name WHERE id=$galleryid");
+//   }
+//   header('Location: my_gallery.php');
+//   die();
+// }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +100,7 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
 		<a href="logout.php">Logout</a>
 	</div>
     <div class="dropdown">
-    <button><a button class="admin">Admin</a></button>
+    <a button class="admin">Admin</a>
     <div class="dropdown-content">
       <a href="reset_username.php">Change username</a>
       <a href="reset_password.php">Change password</a>
@@ -84,6 +124,9 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
     <button id="startbutton">Prendre une photo</button>
     <canvas style="display: none" id="canvas"></canvas>
     <img id="photo" src="">
+    <script type="text/javascript">
+    var myImg = document.getElementById("yourImgId").src;
+    </script>
 
     <form action="#" method="post" enctype="multipart/form-data">
       <div>
@@ -113,6 +156,7 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
       canvas       = document.querySelector('#canvas'),
       photo        = document.querySelector('#photo'),
       startbutton  = document.querySelector('#startbutton'),
+      cpt_1         = document.querySelector('#cpt_1'),
       width = 320,
       height = 0;
 
@@ -120,6 +164,15 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
                              navigator.webkitGetUserMedia ||
                              navigator.mozGetUserMedia ||
                              navigator.msGetUserMedia);
+
+      function sleep(milliseconds) {
+      var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+          if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+      }
+    }
 
       navigator.getMedia({
         video: true,
@@ -157,11 +210,12 @@ if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
         canvas.getContext('2d').drawImage(video, 0, 0, width, height);
         var data = canvas.toDataURL('image/png');
         photo.setAttribute('src', data);
+        cpt_1.setAttribute('value', data);
+        console.log(data);
       }
 
       startbutton.addEventListener('click', function(ev){
           takepicture();
-        ev.preventDefault();
       }, false);
 
 })();

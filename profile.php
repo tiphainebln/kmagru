@@ -28,7 +28,7 @@ else {
   </div>
 
   <div class="dropdown">
-    <button><a button class="admin">Admin</a></button>
+    <a button class="admin">Admin</a>
     <div class="dropdown-content">
       <a href="reset_username.php">Change username</a>
       <a href="reset_password.php">Change password</a>

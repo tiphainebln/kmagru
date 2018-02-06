@@ -55,8 +55,7 @@ try {
           `userid` INT(11) NOT NULL,
           `galleryid` INT(11) NOT NULL,
           `type` VARCHAR(1) NOT NULL,
-          FOREIGN KEY (userid) REFERENCES users(id),
-          FOREIGN KEY (galleryid) REFERENCES gallery(id)
+          FOREIGN KEY (userid) REFERENCES users(id)
         )";
         $dbh->exec($sql);
         echo "Table like created.\n";
@@ -72,8 +71,7 @@ try {
           `userid` INT(11) NOT NULL,
           `galleryid` INT(11) NOT NULL,
           `comment` VARCHAR(255) NOT NULL,
-          FOREIGN KEY (userid) REFERENCES users(id),
-          FOREIGN KEY (galleryid) REFERENCES gallery(id)
+          FOREIGN KEY (userid) REFERENCES users(id)
         )";
         $dbh->exec($sql);
         echo "Table comment created.\n";

@@ -43,7 +43,7 @@ $nb_pic = $total_pic['total'];
 
 $nb_page = ceil($nb_pic / $ppp);
 
-// Pagination du type all_creation.php?p=
+// Pagination du type my_creation.php?p=
 
 if(isset($_GET['p'])) {
 
@@ -63,37 +63,11 @@ if(isset($_GET['p'])) {
 $first = ($cp-1) * $ppp;
 
 
-$user_id = $dbh->quote($users['id']);
-$select = $dbh->query("SELECT * FROM images WHERE user_id=$user_id ORDER BY pub_date DESC LIMIT $first, $ppp");
+$userid = $dbh->quote($users['id']);
+$select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
 $images = $select->fetchAll();
 
 ?>
-
-  <h2> Mes creations </h2>
-
-  <ul class="display-images">
-    <?php foreach ($images as $image) : ?>
-
-      <li>
-        <img class="img" src="<?php echo WEBROOT; ?>img/<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" width="100%"><br>
-        | <a href="?delete=<?php echo $image['id'].'&'.csrf();?>" onclick="return('Sur sur sur ?')">Supprimer</a>
-      </li>
-     <?php  endforeach; ?>
-  </ul>
-
-
-  <div class="paginate">
-    <p><?php
-      if ($cp > 1) {
-        echo ' <a href="'. WEBROOT .'admin/my_creations.php?p='. ($cp - 1) . '">previous</a>';
-      } ?> [ <?php echo $cp; ?> ] <?php
-      if ($cp < $nb_page) {
-        echo ' <a href="'. WEBROOT .'admin/my_creations.php?p='. ($cp + 1) . '">next</a>';
-      }
-    ?></p>
-  </div>
-
-<?php include '../partials/footer.php'; ?>%
 
 <!DOCTYPE html>
 <html>
@@ -129,6 +103,29 @@ $images = $select->fetchAll();
   </p>
   <div class="form">
 </div>
+  <h2> Mes creations </h2>
+
+  <ul class="display-images">
+    <?php foreach ($images as $image) : ?>
+
+      <li>
+        <img class="img" src="<?php echo WEBROOT; ?>img/<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" width="100%"><br>
+        | <a href="?delete=<?php echo $image['id'].'&'.csrf();?>" onclick="return('Sur sur sur ?')">Supprimer</a>
+      </li>
+     <?php  endforeach; ?>
+  </ul>
+
+
+  <div class="paginate">
+    <p><?php
+      if ($cp > 1) {
+        echo ' <a href="http://localhost:8100/camagru/mygallery.php?p='. ($cp - 1) . '">previous</a>';
+      } ?> [ <?php echo $cp; ?> ] <?php
+      if ($cp < $nb_page) {
+        echo ' <a href="http://localhost:8100/camagru/mygallery.php?p='. ($cp + 1) . '">next</a>';
+      }
+    ?></p>
+  </div>
   <div class="footer">
     <p>Footer</p>
   </div>
