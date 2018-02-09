@@ -28,6 +28,7 @@
             $query->closeCursor();
             $e = "User $username not found.";
            } else {
+                $_SESSION['Auth'] = $query->fetch();
                 $query->closeCursor();
                 header('Location: profile.php');
             }

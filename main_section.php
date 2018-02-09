@@ -1,6 +1,8 @@
 
 <?php
 include 'config/database.php';
+// include 'includes.php';
+
 function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
 
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
@@ -23,69 +25,33 @@ var_dump(expression);
   $data = base64_decode($data);
   file_put_contents('img/tmp1.png', $data);
 
-  // creat image from this temporary
-  // $im = imagecreatefrompng('img/tmp1.png');
+ //  //creat image from this temporary
+ //  $im = imagecreatefrompng('img/tmp1.png');
 
-  // get selected alpha
-  // $image = imagecreatefrompng('img/'.$_POST['img'].'.png');
+ // // get selected picture
+ //  $image = imagecreatefrompng('img/'.$_POST['img'].'.png');
 
-  // imagecopymerge_alpha($im, $image, 0, 0, 0, 0, imagesx($image), imagesy($image), 100);
+ //  imagecopymerge_alpha($im, $image, 0, 0, 0, 0, imagesx($image), imagesy($image), 100);
 
-  // Create file name and register the image in database
-  $query = $dbh->query("SELECT `$username` FROM `$users` WHERE $id='".$id."'");
-  $f = $query->fetch();
-  $username = $f[$username];
-  $db->query("INSERT INTO gallery SET id=$id");
-  $image_id = $db->lastInsertId();
-  $image_name = $username.'_'. $image_id . '.png';
+ //   // Create file name and register the image in database
+ //  // $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+ //  // $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ //  // $user = $_SESSION['Auth'];
+ //  // $userid = $dbh->quote($user['id']);
+ //  // $dbh->query("INSERT INTO gallery SET userid=$userid");
+ //  // $image_id = $dbh->lastInsertId();
+ //  // $image_name = $user['username'].'_'. $image_id . '.png';
 
-  imagepng($im,'img/'. $image_name);
-  // free memory
-  imagedestroy($im);
+  // imagepng($im,'img/'. $image_name);
+  // // free memory
+  // imagedestroy($im);
 
-  $image_name = $db->quote($image_name);
-  $db->query("UPDATE gallery SET name=$img_name WHERE id=$galleryid");
+  $image_name = $dbh->quote($image_name);
+  $dbh->query("UPDATE gallery SET name=$img_name WHERE id=$galleryid");
   header('Location: my_gallery.php');
   die();
-
 }
 
-// if (isset($_FILES['image']) && isset($_POST['img'])) {
-  
-
-//   $image = $_FILES['image'];
-//   $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-
-//   if (in_array($extension, array('jpg', 'png'))){
-
-//     // Le format du fichier est correct
-//     $user = $_SESSION['Auth'];
-//     $user_id = $db->quote($user['id']);
-//     $db->query("INSERT INTO gallery SET user_id=$user_id");
-//     $image_id = $db->lastInsertId();
-
-//     $image_name = $user['username'].'_'. $image_id . '.' . $extension;
-//     move_uploaded_file($image['tmp_name'], IMAGES .'/'. $image_name);
-
-//     if ($extension == 'jpg')
-//       $im = imagecreatefromjpeg('img/'. $image_name);
-//     else if ($extension == 'png')
-//       $im = imagecreatefrompng('img/'. $image_name);
-
-//     $img = imagecreatefrompng('img/alpha/'.$_POST['img'].'.png');
-
-//     imagecopymerge_alpha($im, $img, 0, 0, 0, 0, imagesx($img), imagesy($img), 100);
-
-//     imagepng($im,  '/img/'. $image_name);
-//     // free memory
-//     imagedestroy($im);
-
-//     $image_name = $db->quote($image_name);
-//     $db->query("UPDATE gallery SET name=$img_name WHERE id=$galleryid");
-//   }
-//   header('Location: my_gallery.php');
-//   die();
-// }
 
 ?>
 <!DOCTYPE html>
@@ -124,20 +90,23 @@ var_dump(expression);
     <button id="startbutton">Prendre une photo</button>
     <canvas style="display: none" id="canvas"></canvas>
     <img id="photo" src="">
-    <script type="text/javascript">
-    var myImg = document.getElementById("yourImgId").src;
-    </script>
-
     <form action="#" method="post" enctype="multipart/form-data">
-      <div>
-      <ul class="selection">
-        <li><label><img src="img/blossom.png"><input type="radio" name="img" value="alphatest1" checked="checked"></label></li>
-        <li><label><img src="img/cherry_blossom.png"><input type="radio" name="img" value="imgtest2"></label></li>
-        <li><label><img src="img/vulpix.png"><input type="radio" name="img" value="imgtest3"></label></li>
-        <li><label><img src="img/pikachu.png"><input type="radio" name="img" value="imgtest3"></label></li>
-      </ul>
+      <div class="selection">
+        <img src="img/blossom.png"><input type="radio" name="img" value="alphatest1" checked="checked">
       </div>
-      <div>
+      <div class="selection">
+        <ul>
+       <li> <img src="img/cherry_blossom.png"><input type="radio" name="img" value="imgtest2"> </li> 
+      </div>
+      <div class="selection">
+        <li><img src="img/vulpix.png"><input type="radio" name="img" value="imgtest3"> </li> 
+      </div>
+      <div class="selection">
+        <li><img src="img/pikachu.png"><input type="radio" name="img" value="imgtest3"> </li> 
+      </div>
+    </div>
+  </ul>
+    <div>
         <input type="file" name="image">
       </div>
       <div>
