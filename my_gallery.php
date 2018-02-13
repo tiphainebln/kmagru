@@ -1,28 +1,23 @@
 
 <?php
+session_start();
 include 'config/database.php';
 
-// DELETE A IMAGE
-$user = $_SESSION['Auth'];
+
+
 if (isset($_GET['delete'])) {
-
-  // jeton de securité
-  checkCsrf();
-
   // recuperer l'image a supprimer
-  $id = $db->quote($_GET['delete']);
-  $select = $db->query("SELECT name, user_id FROM gallery WHERE id=$id");
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $id = $dbh->quote($_GET['delete']);
+  $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE userid=$userid");
   $image = $select->fetch();
-
   if ($image['user_id'] == $user['id']) {
-
-    // l'image est bien celle de l'utilisateur connecter
+    // l'image est bien celle de l'utilisateur connecté
     // suppression du fichier
-    unlink(IMAGES . '/' . $image['name']);
-
+    unlink('img/' . $image['name']);
     // supression en bdd
-    $db->query("DELETE FROM images WHERE id=$id");
-
+    $dbh->query("DELETE FROM gallery WHERE id=$id");
     // message de confirmation
     echo "artwork deleted.";
     header('Location: my_creations.php');
@@ -43,7 +38,7 @@ $nb_pic = $total_pic['total'];
 
 $nb_page = ceil($nb_pic / $ppp);
 
-// Pagination du type my_creation.php?p=
+// Pagination 
 
 if(isset($_GET['p'])) {
 
@@ -62,9 +57,12 @@ if(isset($_GET['p'])) {
 
 $first = ($cp-1) * $ppp;
 
-
-$userid = $dbh->quote($users['id']);
-$select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
+$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// $user = $_SESSION['Auth'];
+// $userid = $dbh->quote($user['id']);
+// $select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
+$select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
 $images = $select->fetchAll();
 
 ?>
@@ -80,9 +78,8 @@ $images = $select->fetchAll();
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-
-  <div class="dropdown">
-    <button><a button class="admin">Admin</a></button>
+    <div class="dropdown">
+    <a button class="admin">Admin</a>
     <div class="dropdown-content">
       <a href="reset_username.php">Change username</a>
       <a href="reset_password.php">Change password</a>
@@ -94,10 +91,13 @@ $images = $select->fetchAll();
      <a href="#">All</a>
   </div>
   <div class="mygallery">
-      <a href="#">My Gallery</a>
+      <a href="my_gallery.php">My Gallery</a>
   </div>
   <div class="newcreation">
      <a href="main_section.php">New creation</a>
+  </div>
+  <div class="footer">
+    <p>Footer</p>
   </div>
   <p>
   </p>
@@ -109,8 +109,8 @@ $images = $select->fetchAll();
     <?php foreach ($images as $image) : ?>
 
       <li>
-        <img class="img" src="<?php echo WEBROOT; ?>img/<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" width="100%"><br>
-        | <a href="?delete=<?php echo $image['id'].'&'.csrf();?>" onclick="return('Sur sur sur ?')">Supprimer</a>
+        <img class="img" src="<?php echo 'http://localhost:8100/camagru/'; ?><?php echo $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100%"><br>
+        | <a href="?delete=<?php echo $image['userid'];?>" onclick="return('Sur sur sur ?')">Supprimer</a>
       </li>
      <?php  endforeach; ?>
   </ul>
@@ -119,10 +119,10 @@ $images = $select->fetchAll();
   <div class="paginate">
     <p><?php
       if ($cp > 1) {
-        echo ' <a href="http://localhost:8100/camagru/mygallery.php?p='. ($cp - 1) . '">previous</a>';
+        echo ' <a href="http://localhost:8100/camagru/my_gallery.php?p='. ($cp - 1) . '">previous</a>';
       } ?> [ <?php echo $cp; ?> ] <?php
       if ($cp < $nb_page) {
-        echo ' <a href="http://localhost:8100/camagru/mygallery.php?p='. ($cp + 1) . '">next</a>';
+        echo ' <a href="http://localhost:8100/camagru/my_gallery.php?p='. ($cp + 1) . '">next</a>';
       }
     ?></p>
   </div>

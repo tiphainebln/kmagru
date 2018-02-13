@@ -266,11 +266,12 @@ span.psw {
     background-color: #c9d0d4;
     color: #FF6A80;
     padding: 14px 20px;
-    margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
-
+    width: 36%;
+    text-align: center;
+    margin-left: 32%;
+    margin-right: 30%
 }
 
 .selection {
@@ -282,4 +283,22 @@ span.psw {
 .selection img {
     width: 100%;
     height: auto;
+}
+
+#video {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+
+}
+
+#bottom_form {
+      position: relative;
+}
+
+#cpt_1, #submitphoto {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }

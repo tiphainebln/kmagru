@@ -1,6 +1,8 @@
 <?php
 	include 'config/database.php';
+    include 'includes.php';
 	session_start();
+    $auth = 0;
     try {
         if(isset($_GET['action'])){
         //check the action
@@ -31,6 +33,7 @@
                 $_SESSION['Auth'] = $query->fetch();
                 $query->closeCursor();
                 header('Location: profile.php');
+                die();
             }
         }
         }catch(PDOException $e) {

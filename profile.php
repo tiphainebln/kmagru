@@ -3,10 +3,12 @@
 session_start();
 
 // Check if user is logged in using the session variable
-if ($_SESSION['active'] = 1) {
+if (isset($_SESSION['Auth'])) {
      
 }
 else {
+  header('Location : login.php');
+  die;
     // the user can modify his password, his email and his name
     // access to the main section
     // logout must be visible everywhere
@@ -46,7 +48,7 @@ else {
      <a href="main_section.php">New creation</a>
   </div>
   <p>
-    <?php if ($_SESSION['active'] = 1) {
+    <?php if (isset($_SESSION['Auth'])) {
     echo "Thanks for registering"; 
 }
 else {
