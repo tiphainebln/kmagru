@@ -1,12 +1,8 @@
-
-
 <?php
 session_start();
 include 'config/database.php';
  // include 'includes.php';
-
 function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
-
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
   $cut = imagecreatetruecolor($src_w, $src_h);
   imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
@@ -14,41 +10,34 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
   imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
 }
 
+// miniatures ; https://stackoverflow.com/questions/11903289/pull-all-images-from-a-specified-directory-and-then-display-them 
 // https://stackoverflow.com/questions/30389392/capture-image-from-webcam-and-save-in-folder-using-php-and-javascript
-
-
-  // $image = $_POST['image'];
-  // $imgpng = $_POST['img'];
-  // $login = $_SESSION['Auth'];
-  // if (empty($image) || empty ($imgpng))
-  // {
-  //   echo "Required fields missing.";
-  //   return;
-  // }
-  // else if (empty($login))
-  // {
-  //   echo "You must be connected to see this page.";
-  // }
-  // else
-  // {''
     if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
      var_dump("okokok");
       // get the content of the captured image from the webcam put it in a tmp img
       $timestamp = mktime();
-      $file = $timestamp.'.png';
+      $file = 'img/'.$timestamp.'.png';
       $filename = $file;
       list($type, $data) = explode(';', $_POST['cpt_1']);
       list(, $data) = explode(',', $data);
       $data = base64_decode($data);
       file_put_contents($filename, $data);
 
+
       //creat image from this temporary
       $image = imagecreatefrompng($_POST['cpt_1']);
-
      // get selected picture
       $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
+      imagealphablending($imgpng, true);
+      imagesavealpha($imgpng, true);
 
       imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+      imagepng($image, $filename);
+      imagepng($image, $filename);
+      // free memory
+      imagedestroy($image);
+
+
 
         // Create file name and register the image in database
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -58,53 +47,45 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       // $dbh->query("INSERT INTO gallery SET userid=$userid");
       $image_id = $dbh->lastInsertId();
       // $image_name = $user['username'].'_'. $image_id . '.png';
-      $image_name = $image_id.'png';
-      
-      imagepng($image, $filename);
-      // free memory
-      imagedestroy($image);
-      
-
+      $image_name = $image_id.'png';    
       $image_name = $dbh->quote($filename);
       $image_id = $dbh->lastInsertId();
-
       $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
       header('Location: my_gallery.php');
       die();
     }
     // }
-
-if (isset($_FILES['image']) && isset($_POST['img'])) {
-  var_dump("ùùùùùùùùùùù");
-  $imageready = $_FILES['image'];
-  $extension = pathinfo($imageready['name'], PATHINFO_EXTENSION);
-  if (in_array($extension, array('jpg', 'png'))){
+// if (isset($_FILES['image']) && isset($_POST['img'])) {
+//   var_dump("ùùùùùùùùùùù");
+//   $imageready = $_FILES['image'];
+//   $extension = pathinfo($imageready['name'], PATHINFO_EXTENSION);
+//   if (in_array($extension, array('jpg', 'png'))){
     
-    // Le format du fichier est correct
-    $user = $_SESSION['Auth'];
-    $userid = $dbh->quote($user['id']);
-    $dbh->query("INSERT INTO gallery SET userid=$userid");
-    $image_id = $dbh->lastInsertId();
+//     // Le format du fichier est correct
+//     $user = $_SESSION['Auth'];
+//     $userid = $dbh->quote($user['id']);
+//     $dbh->query("INSERT INTO gallery SET userid=$userid");
+//     $image_id = $dbh->lastInsertId();
     
-     $timestamp = mktime();
-    $file = $timestamp.'.png';
-    $filename = 'img/'.$file;
-    move_uploaded_file($imageready['tmp_name'], 'img/'. $filename);
-    if ($extension == 'jpg')
-      $image = imagecreatefromjpeg('img/'. $filename);
-    else if ($extension == 'png')
-      $image = imagecreatefrompng('img/'. $filename);
-    $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
-    imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
-    imagepng($image,'img/'. $filename);
-    // free memory
-    imagedestroy($im);
-    $image_name = $dbh->quote($filename);
-    $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
-  }
-  header('Location: my_gallery.php');
-  die();
-}
+//      $timestamp = mktime();
+//     $file = $timestamp.'.png';
+//     $filename = 'img/'.$file;
+//     move_uploaded_file($imageready['tmp_name'], 'img/'. $filename);
+//     if ($extension == 'jpg')
+//       $image = imagecreatefromjpeg('img/'. $filename);
+//     else if ($extension == 'png')
+//       $image = imagecreatefrompng('img/'. $filename);
+//     $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
+//     imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+//     imagepng($image,'img/'. $filename);
+//     // free memory
+//     imagedestroy($im);
+//     $image_name = $dbh->quote($filename);
+//     $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
+//   }
+//   header('Location: my_gallery.php');
+//   die();
+// }
 ?>
 
 <!DOCTYPE html>
@@ -144,26 +125,32 @@ if (isset($_FILES['image']) && isset($_POST['img'])) {
     <button id="startbutton">Prendre une photo</button>
     <canvas style="display: none" id="canvas"></canvas>
     <img id="photo" src="">
-  <form action="#" method="post" enctype="multipart/form-data">
-      <div>
-         <img id="photo" src="" name="photo">
-      <ul class="selection">
-        <li><label><img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" checked="checked"></label></li>
-        <li><label><img src="img/imgtest2.png"><input type="radio" name="img" value="imgtest2"></label></li>
-        <li><label><img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3"></label></li>
-        <li><label><img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest3"></label></li>
-       </ul>
-       </div>
-       <div id="bottom_form">
+    <form action="#" method="post" enctype="multipart/form-data">
+      <div class="selection">
+        <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" checked="checked">
+      </div>
+      <div class="selection">
+        <ul>
+          <li> <img src="img/imgtest2.png"><input type="radio" name="img" value="imgtest2"> </li>
+      </div>
+      <div class="selection">
+        <li><img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3"> </li>
+      </div>
+      <div class="selection">
+        <li><img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest3"> </li>
+      </div>
+      </div>
+        </ul>
         <div>
           <input type="file" name="image">
         </div>
         <div>
           <input id="cpt_1" type="hidden" name="cpt_1">
         </div>
-        <button id="submitphoto" type="submit">Envoyer</button>
-      </div>
+
+        <button type="submit">Envoyer</button>
     </form>
+    </div>
 /
 <!--   <div class="side">
       <p>Liste des images déja crées (cliquez sur une image pour la supprimer)</p>
