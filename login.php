@@ -1,23 +1,8 @@
 <?php
 	include 'config/database.php';
-    include 'includes.php';
 	session_start();
     $auth = 0;
     try {
-        if(isset($_GET['action'])){
-        //check the action
-        switch ($_GET['action']) {
-            case 'active':
-                echo "<h2 class='bg-success'>Your account is now active you may now log in.</h2>";
-                break;
-            case 'reset':
-                echo "<h2 class='bg-success'>Please check your inbox for a reset link.</h2>";
-                break;
-            case 'resetAccount':
-                echo "<h2 class='bg-success'>Password changed, you may now login.</h2>";
-                break;
-            }
-        }
         if (isset($_POST['login'])) {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,7 +15,7 @@
             $query->closeCursor();
             $e = "User $username not found.";
            } else {
-                $_SESSION['Auth'] = $query->fetch();
+                $_SESSION['Active'] = 'Yes';
                 $query->closeCursor();
                 header('Location: profile.php');
                 die();
@@ -77,6 +62,22 @@
             <span class="psw">
             	Forgot <a href="forgot.php">password?</a>
             </span>
+            <?php         
+            if(isset($_GET['action'])){
+            //check the action
+            switch ($_GET['action']) {
+            case 'active':
+                echo "<h2 class='bg-success'>Your account is now active you may now log in.</h2>";
+                break;
+            case 'reset':
+                echo "<h2 class='bg-success'>Please check your inbox for a reset link.</h2>";
+                break;
+            case 'resetAccount':
+                echo "<h2 class='bg-success'>Password changed, you may now login.</h2>";
+                break;
+            }
+        }
+            ?>
         </form>
   	</div>
 	</div>

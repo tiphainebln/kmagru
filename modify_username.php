@@ -1,21 +1,27 @@
 <?php
+include 'config/database.php';
 session_start();
-if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
+if($_SESSION['active'] == 1 && isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   $username = $dbh->quote($_POST['username']);
    $query = $dbh->query("SELECT * FROM users WHERE username=$username");
    $query->execute(array(':username' => $username));
    $rows = $query->fetch(PDO::FETCH_ASSOC);
    if($query->rowCount() == 1)
    {
-      if(isset($_POST['newusernamebis'])) {
+    var_dump("okokokok");
+      if(isset($_POST['newusernamebis']) && isset($_POST['newusername'])) {
         $user = $_POST['newusername'];
         $cuser = $_POST['newusernamebis'];
         if($cuser!==$user)
         {
           echo "Sorry! Username Mismatch. ";
         } else {
-      $query = $dbh->query("UPDATE users SET username=$username WHERE email=$email");
+      $id = $dbh->lastInsertId();
+      $query = $dbh->query("UPDATE users SET username=$username WHERE id=$id");
       $query->execute(array(':user' => $cuser));
-      echo "Username changed successefully."; }
+      $changed = 1; }
     } 
  } else {
   exit; }
@@ -33,20 +39,27 @@ if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['newuser
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-  <span><a href="#" class="admin">Admin</a></span>
-    <ul id="menu">
-     <ul id="choix">
-        <li><a class="grey" href="#">Settings ▾</a>
-      <ul>
-        <li><a href="reset_username.php" class="grey">Change username</a></li>
-        <li><a href="reset_password.php" class="grey">Change password</a></li>
-        <li><a href="reset_email.php" class="grey">Change email</a></li>
-          </ul>
-        </li>
-        <li><a class="grey" href="#">Comments</a></li>
-        <li><a class="grey" href="#">Gallery</a></li>
-      </ul>
-    </ul>
+    <div class="dropdown">
+    <a button class="admin">Admin</a>
+    <div class="dropdown-content">
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
+    </div>
+  </div>
+
+  <div class="all">
+     <a href="#">All</a>
+  </div>
+  <div class="mygallery">
+      <a href="my_gallery.php">My Gallery</a>
+  </div>
+  <div class="newcreation">
+     <a href="main_section.php">New creation</a>
+  </div>
+  <div class="footer">
+    <p>Footer</p>
+  </div>
   </div></div>
   <div id="username">
   <div class="container">
@@ -67,6 +80,9 @@ if($_SESSION['active'] = 1 && isset($_POST['username']) && isset($_POST['newuser
                 Submit
             </button>
         </form>
+        <?php if (isset($changed))
+        echo "Username changed successfully.";
+        ?>
     </div>
   </div>
     <div class="footer">

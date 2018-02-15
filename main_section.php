@@ -11,6 +11,7 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
 }
 
 // miniatures ; https://stackoverflow.com/questions/11903289/pull-all-images-from-a-specified-directory-and-then-display-them 
+// php -S localhost:8100/
 // https://stackoverflow.com/questions/30389392/capture-image-from-webcam-and-save-in-folder-using-php-and-javascript
     if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
      var_dump("okokok");
@@ -102,9 +103,9 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
     <div class="dropdown">
     <a button class="admin">Admin</a>
     <div class="dropdown-content">
-      <a href="reset_username.php">Change username</a>
-      <a href="reset_password.php">Change password</a>
-      <a href="reset_email.php">Change email</a>
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
     </div>
   </div>
 

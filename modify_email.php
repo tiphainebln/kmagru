@@ -33,20 +33,27 @@ if($_SESSION['active'] = 1 && isset($_POST['email']) && isset($_POST['newemail']
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-  <span><a href="#" class="admin">Admin</a></span>
-    <ul id="menu">
-     <ul id="choix">
-        <li><a class="grey" href="#">Settings ▾</a>
-      <ul>
-        <li><a href="reset_username.php" class="grey">Change username</a></li>
-        <li><a href="reset_password.php" class="grey">Change password</a></li>
-        <li><a href="reset_email.php" class="grey">Change email</a></li>
-          </ul>
-        </li>
-        <li><a class="grey" href="#">Comments</a></li>
-        <li><a class="grey" href="#">Gallery</a></li>
-      </ul>
-    </ul>
+    <div class="dropdown">
+    <a button class="admin">Admin</a>
+    <div class="dropdown-content">
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
+    </div>
+  </div>
+
+  <div class="all">
+     <a href="#">All</a>
+  </div>
+  <div class="mygallery">
+      <a href="my_gallery.php">My Gallery</a>
+  </div>
+  <div class="newcreation">
+     <a href="main_section.php">New creation</a>
+  </div>
+  <div class="footer">
+    <p>Footer</p>
+  </div>
   </div></div>
   <div id="username">
   <div class="container">

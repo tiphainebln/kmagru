@@ -1,9 +1,7 @@
 
 <?php
-session_start();
+// session_start();
 include 'config/database.php';
-
-
 
 if (isset($_GET['delete'])) {
   // recuperer l'image a supprimer
@@ -81,9 +79,9 @@ $images = $select->fetchAll();
     <div class="dropdown">
     <a button class="admin">Admin</a>
     <div class="dropdown-content">
-      <a href="reset_username.php">Change username</a>
-      <a href="reset_password.php">Change password</a>
-      <a href="reset_email.php">Change email</a>
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
     </div>
   </div>
 

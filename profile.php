@@ -3,11 +3,11 @@
 session_start();
 
 // Check if user is logged in using the session variable
-if (isset($_SESSION['Auth'])) {
+if (isset($_SESSION['Active'])) {
      
 }
 else {
-  header('Location : login.php');
+  // header('Location : login.php');
   die;
     // the user can modify his password, his email and his name
     // access to the main section
@@ -32,9 +32,9 @@ else {
   <div class="dropdown">
     <a button class="admin">Admin</a>
     <div class="dropdown-content">
-      <a href="reset_username.php">Change username</a>
-      <a href="reset_password.php">Change password</a>
-      <a href="reset_email.php">Change email</a>
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
     </div>
   </div>
 

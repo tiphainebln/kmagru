@@ -16,7 +16,6 @@ if(is_numeric($id) && !empty($active)){
     ));
     //if the row was updated redirect the user
     if($query->rowCount()){
-        var_dump("okokokok");
         //redirect to login page
         "Your account is activated.";
         header('Location: login.php?action=active');

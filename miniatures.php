@@ -11,7 +11,7 @@ foreach($files as $image)
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Camagru</title>
+  <title>Camagru</title>
   <link rel="stylesheet" href="index.css" href="main_section.php" charset="utf-8">
 </head>
 <body>
@@ -22,9 +22,9 @@ foreach($files as $image)
     <div class="dropdown">
     <a button class="admin">Admin</a>
     <div class="dropdown-content">
-      <a href="reset_username.php">Change username</a>
-      <a href="reset_password.php">Change password</a>
-      <a href="reset_email.php">Change email</a>
+      <a href="modify_username.php">Change username</a>
+      <a href="modify_password.php">Change password</a>
+      <a href="modify_email.php">Change email</a>
     </div>
   </div>
 
