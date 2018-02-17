@@ -35,7 +35,7 @@
     $body = "
     <html>
     <head>
-        <title>Someone requested that the password be reset.</title>
+        <title>Resetting password request.</title>
     </head>
     <body>
         <p>To reset your password, please click on this <a href='http://localhost:8100/camagru/resetPassword.php?key=$token'>link.</a></p>
@@ -49,7 +49,8 @@
          'Reply-To: tbouline@student.42.fr' . "\r\n" .
          'X-Mailer: PHP/' . phpversion();
     mail($to, $subject, $body, $headers);
-    //redirect to index page
+
+    //redirect to login page
     header('Location: login.php?action=reset');
     exit; }
     } catch(PDOException $e) {

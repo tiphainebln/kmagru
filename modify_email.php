@@ -1,25 +1,46 @@
 <?php
+include 'config/database.php';
 session_start();
-if($_SESSION['active'] = 1 && isset($_POST['email']) && isset($_POST['newemail']) && isset($_POST['newemailbis'])){
+
+// if ($_SESSION['active'] == 'Yes' && isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
+if (isset($_POST['email']) && isset($_POST['newemail']) && isset($_POST['newemailbis'])){
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   $username = $dbh->quote($_POST['username']);
+   $email = $dbh->quote($_POST['email']);
+   $id = $dbh->lastInsertId();
    $query = $dbh->query("SELECT * FROM users WHERE username=$username");
    $query->execute(array(':username' => $username));
    $rows = $query->fetch(PDO::FETCH_ASSOC);
+   var_dump("okokokok");
    if($query->rowCount() == 1)
    {
-      if(isset($_POST['newemail'])) {
+      if(isset($_POST['newemailbis']) && isset($_POST['newemail']))
+      {
         $mail = $_POST['newemail'];
         $cmail = $_POST['newemailbis'];
-        if($cmail!==$mail)
+        if($cmail !== $mail)
         {
           echo "Sorry! Email Mismatch. ";
-        } else {
-      $query = $dbh->query("UPDATE users SET email=$email WHERE username=$username");
-      $query->execute(array(':email' => $cmail));
-      echo "Email changed successefully."; }
-    } 
- } else {
-  exit; }
- }
+        } 
+        else 
+        {
+          // $username = $user;
+          var_dump("hereeee");
+          $email = $mail;
+          var_dump($id);
+          var_dump($email);
+          $query = $dbh->query("UPDATE users SET email='$email' WHERE username=$username");
+          $query->execute(array(':email' => $cmail));
+          $changed = 1;
+        }
+      }
+    }
+  else
+  {
+    exit;
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,17 +80,21 @@ if($_SESSION['active'] = 1 && isset($_POST['email']) && isset($_POST['newemail']
   <div class="container">
         <form method="post">
           <label>
-            <b>Email</b>
+            <b>Username</b>
           </label>
-            <input type="text" placeholder="Enter your current username" name="email" autocomplete="off" required>
+            <input type="text" placeholder="Enter your username" name="username" autocomplete="off" required>
+          <label>
+            <b>Current Email</b>
+          </label>
+            <input type="text" placeholder="Enter your current email" name="email" autocomplete="off" required>
             <label>
              <b>New Email</b>
             </label>
-            <input type="password" placeholder="Enter your new username" name="newemail" autocomplete="off" required>
+            <input type="text" placeholder="Enter your new email" name="newemail" autocomplete="off" required>
             <label>
              <b>Repeat new email</b>
             </label>
-            <input type="password" placeholder="Enter your new username again" name="newemailbis" autocomplete="off" required>
+            <input type="text" placeholder="Enter your new email again" name="newemailbis" autocomplete="off" required>
             <button type="submit" name="changeemail">
                 Submit
             </button>

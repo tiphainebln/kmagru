@@ -43,11 +43,11 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         // Create file name and register the image in database
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      // $user = $_SESSION['Auth'];
-      // $userid = $dbh->quote($user['id']);
-      // $dbh->query("INSERT INTO gallery SET userid=$userid");
+      $user = $_SESSION['active'];
+      $userid = $dbh->quote($user['id']);
+      $dbh->query("INSERT INTO gallery SET userid=$userid");
       $image_id = $dbh->lastInsertId();
-      // $image_name = $user['username'].'_'. $image_id . '.png';
+      $image_name = $user['username'].'_'. $image_id . '.png';
       $image_name = $image_id.'png';    
       $image_name = $dbh->quote($filename);
       $image_id = $dbh->lastInsertId();
@@ -152,13 +152,12 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         <button type="submit">Envoyer</button>
     </form>
     </div>
-/
 <!--   <div class="side">
       <p>Liste des images déja crées (cliquez sur une image pour la supprimer)</p>
       <?PHP
       //listPhotos();
-      ?>
-  </div> -->
+      ?> -->
+  </div>
 </div>
   </div>
 

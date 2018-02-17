@@ -3,7 +3,7 @@
 session_start();
 
 // Check if user is logged in using the session variable
-if (isset($_SESSION['Active'])) {
+if (isset($_SESSION['Active']) == 'Yes') {
      
 }
 else {
@@ -48,7 +48,7 @@ else {
      <a href="main_section.php">New creation</a>
   </div>
   <p>
-    <?php if (isset($_SESSION['Auth'])) {
+    <?php if (isset($_SESSION['Active']) == 'Yes') {
     echo "Thanks for registering"; 
 }
 else {
