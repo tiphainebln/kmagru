@@ -1,3 +1,6 @@
+<!--  miniatures a faire, forgot.php a retravailler : l'envoi de mail ne fo…  …
+…nctionne pas pour cette page. Lastinsertid retourne toujours 0 dans modify_username : peut etre du a pamp. creation de la galerie general. a venir : implementation des commentaires et des likes. -->
+
 
 <?php
 // session_start();
@@ -59,8 +62,11 @@ $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // $user = $_SESSION['Auth'];
 // $userid = $dbh->quote($user['id']);
-// $select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
-$select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
+// $userid = ("SELECT LAST_INSERT_ID()");
+$userid = $dbh->lastInsertId();
+echo $userid;
+$select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
+// $select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
 $images = $select->fetchAll();
 
 ?>
@@ -86,7 +92,7 @@ $images = $select->fetchAll();
   </div>
 
   <div class="all">
-     <a href="#">All</a>
+     <a href="gallery.php">All</a>
   </div>
   <div class="mygallery">
       <a href="my_gallery.php">My Gallery</a>

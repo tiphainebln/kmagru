@@ -101,7 +101,7 @@
 				<label>
 					Email
 				</label>
-				<input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="<?php if(isset($error)){ echo $_POST['email']; } ?>" tabindex="2"/>
+				<input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="" />
 				<label>
 					Username
 				</label>
@@ -109,7 +109,7 @@
 				<label>
 					Password
 				</label>
-				<input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="test" />
+				<input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="" />
 				 <button type="submit" class="registerbtn" value="ok"> Register </button>
 			</form>
 		</div>

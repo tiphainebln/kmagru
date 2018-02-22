@@ -18,11 +18,11 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       // get the content of the captured image from the webcam put it in a tmp img
       $timestamp = mktime();
       $file = 'img/'.$timestamp.'.png';
-      $filename = $file;
+      $filename = $timestamp.'.png';
       list($type, $data) = explode(';', $_POST['cpt_1']);
       list(, $data) = explode(',', $data);
       $data = base64_decode($data);
-      file_put_contents($filename, $data);
+      file_put_contents($file, $data);
 
 
       //creat image from this temporary
@@ -33,8 +33,8 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       imagesavealpha($imgpng, true);
 
       imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
-      imagepng($image, $filename);
-      imagepng($image, $filename);
+      imagepng($image, $file);
+      imagepng($image, $file);
       // free memory
       imagedestroy($image);
 
@@ -51,42 +51,43 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       $image_name = $image_id.'png';    
       $image_name = $dbh->quote($filename);
       $image_id = $dbh->lastInsertId();
+      // userid = userid
       $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
       header('Location: my_gallery.php');
       die();
     }
     // }
-// if (isset($_FILES['image']) && isset($_POST['img'])) {
-//   var_dump("ùùùùùùùùùùù");
-//   $imageready = $_FILES['image'];
-//   $extension = pathinfo($imageready['name'], PATHINFO_EXTENSION);
-//   if (in_array($extension, array('jpg', 'png'))){
+if (isset($_FILES['image']) && isset($_POST['img'])) {
+  var_dump("ùùùùùùùùùùù");
+  $imageready = $_FILES['image'];
+  $extension = pathinfo($imageready['name'], PATHINFO_EXTENSION);
+  if (in_array($extension, array('jpg', 'png'))){
     
-//     // Le format du fichier est correct
-//     $user = $_SESSION['Auth'];
-//     $userid = $dbh->quote($user['id']);
-//     $dbh->query("INSERT INTO gallery SET userid=$userid");
-//     $image_id = $dbh->lastInsertId();
+    // Le format du fichier est correct
+    $user = $_SESSION['Auth'];
+    $userid = $dbh->quote($user['id']);
+    $dbh->query("INSERT INTO gallery SET userid=$userid");
+    $image_id = $dbh->lastInsertId();
     
-//      $timestamp = mktime();
-//     $file = $timestamp.'.png';
-//     $filename = 'img/'.$file;
-//     move_uploaded_file($imageready['tmp_name'], 'img/'. $filename);
-//     if ($extension == 'jpg')
-//       $image = imagecreatefromjpeg('img/'. $filename);
-//     else if ($extension == 'png')
-//       $image = imagecreatefrompng('img/'. $filename);
-//     $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
-//     imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
-//     imagepng($image,'img/'. $filename);
-//     // free memory
-//     imagedestroy($im);
-//     $image_name = $dbh->quote($filename);
-//     $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
-//   }
-//   header('Location: my_gallery.php');
-//   die();
-// }
+     $timestamp = mktime();
+    $file = $timestamp.'.png';
+    $filename = 'img/'.$file;
+    move_uploaded_file($imageready['tmp_name'], 'img/'. $filename);
+    if ($extension == 'jpg')
+      $image = imagecreatefromjpeg('img/'. $filename);
+    else if ($extension == 'png')
+      $image = imagecreatefrompng('img/'. $filename);
+    $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
+    imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+    imagepng($image,'img/'. $filename);
+    // free memory
+    imagedestroy($im);
+    $image_name = $dbh->quote($filename);
+    $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
+  }
+  header('Location: my_gallery.php');
+  die();
+}
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +111,7 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
   </div>
 
   <div class="all">
-     <a href="#">All</a>
+     <a href="gallery.php">All</a>
   </div>
   <div class="mygallery">
       <a href="my_gallery.php">My Gallery</a>
