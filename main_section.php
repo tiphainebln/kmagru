@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'config/database.php';
- // include 'includes.php';
+ include 'includes.php';
 function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
   $cut = imagecreatetruecolor($src_w, $src_h);
@@ -24,7 +24,6 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       $data = base64_decode($data);
       file_put_contents($file, $data);
 
-
       //creat image from this temporary
       $image = imagecreatefrompng($_POST['cpt_1']);
      // get selected picture
@@ -43,19 +42,18 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         // Create file name and register the image in database
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $user = $_SESSION['active'];
+
+      $user = $_SESSION['Auth'];
       $userid = $dbh->quote($user['id']);
       $dbh->query("INSERT INTO gallery SET userid=$userid");
       $image_id = $dbh->lastInsertId();
-      $image_name = $user['username'].'_'. $image_id . '.png';
-      $image_name = $image_id.'png';    
-      $image_name = $dbh->quote($filename);
-      $image_id = $dbh->lastInsertId();
-      // userid = userid
-      $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
+      // $image_name = $user['username'].'_'. $image_id . '.png';
+      $image_name = $filename;
+      // $dbh->query("UPDATE gallery SET img_name=$image_name WHERE galleryid=$image_id");
       header('Location: my_gallery.php');
       die();
     }
+    
     // }
 if (isset($_FILES['image']) && isset($_POST['img'])) {
   var_dump("ùùùùùùùùùùù");

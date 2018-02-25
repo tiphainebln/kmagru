@@ -11,11 +11,13 @@
         $query= $dbh->prepare("SELECT id, username, password FROM users WHERE username=:username AND password=:password");
         $query->execute(array(':username' => $username, ':password' => $password));
         $data = $query->fetch(PDO::FETCH_ASSOC);
+         var_dump("expression");
         if ($data == null){
             $query->closeCursor();
             $e = "User $username not found.";
            } else {
                 $_SESSION['Active'] = 'Yes';
+                $_SESSION['Auth'] = $query->fetch(PDO::FETCH_ASSOC);
                 $query->closeCursor();
                 header('Location: profile.php');
                 die();

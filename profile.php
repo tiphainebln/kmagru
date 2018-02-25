@@ -1,5 +1,6 @@
 <?php
 /* Displays user information and some useful messages */
+  include 'config/database.php';
 session_start();
 
 // Check if user is logged in using the session variable
@@ -49,7 +50,7 @@ else {
   </div>
   <p>
     <?php if (isset($_SESSION['Active']) == 'Yes') {
-    echo "Thanks for registering"; 
+    echo "Thanks for registering $_SESSION['Auth']['username']";
 }
 else {
    echo "You must log in before viewing your profile page!";} ?>
