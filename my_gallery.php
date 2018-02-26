@@ -3,7 +3,7 @@
 
 
 <?php
-// session_start();
+session_start();
 include 'config/database.php';
 
 if (isset($_GET['delete'])) {
@@ -13,12 +13,12 @@ if (isset($_GET['delete'])) {
   $id = $dbh->quote($_GET['delete']);
   $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE userid=$userid");
   $image = $select->fetch();
-  if ($image['user_id'] == $user['id']) {
+  if ($image['userid'] == $user['id']) {
     // l'image est bien celle de l'utilisateur connecté
     // suppression du fichier
     unlink('img/' . $image['name']);
     // supression en bdd
-    $dbh->query("DELETE FROM gallery WHERE id=$id");
+    $dbh->query("DELETE FROM gallery WHERE userid=$userid");
     // message de confirmation
     echo "artwork deleted.";
     header('Location: my_creations.php');

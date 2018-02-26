@@ -2,32 +2,7 @@
 // session_start();
   include 'config/database.php';
 
-// Pagination 
 
-  if(isset($_GET['p'])) {
-
-    // recuperer la valeur de la page courante passer en GET
-    $cp = intval($_GET['p']);
-
-    if($cp > $nb_page) {
-      $cp=$nb_page;
-    } else if ($cp < 1) {
-      $cp = 1;
-    }
-
-  } else {
-    $cp = 1;
-  }
-
-  $first = ($cp-1) * $ppp;
-
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  // $user = $_SESSION['Auth'];
-  // $userid = $dbh->quote($user['id']);
-  // $select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
-  $select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
-  $images = $select->fetchAll();
 
 ?> 
 

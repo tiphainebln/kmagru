@@ -1,7 +1,7 @@
 <?php
 /* Displays user information and some useful messages */
-  include 'config/database.php';
 session_start();
+include 'config/database.php';
 
 // Check if user is logged in using the session variable
 if (isset($_SESSION['Active']) == 'Yes') {
@@ -9,7 +9,7 @@ if (isset($_SESSION['Active']) == 'Yes') {
 }
 else {
   // header('Location : login.php');
-  die;
+  
     // the user can modify his password, his email and his name
     // access to the main section
     // logout must be visible everywhere
@@ -50,7 +50,7 @@ else {
   </div>
   <p>
     <?php if (isset($_SESSION['Active']) == 'Yes') {
-    echo "Thanks for registering $_SESSION['Auth']['username']";
+    echo "Thanks for registering";
 }
 else {
    echo "You must log in before viewing your profile page!";} ?>

@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include 'config/database.php';
 	
 	try {
@@ -22,18 +23,18 @@
     		$query->closeCursor();
     	}
 		
-		//email validation
-		if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-		    $error[] = 'Please enter a valid email address';
-		} else {
-		    $query = $dbh->prepare('SELECT email FROM users WHERE email = :email');
-		    $query->execute(array(':email' => $_POST['email']));
-		    $row = $query->fetch(PDO::FETCH_ASSOC);
+		// //email validation
+		// if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+		//     $error[] = 'Please enter a valid email address';
+		// } else {
+		//     $query = $dbh->prepare('SELECT email FROM users WHERE email = :email');
+		//     $query->execute(array(':email' => $_POST['email']));
+		//     $row = $query->fetch(PDO::FETCH_ASSOC);
 
-		    if(!empty($row['email'])){
-		        $error[] = 'Email provided is already in use.';
-		    }   
-		}
+		//     if(!empty($row['email'])){
+		//         $error[] = 'Email provided is already in use.';
+		//     }   
+		// }
 
 		if (!isset($error)){
 		//create the activation code
@@ -49,29 +50,30 @@
 		    ':active' => $active
 		));
 		$id = $dbh->lastInsertId('id');
-
+		$_SESSION['Auth'] = $id;
+		echo $_SESSION['Auth'];
 		// send confirmation email
-		$to = $_POST['email'];
-		$subject = "Registration Confirmation";
-		$activeurl = 'http://active.php?x=.$id&y=$active';
-		$body = "
-		<html>
-			<head>
-			<title>Thank you for registering at Camagru.</title>
-			</head>
-		<body>
-			<p>To activate your account, please click on this <a href='http://localhost:8100/activate.php?x=$id&y=$active'>link.</a></p>
+		// $to = $_POST['email'];
+		// $subject = "Registration Confirmation";
+		// $activeurl = 'http://active.php?x=.$id&y=$active';
+		// $body = "
+		// <html>
+		// 	<head>
+		// 	<title>Thank you for registering at Camagru.</title>
+		// 	</head>
+		// <body>
+		// 	<p>To activate your account, please click on this <a href='http://localhost:8100/activate.php?x=$id&y=$active'>link.</a></p>
 			
-			</body>
-		</html>";
-		// To send HTML mail, the Content-type header must be set
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		// Additionnal headers
-		$headers .= 'From: tbouline@student.42.fr' . "\r\n" .
-		 'Reply-To: tbouline@student.42.fr' . "\r\n" .
-		 'X-Mailer: PHP/' . phpversion();
- 		mail($to, $subject, $body, $headers);
+		// 	</body>
+		// </html>";
+		// // To send HTML mail, the Content-type header must be set
+		// $headers  = 'MIME-Version: 1.0' . "\r\n";
+		// $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		// // Additionnal headers
+		// $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
+		//  'Reply-To: tbouline@student.42.fr' . "\r\n" .
+		//  'X-Mailer: PHP/' . phpversion();
+ 	// 	mail($to, $subject, $body, $headers);
 
 		header('Location: register.php?action=joined');
 		exit; }
