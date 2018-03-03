@@ -1,7 +1,7 @@
 <?php
 	include 'config/database.php';
 	session_start();
-    $auth = 0;
+
     try {
         if (isset($_POST['login'])) {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -11,13 +11,13 @@
         $query= $dbh->prepare("SELECT id, username, password FROM users WHERE username=:username AND password=:password");
         $query->execute(array(':username' => $username, ':password' => $password));
         $data = $query->fetch(PDO::FETCH_ASSOC);
-         var_dump("expression");
         if ($data == null){
             $query->closeCursor();
             $e = "User $username not found.";
-           } else {
+           } else { 
+                var_dump("expression");
                 $_SESSION['Active'] = 'Yes';
-                $_SESSION['Auth'] = $query->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['userid'] = $data['id'];
                 $query->closeCursor();
                 header('Location: profile.php');
                 die();

@@ -5,7 +5,6 @@ include 'config/database.php';
 
 // Check if user is logged in using the session variable
 if (isset($_SESSION['Active']) == 'Yes') {
-     
 }
 else {
   // header('Location : login.php');

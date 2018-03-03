@@ -63,12 +63,12 @@ $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // $user = $_SESSION['Auth'];
 // $userid = $dbh->quote($user['id']);
 // $userid = ("SELECT LAST_INSERT_ID()");
-$userid = $dbh->lastInsertId();
+$userid = $_SESSION['userid'];
 echo $userid;
-$select = $dbh->query("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
+$select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$userid ORDER BY date DESC LIMIT $first, $ppp");
 // $select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
+$select->execute();
 $images = $select->fetchAll();
-
 ?>
 
 <!DOCTYPE html>
@@ -109,15 +109,14 @@ $images = $select->fetchAll();
 </div>
   <h2> Mes creations </h2>
 
-  <ul class="display-images">
+  <div class="display-images">
     <?php foreach ($images as $image) : ?>
-
-      <li>
-        <img class="img" src="<?php echo 'http://localhost:8100/camagru/'; ?><?php echo $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100%"><br>
-        | <a href="?delete=<?php echo $image['userid'];?>" onclick="return('Sur sur sur ?')">Supprimer</a>
-      </li>
-     <?php  endforeach; ?>
-  </ul>
+      <div class="imgandbutton">
+        <img style="list-style: none; text-decoration: none; display: inline-block;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+        | <a href="?delete=<?php echo '1518637135.png';?>" onclick="alert('Sur sur sur ?')">Supprimer</a>
+      </div>
+    <?php endforeach; ?>
+  </div>
 
 
   <div class="paginate">

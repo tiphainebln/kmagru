@@ -1,6 +1,6 @@
 <?php
 require('config/database.php');
-
+session_start();
 //collect values from the url
 $id = trim($_GET['x']);
 $active = trim($_GET['y']);
@@ -18,6 +18,7 @@ if(is_numeric($id) && !empty($active)){
     if($query->rowCount()){
         //redirect to login page
         "Your account is activated.";
+        $_SESSION['userid'] = $id;
         header('Location: login.php?action=active');
         exit;
 

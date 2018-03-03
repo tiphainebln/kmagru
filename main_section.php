@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'config/database.php';
-// include 'includes.php';
+
 function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
   $cut = imagecreatetruecolor($src_w, $src_h);
@@ -9,10 +9,8 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
   imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
   imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
 }
-
-// miniatures ; https://stackoverflow.com/questions/11903289/pull-all-images-from-a-specified-directory-and-then-display-them 
-// php -S localhost:8100/
-// https://stackoverflow.com/questions/30389392/capture-image-from-webcam-and-save-in-folder-using-php-and-javascript
+ 
+ var_dump($_SESSION['userid']);
     if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
       // get the content of the captured image from the webcam put it in a tmp img
       $timestamp = mktime();
@@ -36,22 +34,21 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       imagepng($image, $file);
       // free memory
       imagedestroy($image);
-
-
-
-
+      var_dump("expression");
         // Create file name and register the image in database
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-      $user = $_SESSION['Auth'];
+      $user = $_SESSION['userid'];
 
-      $dbh->query("UPDATE gallery SET userid=$user");
-      $image_id = $dbh->lastInsertId();
-      $image_name = $filename;
-      $dbh->query("UPDATE gallery SET img_name=$image_name WHERE userid=$user");
+      try {
+      $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
+          $req->execute(array(":user" => $user, ":filename" => $filename));
+      }
+      catch (PDOException $e) {
+        echo $req . "<br>" . $e->getMessage();
+      }
       header('Location: my_gallery.php');
-       die();
     }
     
     // }
