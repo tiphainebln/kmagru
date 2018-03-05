@@ -9,9 +9,8 @@ if(is_numeric($id) && !empty($active)){
     $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //update users record set the active column to Yes where the ID and active value match the ones provided in the array
-    $query = $dbh->prepare("UPDATE users SET active = 'Yes' WHERE id = :id AND active = :active");
+    $query = $dbh->prepare("UPDATE users SET active = 'Yes' WHERE id = :id");
     $query->execute(array(
-        ':id' => $id,
         ':active' => $active
     ));
     //if the row was updated redirect the user

@@ -16,7 +16,6 @@
             $e = "User $username not found.";
            } else { 
                 var_dump("expression");
-                $_SESSION['Active'] = 'Yes';
                 $_SESSION['userid'] = $data['id'];
                 $_SESSION['username'] = $data['username'];
                 $query->closeCursor();
