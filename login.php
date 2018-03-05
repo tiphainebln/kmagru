@@ -18,6 +18,7 @@
                 var_dump("expression");
                 $_SESSION['Active'] = 'Yes';
                 $_SESSION['userid'] = $data['id'];
+                $_SESSION['username'] = $data['username'];
                 $query->closeCursor();
                 header('Location: profile.php');
                 die();
@@ -69,13 +70,13 @@
             //check the action
             switch ($_GET['action']) {
             case 'active':
-                echo "<h2 class='bg-success'>Your account is now active you may now log in.</h2>";
+                echo "<h2>Your account is now active you may now log in.</h2>";
                 break;
             case 'reset':
-                echo "<h2 class='bg-success'>Please check your inbox for a reset link.</h2>";
+                echo "<h2>Please check your inbox for a reset link.</h2>";
                 break;
             case 'resetAccount':
-                echo "<h2 class='bg-success'>Password changed, you may now login.</h2>";
+                echo "<h2>Password changed, you may now login.</h2>";
                 break;
             }
         }

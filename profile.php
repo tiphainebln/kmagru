@@ -39,10 +39,10 @@ else {
   </div>
 
   <div class="all">
-     <a href="#">All</a>
+     <a href="gallery.php">All</a>
   </div>
   <div class="mygallery">
-      <a href="#">My Gallery</a>
+      <a href="my_gallery.php">My Gallery</a>
   </div>
   <div class="newcreation">
      <a href="main_section.php">New creation</a>

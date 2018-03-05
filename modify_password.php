@@ -1,30 +1,35 @@
 <?php
+include 'config/database.php';
 session_start();
-  var_dump("okok");
-if ($_SESSION['active'] == 1 && isset($_POST['username']) && isset($_POST['q']) && isset($_POST['password'])){
-   $stmt = $dbh->query("SELECT * FROM users WHERE username=$username");
-   $stmt->execute(array(':username' => $username));
-   $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-   if($stmt->rowCount() == 1)
-   {
-      if(isset($_POST['resetpass'])) {
-        $pass = $_POST['pass'];
-        $cpass = $_POST['confirm-pass'];
-        if($cpass!==$pass)
-        {
-          echo "Sorry! Password Mismatch. ";
-        } else {
-      $stmt = $dbh->query("UPDATE users SET password=$password WHERE username=$username");
-      $stmt->execute(array(':pass' => $cpass));
-      echo "Password changed successefully."; }
-    } 
- } else {
-  exit; }
- }
-    // the user can modify his password, his email and his name
-    // access to the main section
-    // logout must be visible everywhere
+$changed = 0;
+$missmatch = 0;
+try {
+  $username = $_SESSION['username'];
+  $userid = $_SESSION['userid'];
+  if (isset($_POST['password']) && isset($_POST['newpassword']) && isset($_POST['newpasswordbis'])){
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pass = $_POST['newpassword'];
+  $cpass = $_POST['newpasswordbis'];
+  if ($pass !== $cpass)
+  {
+    $mismatch = 1;
+  }
+  else
+  {
+    $hash = password_hash($cpass, PASSWORD_BCRYPT);
+    $query = $dbh->prepare("UPDATE users SET password='$pass', hash='$hash' WHERE id=$userid");
+    $query->execute();
+    $changed = 1;
+  }
+}
+}
+catch(PDOException $e){
+    echo $query . "<br>" . $e->getMessage();
+}
 ?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,21 +68,31 @@ if ($_SESSION['active'] == 1 && isset($_POST['username']) && isset($_POST['q']) 
           <label>
             <b>Password</b>
           </label>
-            <input type="text" placeholder="Enter your current password" name="pass" autocomplete="off" required>
+            <input type="text" placeholder="Enter your current password" name="password" autocomplete="off" required>
             <label>
              <b>New password</b>
             </label>
-            <input type="password" placeholder="Enter your new password" name="confirm-pass" autocomplete="off" required>
+            <input type="password" placeholder="Enter your new password" name="newpassword" autocomplete="off" required>
             <label>
              <b>Repeat new password</b>
             </label>
-            <input type="password" placeholder="Enter your password again" name="confirm-pass" autocomplete="off" required>
+            <input type="password" placeholder="Enter your password again" name="newpasswordbis" autocomplete="off" required>
             <button type="submit" name="changeusername">
                 Reset your password
             </button>
         </form>
     </div>
   </div>
+    <?php 
+    if ($changed != 0)
+    {
+     echo "<h2>Records updated successfully.</h2>";
+    }
+    else if ($mismatch != 0)
+    {
+     echo "<h2>Sorry! Password Mismatch.</h2>";
+    }
+  ?>
     <div class="footer">
     <p>Footer</p>
   </div>

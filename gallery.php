@@ -1,8 +1,39 @@
 <?php
 // session_start();
   include 'config/database.php';
+$ppp = 5;
 
+// recuperer le nombre d'image enregistrées
+$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
+$total_pic = $select->fetch();
+$nb_pic = $total_pic['total'];
 
+$nb_page = ceil($nb_pic / $ppp);
+
+// Pagination du type all_creation.php?p=
+
+if(isset($_GET['p'])) {
+
+  // recuperer la valeur de la page courante passer en GET
+  $cp = intval($_GET['p']);
+
+  if($cp > $nb_page) {
+    $cp=$nb_page;
+  } else if ($cp < 1) {
+    $cp = 1;
+  }
+
+} else {
+  $cp = 1;
+}
+
+$first = ($cp-1) * $ppp;
+
+// Get result from db
+$select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
+$images = $select->fetchAll();
 
 ?> 
 
@@ -27,7 +58,7 @@
   </div>
 
   <div class="all">
-     <a href="#">All</a>
+     <a href="gallery.php">All</a>
   </div>
   <div class="mygallery">
       <a href="my_gallery.php">My Gallery</a>
@@ -42,32 +73,26 @@
   </p>
   <div class="form">
 </div>
-  <h2> Galerie </h2>
 
-  <ul class="display-images">
+  <ul class="display-images" style="width: 90%; margin-left: 10%;">
     <?php foreach ($images as $image) : ?>
-
-      <li>
-        <img class="img" src="<?php echo 'http://localhost:8100/camagru/'; ?><?php echo $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100%"><br>
-        | <a href="?delete=<?php echo $image['userid'];?>" onclick="return('Sur sur sur ?')">Supprimer</a>
-      </li>
+        <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
+    margin-top: 20px;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
      <?php  endforeach; ?>
   </ul>
-
 
   <div class="paginate">
     <p><?php
       if ($cp > 1) {
-        echo ' <a href="http://localhost:8100/camagru/gallery.php?p='. ($cp - 1) . '">previous</a>';
+        echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp - 1) . '">previous</a>';
       } ?> [ <?php echo $cp; ?> ] <?php
       if ($cp < $nb_page) {
-        echo ' <a href="http://localhost:8100/camagru/gallery.php?p='. ($cp + 1) . '">next</a>';
+        echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp + 1) . '">next</a>';
       }
     ?></p>
   </div>
   <div class="footer">
     <p>Footer</p>
   </div>
-</body>
 </body>
 </html>

@@ -4,13 +4,12 @@ include 'config/database.php';
 
 function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
-  $cut = imagecreatetruecolor($src_w, $src_h);
-  imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
-  imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
-  imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
+  $result = imagecreatetruecolor($src_w, $src_h);
+  imagecopy($result, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
+  imagecopy($result, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
+  imagecopymerge($dst_im, $result, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
 }
- 
- var_dump($_SESSION['userid']);
+ var_dump("test4");
     if (isset($_POST['cpt_1']) && $_POST['cpt_1'] != "" && isset($_POST['img'])) {
       // get the content of the captured image from the webcam put it in a tmp img
       $timestamp = mktime();
@@ -22,19 +21,17 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
       file_put_contents($file, $data);
 
       //creat image from this temporary
-      $image = imagecreatefrompng($_POST['cpt_1']);
+      $destination = imagecreatefrompng($file);
      // get selected picture
-      $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
-      imagealphablending($imgpng, true);
-      imagesavealpha($imgpng, true);
+      $source = imagecreatefrompng('img/'.$_POST['img'].'.png');
 
-      imagecopymerge_alpha($image, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+      imagecopymerge_alpha($destination, $source, 0, 0, 0, 0, imagesx($source), imagesy($source), 100);
       
-      imagepng($image, $file);
-      imagepng($image, $file);
+      imagepng($destination, $file);
+      // imagepng($image, $file);
       // free memory
       imagedestroy($image);
-      var_dump("expression");
+
         // Create file name and register the image in database
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

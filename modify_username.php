@@ -1,44 +1,31 @@
 <?php
 include 'config/database.php';
 session_start();
-
-// if ($_SESSION['active'] == 'Yes' && isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
-if (isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
+$changed = 0;
+$missmatch = 0;
+try {
+  $username = $_SESSION['username'];
+  $userid = $_SESSION['userid'];
+  if (isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
   $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   $username = $dbh->quote($_POST['username']);
-   $id = $dbh->lastInsertId();
-   $query = $dbh->query("SELECT * FROM users WHERE username=$username");
-   $query->execute(array(':username' => $username));
-   $rows = $query->fetch(PDO::FETCH_ASSOC);
-   var_dump("okokokok");
-   if($query->rowCount() == 1)
-   {
-      if(isset($_POST['newusernamebis']) && isset($_POST['newusername']))
-      {
-        $user = $_POST['newusername'];
-        $cuser = $_POST['newusernamebis'];
-        if($cuser !== $user)
-        {
-          echo "Sorry! Username Mismatch. ";
-        } 
-        else 
-        {
-          // $username = $user;
-          var_dump("hereeee");
-          $username = $user;
-          var_dump($id);
-          var_dump($username);
-          $query = $dbh->query("UPDATE users SET username='$username' WHERE id=$id");
-          $query->execute(array(':user' => $cuser));
-          $changed = 1;
-        }
-      }
-    }
+  $user = $_POST['newusername'];
+  $cuser = $_POST['newusernamebis'];
+  if($cuser !== $user)
+  {
+     $mismatch = 1;
+    echo "Sorry! Email Mismatch. ";
+  }
   else
   {
-    exit;
+    $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=$userid");
+    $query->execute();
+    $changed = 1;
   }
+}
+}
+catch(PDOException $e){
+    echo $query . "<br>" . $e->getMessage();
 }
 ?>
 
@@ -94,12 +81,18 @@ if (isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['n
                 Submit
             </button>
         </form>
-        <?php if (isset($changed)){
-        echo "Username changed successfully.";
-      }
-        ?>
     </div>
   </div>
+    <?php 
+    if ($changed != 0)
+    {
+     echo "<h2>Records updated successfully.</h2>";
+    }
+    else if ($mismatch != 0)
+    {
+     echo "<h2>Sorry! Username Mismatch.</h2>";
+    }
+  ?>
     <div class="footer">
     <p>Footer</p>
   </div>
