@@ -11,7 +11,7 @@
 	    	//check for any errors
 				if(isset($error)){
 			  		foreach($error as $error){
-			    echo '<p>'.$error.'</p>';
+			    echo '<h2>'.$error.'</h2>';
 			  }
 			}
     	$query= $dbh->prepare("SELECT id FROM users WHERE username=:username");
@@ -40,6 +40,7 @@
 	        $hash = password_hash($password, PASSWORD_BCRYPT);
 			$sql = "INSERT INTO users (username, password, email, hash, active) VALUES(:username, :password, :email, :hash, :active)";
 			$query = $dbh->prepare($sql);
+			var_dump("prepared");
 			$query->execute(array(
 			    ':username' => $username,
 			    ':password' => $password,
@@ -47,6 +48,7 @@
 			    ':hash' => $hash,
 			    ':active' => $active
 			));
+			$id = $dbh->lastInsertId('id');
 
 			// send confirmation email
 			$to = $_POST['email'];
@@ -86,6 +88,9 @@
 	<link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
+	<div class="all">
+     <a href="gallery.php">All</a>
+  </div>
 	<a href="index.php"><h1>Camagru</h1></a>
 	<div class="connect">
 		<a href="login.php">Login</a>

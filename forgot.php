@@ -38,7 +38,7 @@
         <title>Resetting password request.</title>
     </head>
     <body>
-        <p>To reset your password, please click on this <a href='http://localhost:8100/camagru/resetPassword.php?key=$token'>link.</a></p>
+        <p>To reset your password, please click on this <a href='http://localhost:8080/camagru/resetPassword.php?key=$token'>link.</a></p>
     </body>
     </html>"; 
     // To send HTML mail, the Content-type header must be set
@@ -57,6 +57,7 @@
         $error[] = $e->getMessage();
         print_r( $e );
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +80,7 @@
                 <label>
                     Email
                 </label>
-                <input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="<?php if(isset($error)){ echo $_POST['email']; } ?>" tabindex="2"/>
+                <input type="text" placeholder="Enter Email" name="email" autocomplete="off" value=""/>
            <button type="submit" name="login" value="ok">
                   Submit
             </button>

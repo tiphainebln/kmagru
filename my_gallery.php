@@ -6,65 +6,67 @@
 session_start();
 include 'config/database.php';
 
-$user = $_SESSION['userid'];
-if (isset($_GET['delete'])) {
-  // recuperer l'image a supprimer
+if (isset($_SESSION['logged_in'])) {
+  $user = $_SESSION['userid'];
+  if (isset($_GET['delete'])) {
+    // recuperer l'image a supprimer
+    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $id = $dbh->quote($_GET['delete']);
+    $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
+    $image = $select->fetch();
+    if ($image['userid'] == $user) {
+      // l'image est bien celle de l'utilisateur connecté
+      // suppression du fichier
+      unlink('img/' . $image['img_name']);
+      // supression en bdd
+      $dbh->query("DELETE FROM gallery WHERE galleryid=$id");
+      // message de confirmation
+      echo "artwork deleted.";
+      header('Location: my_gallery.php');
+      die();
+    }
+  }
+
+  // GET MY IMAGES
+  // $pp -> Pictures Per Pages
+  $ppp = 5;
+
+  // recuperer le nombre d'image enregistrées
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
   $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $id = $dbh->quote($_GET['delete']);
-  $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
-  $image = $select->fetch();
-  if ($image['userid'] == $user) {
-    // l'image est bien celle de l'utilisateur connecté
-    // suppression du fichier
-    unlink('img/' . $image['img_name']);
-    // supression en bdd
-    $dbh->query("DELETE FROM gallery WHERE galleryid=$id");
-    // message de confirmation
-    echo "artwork deleted.";
-    header('Location: my_gallery.php');
-    die();
-  }
-}
+  $select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
+  $total_pic = $select->fetch();
+  $nb_pic = $total_pic['total'];
 
-// GET MY IMAGES
-// $pp -> Pictures Per Pages
-$ppp = 5;
+  $nb_page = ceil($nb_pic / $ppp);
 
-// recuperer le nombre d'image enregistrées
-$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
-$total_pic = $select->fetch();
-$nb_pic = $total_pic['total'];
+  // Pagination 
 
-$nb_page = ceil($nb_pic / $ppp);
+  if(isset($_GET['p'])) {
 
-// Pagination 
+    // recuperer la valeur de la page courante passer en GET
+    $cp = intval($_GET['p']);
 
-if(isset($_GET['p'])) {
+    if($cp > $nb_page) {
+      $cp=$nb_page;
+    } else if ($cp < 1) {
+      $cp = 1;
+    }
 
-  // recuperer la valeur de la page courante passer en GET
-  $cp = intval($_GET['p']);
-
-  if($cp > $nb_page) {
-    $cp=$nb_page;
-  } else if ($cp < 1) {
+  } else {
     $cp = 1;
   }
 
-} else {
-  $cp = 1;
+  $first = ($cp-1) * $ppp;
+
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $user = $_SESSION['userid'];
+  $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT $first, $ppp");
+  $select->execute();
+  $images = $select->fetchAll();
 }
-
-$first = ($cp-1) * $ppp;
-
-$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$user = $_SESSION['userid'];
-$select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT $first, $ppp");
-$select->execute();
-$images = $select->fetchAll();
 ?>
 
 <!DOCTYPE html>

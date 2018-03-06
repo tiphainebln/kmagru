@@ -15,7 +15,7 @@
   }
 
   if(isset($stop)){
-      echo "<p class='bg-danger'>$stop</p>";
+      echo "<p>$stop</p>";
   }
 
   if(isset($_POST['submit'])){

@@ -8,16 +8,16 @@
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $username = !empty($_POST['username']) ? trim($_POST['username']) : null;
         $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
-        $query= $dbh->prepare("SELECT id, username, password FROM users WHERE username=:username AND password=:password");
+        $query= $dbh->prepare("SELECT id, username, password FROM users WHERE username=:username AND password=:password AND active='Yes'");
         $query->execute(array(':username' => $username, ':password' => $password));
         $data = $query->fetch(PDO::FETCH_ASSOC);
         if ($data == null){
             $query->closeCursor();
             $e = "User $username not found.";
            } else { 
-                var_dump("expression");
                 $_SESSION['userid'] = $data['id'];
                 $_SESSION['username'] = $data['username'];
+                $_SESSION['logged_in'] = true;
                 $query->closeCursor();
                 header('Location: profile.php');
                 die();
@@ -35,6 +35,9 @@
 </head>
 <body>
 	<a href="index.php"><h1>Camagru</h1></a>
+      <div class="all">
+     <a href="gallery.php">All</a>
+  </div>
 	<div class="connect">
 		<a href="login.php">Login</a>
 	</div>
@@ -57,10 +60,6 @@
             </button>
             <input type="checkbox" checked="checked"> Remember me
             </div>
-            <div class="container">
-            <button type="button" class="cancelbtn">
-        	   Cancel
-            </button>
             <span class="psw">
             	Forgot <a href="forgot.php">password?</a>
             </span>

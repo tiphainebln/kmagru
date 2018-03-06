@@ -1,6 +1,8 @@
 <?php
 // session_start();
   include 'config/database.php';
+
+
 $ppp = 5;
 
 // recuperer le nombre d'image enregistrées

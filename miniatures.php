@@ -1,5 +1,5 @@
 <?php
-$dir = '/img/*.{jpg,jpeg,gif,png}';
+$dir = '/img/*.{jpg,jpeg,png}';
 $files = glob($dir,GLOB_BRACE);
   
 echo '<p id="texte"> Choisissez une image superposable dans cette liste<p>';
