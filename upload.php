@@ -42,34 +42,31 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
     } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-        } else {
-            echo "Sorry, there was an error uploading your file.";
+        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $user = $_SESSION['userid'];
+        $filename = $_SESSION['username'].'_'. mktime() . '.' . $imageFileType;
+        $target_file = $target_dir . $_SESSION['username'].'_'. mktime() . '.' . $imageFileType;
+        move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+        echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded to ".$target_file.".";
+        if ($imageFileType == 'jpg' || $imageFileType == 'jpeg')
+          $upload = imagecreatefromjpeg('img/'. $filename);
+        else if ($imageFileType == 'png')
+          $upload = imagecreatefrompng('img/'. $filename);
+        $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
+        imagecopymerge_alpha($upload, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+        imagepng($upload,'img/'. $filename);
+        // free memory
+        imagedestroy($upload);
+        try {
+          $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
+          $req->execute(array(":user" => $user, ":filename" => $filename));
         }
-    }
-
-    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $user = $_SESSION['userid'];
-    $image_id = $dbh->lastInsertId();
-    $filename = $_SESSION['username'].'_'. mktime() . '.' . $imageFileType;
-    if ($imageFileType == 'jpg')
-      $upload = imagecreatefromjpeg('img/'. $filename);
-    else if ($imageFileType == 'png')
-      $upload = imagecreatefrompng('img/'. $filename);
-    $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
-    imagecopymerge_alpha($upload, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
-    imagepng($upload,'img/'. $filename);
-    // free memory
-    imagedestroy($upload);
-    try {
-      $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
-      $req->execute(array(":user" => $user, ":filename" => $filename));
-    }
-    catch (PDOException $e) {
-      echo $req . "<br>" . $e->getMessage();
+        catch (PDOException $e) {
+          echo $req . "<br>" . $e->getMessage();
+        }
+        header('Location: my_gallery.php');
     }
 
 ?>
