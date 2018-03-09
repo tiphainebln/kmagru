@@ -19,7 +19,7 @@ session_destroy();
   <div class="signin">
     <a href="register.php">Register</a>
   </div>
-      <p><?= 'You have been logged out!'; ?></p>
+      <p><?= 'Goodbye !!'; ?></p>
     </div>
   </div>
   <div class="footer">

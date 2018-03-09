@@ -73,14 +73,18 @@ if (isset($_SESSION['logged_in'])) {
 <html>
 <head>
   <title>Camagru</title>
-  <link rel="stylesheet" href="index.css" href="main_section.php" charset="utf-8">
+  <link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
+  <div class="all">
+    <a href="gallery.php">All</a>
+  </div>
+  <?php if (isset($_SESSION['logged_in'])) { ?>
   <div class="logout">
     <a href="logout.php">Logout</a>
   </div>
-    <div class="dropdown">
+  <div class="dropdown">
     <a button class="admin">Admin</a>
     <div class="dropdown-content">
       <a href="modify_username.php">Change username</a>
@@ -88,18 +92,12 @@ if (isset($_SESSION['logged_in'])) {
       <a href="modify_email.php">Change email</a>
     </div>
   </div>
-
-  <div class="all">
-     <a href="gallery.php">All</a>
-  </div>
   <div class="mygallery">
-      <a href="my_gallery.php">My Gallery</a>
+    <a href="my_gallery.php">My Gallery</a>
   </div>
   <div class="newcreation">
-     <a href="main_section.php">New creation</a>
+    <a href="main_section.php">New creation</a>
   </div>
-  <p>
-  </p>
   <div class="form">
 </div>
 
@@ -113,7 +111,6 @@ if (isset($_SESSION['logged_in'])) {
     <?php endforeach; ?>
   </div>
 
-
   <div class="paginate">
     <p><?php
       if ($cp > 1) {
@@ -124,8 +121,17 @@ if (isset($_SESSION['logged_in'])) {
       }
     ?></p>
   </div>
-<!--   <div class="footer">
+  <?php } else { ?>
+  <div class="connect">
+    <a href="login.php">Login</a>
+  </div>
+  <div class="signin">
+    <a href="register.php">Register</a>
+  </div>
+  <div class="container" id="login">  You're not supposed to see this. </div>
+  <?php } ?>
+  <div class="footer">
     <p>Footer</p>
-  </div> -->
+  </div>
 </body>
 </html>

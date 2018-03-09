@@ -21,7 +21,7 @@ else {
 <html>
 <head>
   <title>Camagru</title>
-  <link rel="stylesheet" href="index.css" href="main_section.php" charset="utf-8">
+  <link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
@@ -41,9 +41,6 @@ else {
       </div>
     </div>
 
-    <div class="all">
-       <a href="gallery.php">All</a>
-    </div>
     <div class="mygallery">
         <a href="my_gallery.php">My Gallery</a>
     </div>

@@ -27,9 +27,6 @@ session_start();
       </div>
     </div>
 
-    <div class="all">
-       <a href="gallery.php">All</a>
-    </div>
     <div class="mygallery">
         <a href="my_gallery.php">My Gallery</a>
     </div>

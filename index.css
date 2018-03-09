@@ -268,16 +268,12 @@ span.psw {
     text-align: center;
     width: 17%;
     margin-left: -38%;
-    margin-top: -5%;
+    margin-top: -8%;
     position: absolute;
     transition: .5s ease;
     top: 50%;
     left: 50%;
 
-}
-
-#photo {
-    margin-bottom: 7%;
 }
 
 .selection {
@@ -310,7 +306,7 @@ span.psw {
       position: relative;
 }
 
-#cpt_1, #submitphoto {
+#capture, #submitphoto {
     position: absolute;
     bottom: 0;
     left: 0;

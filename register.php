@@ -1,6 +1,7 @@
 <?php
 	include 'config/database.php';
 	session_start();
+	var_dump('test1');
 	try {
     	if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])){
 			$email = ($_POST['email']);
@@ -11,7 +12,7 @@
 	    	//check for any errors
 				if(isset($error)){
 			  		foreach($error as $error){
-			    echo '<h2>'.$error.'</h2>';
+			  			echo '<h2>'.$error.'</h2>';
 			  }
 			}
     	$query= $dbh->prepare("SELECT id FROM users WHERE username=:username");
@@ -43,7 +44,7 @@
 			var_dump("prepared");
 			$query->execute(array(
 			    ':username' => $username,
-			    ':password' => $password,
+			    ':password' => $password, // DELETE
 			    ':email' => $email,
 			    ':hash' => $hash,
 			    ':active' => $active
@@ -53,7 +54,6 @@
 			// send confirmation email
 			$to = $_POST['email'];
 			$subject = "Registration Confirmation";
-			$activeurl = 'http://active.php?x=.$id&y=$active';
 			$body = "
 			<html>
 				<head>
@@ -73,7 +73,8 @@
 			 'X-Mailer: PHP/' . phpversion();
 	 		mail($to, $subject, $body, $headers);
 			header('Location: register.php?action=joined');
-			exit; }
+			exit;
+		}
 	} catch (PDOException $e) {
 		var_dump($e->getMessage());
           $_SESSION['error'] = "ERROR: ".$e->getMessage();
@@ -88,10 +89,32 @@
 	<link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
-	<div class="all">
-     <a href="gallery.php">All</a>
-  </div>
 	<a href="index.php"><h1>Camagru</h1></a>
+	<div class="all">
+		<a href="gallery.php">All</a>
+  	</div>
+	<?php if (isset($_SESSION['logged_in'])) { ?>
+	<div class="logout">
+		<a href="logout.php">Logout</a>
+	</div>
+	<div class="dropdown">
+		<a button class="admin">Admin</a>
+		<div class="dropdown-content">
+			<a href="modify_username.php">Change username</a>
+            <a href="modify_password.php">Change password</a>
+            <a href="modify_email.php">Change email</a>
+        </div>
+    </div>
+    <div class="mygallery">
+    	<a href="my_gallery.php">My Gallery</a>
+    </div>
+    <div class="newcreation">
+    	<a href="main_section.php">New creation</a>
+    </div>
+    <div class="container" id="login">
+    	Vous n'êtes pas censé être ici.
+    </div>
+    <?php } else { ?>
 	<div class="connect">
 		<a href="login.php">Login</a>
 	</div>
@@ -118,9 +141,9 @@
 			</form>
 		</div>
 	</div>
+	 <?php } ?>
 	<div class="footer">
 		<p>Footer</p>
 	</div>
-
 </body>
 </html>

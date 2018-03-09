@@ -1,18 +1,22 @@
 <?php
-$dir = '/img/*.{jpg,jpeg,png}';
-$files = glob($dir,GLOB_BRACE);
-  
-echo '<p id="texte"> Choisissez une image superposable dans cette liste<p>';
-foreach($files as $image)
-{ 
-	echo "<li><img class='vignette' src='$image' onclick='select_image(this)'></li>";
-}
+ public function listPhotos($dbh)
+ {
+  // recupere les photos de l'utilisateur par ordre de creation descendant et les renvoie dans un tableau
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $user = $_SESSION['userid'];
+  $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT $first, $ppp");
+  $select->execute();
+  $images = $select->fetchAll();
+
+  return $result;
+  }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Camagru</title>
-  <link rel="stylesheet" href="index.css" href="main_section.php" charset="utf-8">
+  <link rel="stylesheet" href="index.css" charset="utf-8">
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
