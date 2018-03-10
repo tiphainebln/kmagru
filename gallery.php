@@ -52,7 +52,7 @@ $images = $select->fetchAll();
         <a href="logout.php">Logout</a>
       </div>
         <div class="dropdown">
-        <a button class="admin">Admin</a>
+        <a button class="admin">Settings</a>
         <div class="dropdown-content">
           <a href="modify_username.php">Change username</a>
           <a href="modify_password.php">Change password</a>
@@ -78,6 +78,7 @@ $images = $select->fetchAll();
     <?php foreach ($images as $image) : ?>
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
     margin-top: 20px;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+    <a  href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Commenter</a>
      <?php  endforeach; ?>
   </ul>
 

@@ -315,3 +315,7 @@ span.psw {
 .upload {
     margin-top: 4%;
 }
+
+#miniature {
+    display: inline-block;
+}

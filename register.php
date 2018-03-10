@@ -1,7 +1,6 @@
 <?php
 	include 'config/database.php';
 	session_start();
-	var_dump('test1');
 	try {
     	if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])){
 			$email = ($_POST['email']);
@@ -98,7 +97,7 @@
 		<a href="logout.php">Logout</a>
 	</div>
 	<div class="dropdown">
-		<a button class="admin">Admin</a>
+		<a button class="admin">Settings</a>
 		<div class="dropdown-content">
 			<a href="modify_username.php">Change username</a>
             <a href="modify_password.php">Change password</a>
