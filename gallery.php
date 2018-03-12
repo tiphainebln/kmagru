@@ -69,14 +69,17 @@ $images = $select->fetchAll();
 
   <ul class="display-images" style="width: 90%; margin-left: 10%;">
     <?php foreach ($images as $image) : ?>
+      <div class="display" style="text-align:center; float:left; clear:right;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
-    margin-top: 20px;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
-    <a  href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Commenter</a>
+          margin-top: 20px;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+         <p><a  style="" href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Comment</a></p>
+         <p><a  style="" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
+      </div>
      <?php  endforeach; ?>
   </ul>
 
   <div class="paginate">
-    <p><?php
+    <p style="margin-top: 20%;"><?php
       if ($cp > 1) {
         echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp - 1) . '">previous</a>';
       } ?> [ <?php echo $cp; ?> ] <?php

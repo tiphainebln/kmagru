@@ -2,7 +2,7 @@
 include "config/database.php";
 session_start();
 // Récupérer l'image
-var_dump("25");
+var_dump("26");
 $send = 0;
 if (isset($_GET['id'])) {
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -24,10 +24,19 @@ if (isset($_GET['id'])) {
       $mail = $query->fetch();
       // send confirmation email
 
+    //   You received a comment from    ".$_SESSION['username']."   The message is :\n".$_POST['content'];
       $to = $mail;
       $subject = "You received a new comment !";
-      $body = " 
-      You received a comment from    ".$_SESSION['username']."   The message is :\n".$_POST['content'];
+      $body ="
+      <html>
+        <head>
+          <title>New comment.</title>
+        </head>
+        <body>
+          <p>You received a comment.</p>
+        </body>
+      </html>";
+
       // To send HTML mail, the Content-type header must be set
       $headers  = 'MIME-Version: 1.0' . "\r\n";
       $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -36,7 +45,7 @@ if (isset($_GET['id'])) {
       'Reply-To: tbouline@student.42.fr' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
       mail($to, $subject, $body, $headers);
-      
+
       $send = 1;
       $comment = $_POST['content'];
       #enregistre le commentaire en db

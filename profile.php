@@ -38,6 +38,7 @@ else {
         <a href="modify_username.php">Change username</a>
         <a href="modify_password.php">Change password</a>
         <a href="modify_email.php">Change email</a>
+        <a href="desactivate.php">Disable notifications</a>
       </div>
     </div>
 

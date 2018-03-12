@@ -2,17 +2,15 @@
   include "config/database.php";
   session_start();
 
-  $send = 0;
-if (isset($_GET['id'])) {
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $galleryid = $_GET['id'];
-  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=$galleryid");
-  $select->execute();
-  $image = $select->fetch();
+  if (isset($_POST['submit'])) {
+    //form was submitted...let's DO this.
+
+    if (!isset($_POST['checkboxname'])) {
+        // checkbox was not checked...do something
+    } else {
+        // checkbox was checked. Rock on!
+    }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -23,8 +21,8 @@ if (isset($_GET['id'])) {
 </head>
 <body>
   <a href="index.php"><h1>Camagru</h1></a>
-    <div class="all">
-     <a href="gallery.php">All</a>
+  <div class="all">
+    <a href="gallery.php">All</a>
   </div>
   <?php if (isset($_SESSION['logged_in'])) { ?>
   <div class="logout">
@@ -44,22 +42,14 @@ if (isset($_GET['id'])) {
   <div class="newcreation">
     <a href="main_section.php">New creation</a>
   </div>
-  <div>
-    <img src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
-  </div>
-
-  <div>
-    <form action="" method="post">
-      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Like</button>
+  <div class="container">
+    <form method="post">
+      <label>Enable notification</label> 
+      <input type="radio" name="noification" value="notification"> <br>
+      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Validate</button>
     </form>
   </div>
-
-  <?php 
-  if ($send != 0)
-  {
-    echo "<h2>Your like has been submited.</h2>";
-  }
-   } else { ?>
+  <?php } else { ?>
   <div class="connect">
     <a href="login.php">Login</a>
   </div>
@@ -72,3 +62,4 @@ if (isset($_GET['id'])) {
     <p>Footer</p>
   </div>
 </body>
+</html>
