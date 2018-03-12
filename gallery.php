@@ -2,10 +2,7 @@
  session_start();
  include 'config/database.php';
 
-
 $ppp = 5;
-
-// recuperer le nombre d'image enregistrées
 $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
@@ -14,11 +11,8 @@ $nb_pic = $total_pic['total'];
 
 $nb_page = ceil($nb_pic / $ppp);
 
-// Pagination du type all_creation.php?p=
 
 if(isset($_GET['p'])) {
-
-  // recuperer la valeur de la page courante passer en GET
   $cp = intval($_GET['p']);
 
   if($cp > $nb_page) {
@@ -33,7 +27,6 @@ if(isset($_GET['p'])) {
 
 $first = ($cp-1) * $ppp;
 
-// Get result from db
 $select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
 $images = $select->fetchAll();
 

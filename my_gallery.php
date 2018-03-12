@@ -1,7 +1,3 @@
-<!--  miniatures a faire, forgot.php a retravailler : l'envoi de mail ne fo…  …
-…nctionne pas pour cette page. Lastinsertid retourne toujours 0 dans modify_username : peut etre du a pamp. creation de la galerie general. a venir : implementation des commentaires et des likes. -->
-
-
 <?php
 session_start();
 include 'config/database.php';
@@ -16,23 +12,15 @@ if (isset($_SESSION['logged_in'])) {
     $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
     $image = $select->fetch();
     if ($image['userid'] == $user) {
-      // l'image est bien celle de l'utilisateur connecté
-      // suppression du fichier
       unlink('img/' . $image['img_name']);
-      // supression en bdd
       $dbh->query("DELETE FROM gallery WHERE galleryid=$id");
-      // message de confirmation
       echo "artwork deleted.";
       header('Location: my_gallery.php');
       die();
     }
   }
 
-  // GET MY IMAGES
-  // $pp -> Pictures Per Pages
   $ppp = 5;
-
-  // recuperer le nombre d'image enregistrées
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
   $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
@@ -41,11 +29,7 @@ if (isset($_SESSION['logged_in'])) {
 
   $nb_page = ceil($nb_pic / $ppp);
 
-  // Pagination 
-
   if(isset($_GET['p'])) {
-
-    // recuperer la valeur de la page courante passer en GET
     $cp = intval($_GET['p']);
 
     if($cp > $nb_page) {

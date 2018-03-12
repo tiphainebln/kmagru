@@ -2,41 +2,51 @@
 include "config/database.php";
 session_start();
 // Récupérer l'image
+var_dump("25");
+$send = 0;
 if (isset($_GET['id'])) {
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
   $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $id = $_GET['id'];
-  $select = $dbh->prepare("SELECT img_name FROM gallery WHERE galleryid=$id");
+  $galleryid = $_GET['id'];
+  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=$galleryid");
+  $select->execute();
   $image = $select->fetch();
 
+
   // Envoyer un commentaire par mail
-  // if (isset($_POST['content'])) {
-  //   $user = $_SESSION['userid'];
-  //   $select = $dbh->prepare("SELECT email FROM users WHERE id=$user");
-  //   $mail = $select->fetch();
-  //   // send confirmation email
+  try{
+    if (isset($_POST['content']) && isset($_POST['submit'])) {
+      $for_user = $image['userid'];
+      $userid = $_SESSION['userid'];
 
-  //   $to = $mail;
-  //   $subject = "You received a new comment !";
-  //   $body = "
-  //   <html>
-  //     <head>
-  //       <title>New comment</title>
-  //     </head>
-  //     <body>
-  //       <p>"You received a comment from ".$_SESSION['username']."\n".$_POST['content']</p>
-  //     </body>
-  //   </html>";
-  //   // To send HTML mail, the Content-type header must be set
-  //   $headers  = 'MIME-Version: 1.0' . "\r\n";
-  //   $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-  //   // Additionnal headers
-  //   $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
-  //   'Reply-To: tbouline@student.42.fr' . "\r\n" .
-  //   'X-Mailer: PHP/' . phpversion();
-  //   mail($to, $subject, $body, $headers);
-  // }
+      $query = $dbh->prepare("SELECT email FROM users WHERE id=$for_user");
+      $query->execute();
+      $mail = $query->fetch();
+      // send confirmation email
 
+      $to = $mail;
+      $subject = "You received a new comment !";
+      $body = " 
+      You received a comment from    ".$_SESSION['username']."   The message is :\n".$_POST['content'];
+      // To send HTML mail, the Content-type header must be set
+      $headers  = 'MIME-Version: 1.0' . "\r\n";
+      $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+      // Additionnal headers
+      $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
+      'Reply-To: tbouline@student.42.fr' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
+      mail($to, $subject, $body, $headers);
+      
+      $send = 1;
+      $comment = $_POST['content'];
+      #enregistre le commentaire en db
+      $req = $dbh->prepare("INSERT INTO comment (userid, galleryid, comment) VALUES (:userid, :galleryid, :comment)");
+      $req->execute(array(":userid" => $userid, ":galleryid" => $galleryid, ":comment" =>$comment));
+    }
+  } catch (PDOException $e) {
+    var_dump($e->getMessage());
+          $_SESSION['error'] = "ERROR: ".$e->getMessage();
+    }
 }
 
 ?>
@@ -71,19 +81,24 @@ if (isset($_GET['id'])) {
     <a href="main_section.php">New creation</a>
   </div>
   <div>
-    <p><img src="<?php echo 'http://localhost:8080/camagru/img/' .$image['img_name']; ?>"></p>
+    <img src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
   </div>
 
   <div>
-    <form action="#" method="post">
+    <form action="" method="post">
       <div>
-        <label for="content">Envoyer un Commentaire</label>
-        <?php echo textarea('content'); ?>
+        Comment: <textarea style="margin-top: 1%;" name="content" rows="5" cols="40"><?php echo $comment;?></textarea>
       </div>
-      <button type="submit">Envoyer</button>
+      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Envoyer</button>
     </form>
   </div>
-  <?php } else { ?>
+
+  <?php 
+  if ($send != 0)
+  {
+    echo "<h2>The comment has been submited.</h2>";
+  }
+   } else { ?>
   <div class="connect">
     <a href="login.php">Login</a>
   </div>
