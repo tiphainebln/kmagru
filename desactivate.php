@@ -2,15 +2,25 @@
   include "config/database.php";
   session_start();
 
-var_dump("2");
 
-  if (isset($_POST['submit'])) {
-    if (isset($_POST['notification'])) {
-        $_SESSION['disable'] == true;
-    } else {
-        $_SESSION['disable'] == false;
+  var_dump("10");
+  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $uid = $_SESSION['userid'];
+  if (isset($_POST['submit']))
+  {
+    $checked = $_POST['check'];
+    if (isset($checked)) {
+      $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=$uid");
+      $select->execute();
     }
-}
+    else
+    {
+      $select = $dbh->prepare("UPDATE users SET notification='0' WHERE id=$uid");
+      $select->execute();
+    }
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -43,22 +53,24 @@ var_dump("2");
     <a href="main_section.php">New creation</a>
   </div>
   <div class="container">
-    <form method="post">
-      <label>Disable notification</label> 
-      <input type="radio" name="notification" value="notification"> <br>
-      <button style="width: 10%; margin-top: 1%; padding: 9px 20px;" type="submit" name="submit" value="submit">Validate</button>
+    <form action="" method="post">
+      Enable Notifications
+      <label class="switch">
+        <?php 
+            $select = $dbh->prepare("SELECT notification FROM users WHERE id=$uid");
+            $select->execute();
+            $notifications = $select->fetch()['notification'];
+
+            if ($notifications == 0) { ?>
+              <input type="checkbox" name="check" value="0"> 
+        <?php } else { ?>
+             <input type="checkbox" name="check" value="1" checked>
+        <?php } ?>
+          <span class="slider"></span>
+      </label>
+      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit">Confirmer ?</button>
     </form>
   </div>
-  <?php 
-    if ($_SESSION['disable'] == false)
-    {
-      echo "<h2>notifications are on.</h2>";
-    }
-    else if ($_SESSION['disable'] == true)
-    {
-      echo "<h2>notifications are off.</h2>";
-    }
-  ?>
   <?php } else { ?>
   <div class="connect">
     <a href="login.php">Login</a>

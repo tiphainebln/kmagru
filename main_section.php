@@ -37,6 +37,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       try {
           $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
           $req->execute(array(":user" => $user, ":filename" => $filename));
+                    header('Location:main_section.php');
       }
       catch (PDOException $e) {
         echo $req . "<br>" . $e->getMessage();
@@ -50,11 +51,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC");
       $select->execute();
       $images = $select->fetchAll();
-    }
 
-      if (isset($_SESSION['logged_in'])) {
-      $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $user = $_SESSION['userid'];
       $query = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT 1");
       $query->execute();
@@ -111,7 +108,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         </div>
 
 
-        <div class="display-images" style="width: 90%; margin-left: 70%; margin-top: -13%;">
+        <div class="display-images" style="width: 20%; right: 0; top: 200px; position: absolute;">
           <p style="font-family: 'Georgia', serif;">Last pictures :</p>
           <?php 
               $column_count = 0;
@@ -132,28 +129,48 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         </div>
 
         <form action="#" method="post" enctype="multipart/form-data"> 
-          <div class="pngs" style="margin-top: 15%;">
+          <div class="pngs" style="margin-top: 5%; width: 70%;">
            <div class="selection">
-              <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" checked="checked">
+              <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" id="box1" onclick="validate()">
             </div>
             <div class="selection">
-              <img src="img/imgtest2.png"><input type="radio" name="img" value="imgtest2">
+              <img src="img/imgtest2.png"><input type="radio" name="img" value="imgtest2" id="box2" onclick="validate()">
             </div>
             <div class="selection">
-              <img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3">
+              <img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3" id="box3" onclick="validate()">
             </div>
             <div class="selection">
-              <img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest3">
+              <img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest4" id="box4" onclick="validate()">
             </div>
           </div>
-          <input id="capture" stype="hidden" name="capture">
+          <input id="capture" type="hidden" name="capture">
           <?php ?>
           <button type="submit" name="startbutton" id="startbutton">Prendre une photo</button>
         </form>
-        <a href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a>
+        <a style="margin-top: 5%;" href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a>
       </div>
 
       <script type="text/javascript">
+        if (document.getElementById('box1').checked == false && document.getElementById('box2').checked == false && document.getElementById('box3').checked == false && document.getElementById('box4').checked == false) {
+          console.log("in");
+          document.getElementById("startbutton").className = "make-background-grey"; 
+          document.getElementById("startbutton").disabled = true;
+        }
+        
+        function validate() {
+                  if (document.getElementById('box1').checked == false && document.getElementById('box2').checked == false && document.getElementById('box3').checked == false && document.getElementById('box4').checked == false) {
+          console.log("in");
+          document.getElementById("startbutton").className = "make-background-grey"; 
+          document.getElementById("startbutton").disabled = true;
+        }
+                    else {
+            console.log("out");
+          document.getElementById("startbutton").className = ""; 
+          document.getElementById("startbutton").disabled = false;
+        }
+
+        }
+
       (function() {
         var streaming = false,
         video        = document.querySelector('#video'),

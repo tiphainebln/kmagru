@@ -2,8 +2,7 @@
 include "config/database.php";
 session_start();
 // Récupérer l'image
-var_dump("26");
-$send = 0;
+
 if (isset($_GET['id'])) {
   $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
   $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -12,52 +11,87 @@ if (isset($_GET['id'])) {
   $select->execute();
   $image = $select->fetch();
 
+  if (isset($_GET['delete'])) {
+    // recuperer le commentaire a supprimer
+    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $id = $dbh->quote($_GET['delete']);
+    $select = $dbh->query("SELECT userid, galleryid FROM comment WHERE id=$id");
+    $comment = $select->fetch();
+    if ($comment['userid'] == $_SESSION['userid']) {
+      $dbh->query("DELETE FROM comment WHERE id=$id");
+      header('Location: add_comment.php?id='.$comment['galleryid']);
+      die();
+    }
+  }
 
-  // Envoyer un commentaire par mail
-  try{
-    if (isset($_POST['content']) && isset($_POST['submit'])) {
-      $for_user = $image['userid'];
-      $userid = $_SESSION['userid'];
-
-      $query = $dbh->prepare("SELECT email FROM users WHERE id=$for_user");
-      $query->execute();
-      $mail = $query->fetch();
-      // send confirmation email
-
-    //   You received a comment from    ".$_SESSION['username']."   The message is :\n".$_POST['content'];
-      $to = $mail;
-      $subject = "You received a new comment !";
-      $body ="
-      <html>
-        <head>
-          <title>New comment.</title>
-        </head>
-        <body>
-          <p>You received a comment.</p>
-        </body>
-      </html>";
-
-      // To send HTML mail, the Content-type header must be set
-      $headers  = 'MIME-Version: 1.0' . "\r\n";
-      $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-      // Additionnal headers
-      $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
-      'Reply-To: tbouline@student.42.fr' . "\r\n" .
-      'X-Mailer: PHP/' . phpversion();
-      mail($to, $subject, $body, $headers);
-
-      $send = 1;
+        // enregistre le commentaire en db
+  try {
+    if (isset($_POST['content']) && isset($_POST['submit']) && $_POST['content'] != "") {
+      $my_userid = $_SESSION['userid'];
+      $my_username = $_SESSION['username'];
       $comment = $_POST['content'];
-      #enregistre le commentaire en db
-      $req = $dbh->prepare("INSERT INTO comment (userid, galleryid, comment) VALUES (:userid, :galleryid, :comment)");
-      $req->execute(array(":userid" => $userid, ":galleryid" => $galleryid, ":comment" =>$comment));
+      $req = $dbh->prepare("INSERT INTO comment (userid, galleryid, comment, username) VALUES (:userid, :galleryid, :comment, :username)");
+      $req->execute(array(":userid" => $my_userid, ":galleryid" => $galleryid, ":comment" => $comment, ":username" => $my_username));
     }
   } catch (PDOException $e) {
     var_dump($e->getMessage());
-          $_SESSION['error'] = "ERROR: ".$e->getMessage();
-    }
-}
+    $_SESSION['error'] = "ERROR: ".$e->getMessage();
+  }
 
+        // get les commentaires
+  try {
+      $querycomment = $dbh->prepare("SELECT comment, username, id FROM comment WHERE galleryid=$galleryid");
+      $querycomment->execute();
+  } catch (PDOException $e) {
+    var_dump($e->getMessage());
+    $_SESSION['error'] = "ERROR: ".$e->getMessage();
+  }
+
+        // Envoyer une notification par mail
+  try{
+    if (isset($_POST['content']) && isset($_POST['submit'])) {
+      $for_this_user = $image['userid'];
+
+      $query = $dbh->prepare("SELECT email FROM users WHERE id=$for_this_user");
+      $query->execute();
+      $mail = $query->fetch();
+
+      $query = $dbh->prepare("SELECT notification FROM users WHERE id=$for_this_user");
+      $query->execute();
+      $toggle = $query->fetch()['notification'];
+
+      if ($toggle == 1)
+      {
+        $to = $mail['email'];
+        $subject = "You received a new comment on your picture !";
+        $body ="
+        <html>
+          <head>
+            <title>New comment.</title>
+          </head>
+          <body>
+            <p>You received a comment from " . $_SESSION['username'] . " on <a href='http://localhost:8080/camagru/add_comment.php?id=" . $galleryid . "'>Your Picture</a> ! The message is :\n".$_POST['content']."</p>
+          </body>
+        </html>";
+
+        // To send HTML mail, the Content-type header must be set
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        // Additionnal headers
+        $headers .= 'From: tbouline@student.42.fr' . "\r\n" .
+         'Reply-To: tbouline@student.42.fr' . "\r\n" .
+         'X-Mailer: PHP/' . phpversion();
+        mail($to, $subject, $body, $headers);
+      }
+      header('Location: add_comment.php?id=' .$galleryid. '&action=submitted');
+      exit;
+      }
+    } catch (PDOException $e) {
+        var_dump($e->getMessage());
+        $_SESSION['error'] = "ERROR: ".$e->getMessage();
+      }
+}
 ?>
 
 <!DOCTYPE html>
@@ -96,17 +130,25 @@ if (isset($_GET['id'])) {
   <div>
     <form action="" method="post">
       <div>
-        Comment: <textarea style="margin-top: 1%;" name="content" rows="5" cols="40"><?php echo $comment;?></textarea>
+        Comment: <textarea style="margin-top: 1%;" name="content" rows="5" cols="40"></textarea>
       </div>
       <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Envoyer</button>
     </form>
   </div>
 
+  <div id="commentlist">
+      <?php 
+            $comment = $querycomment->fetch();
+            while ($comment) {
+                echo "<p style='margin-top:15px;' id='auteur'>" .$comment['username']. "</p><p id='comment'>" .$comment['comment']. "</p>";
+                if ($comment['username'] == $_SESSION['username'])
+                  echo "<a href='add_comment.php?id=" .$galleryid. "&delete=" .$comment['id']. "'>Delete</a>";
+                $comment = $querycomment->fetch();
+            }
+      ?>
+  </div>
+
   <?php 
-  if ($send != 0)
-  {
-    echo "<h2>The comment has been submited.</h2>";
-  }
    } else { ?>
   <div class="connect">
     <a href="login.php">Login</a>
