@@ -2,13 +2,13 @@
   include "config/database.php";
   session_start();
 
-  if (isset($_POST['submit'])) {
-    //form was submitted...let's DO this.
+var_dump("2");
 
-    if (!isset($_POST['checkboxname'])) {
-        // checkbox was not checked...do something
+  if (isset($_POST['submit'])) {
+    if (isset($_POST['notification'])) {
+        $_SESSION['disable'] == true;
     } else {
-        // checkbox was checked. Rock on!
+        $_SESSION['disable'] == false;
     }
 }
 ?>
@@ -44,11 +44,21 @@
   </div>
   <div class="container">
     <form method="post">
-      <label>Enable notification</label> 
-      <input type="radio" name="noification" value="notification"> <br>
-      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Validate</button>
+      <label>Disable notification</label> 
+      <input type="radio" name="notification" value="notification"> <br>
+      <button style="width: 10%; margin-top: 1%; padding: 9px 20px;" type="submit" name="submit" value="submit">Validate</button>
     </form>
   </div>
+  <?php 
+    if ($_SESSION['disable'] == false)
+    {
+      echo "<h2>notifications are on.</h2>";
+    }
+    else if ($_SESSION['disable'] == true)
+    {
+      echo "<h2>notifications are off.</h2>";
+    }
+  ?>
   <?php } else { ?>
   <div class="connect">
     <a href="login.php">Login</a>
