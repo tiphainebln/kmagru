@@ -1,6 +1,7 @@
-<?php
+s<?php
 session_start();
 include 'config/database.php';
+
 $mismatch = 0;
 $wrong = 0;
 $changed = 0;
@@ -8,23 +9,23 @@ try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
   if (isset($_POST['email']) && isset($_POST['newemail']) && isset($_POST['newemailbis'])){
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $mail = $_POST['newemail'];
-  $cmail = $_POST['newemailbis'];
-  if($cmail !== $mail){
-    $mismatch = 1;
+    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $mail = $_POST['newemail'];
+    $cmail = $_POST['newemailbis'];
+    if($cmail !== $mail){
+      $mismatch = 1;
+    }
+    else if (!filter_var($_POST['newemail'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['newemailbis'], FILTER_VALIDATE_EMAIL)) {
+      $wrong = 1;
+    }
+    else
+    {
+      $query = $dbh->prepare("UPDATE users SET email='$mail' WHERE id=$userid");
+      $query->execute();
+      $changed = 1;
+    }
   }
-  else if (!filter_var($_POST['newemail'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['newemailbis'], FILTER_VALIDATE_EMAIL)) {
-    $wrong = 1;
-  }
-  else
-  {
-    $query = $dbh->prepare("UPDATE users SET email='$mail' WHERE id=$userid");
-    $query->execute();
-    $changed = 1;
-  }
-}
 }
 catch(PDOException $e){
     echo $query . "<br>" . $e->getMessage();
@@ -52,6 +53,7 @@ catch(PDOException $e){
       <a href="modify_username.php">Change username</a>
       <a href="modify_password.php">Change password</a>
       <a href="modify_email.php">Change email</a>
+      <a href="desactivate.php">Disable notifications</a>
     </div>
   </div>
   <div class="mygallery">
@@ -109,8 +111,8 @@ catch(PDOException $e){
   </div>
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
-<div class="footer">
-    <p>Footer</p>
-</div>
+  <div class="footer">
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+  </div>
 </body>
 </html>

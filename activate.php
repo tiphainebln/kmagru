@@ -50,6 +50,7 @@ if(is_numeric($id) && !empty($active)){
         <a href="modify_username.php">Change username</a>
         <a href="modify_password.php">Change password</a>
         <a href="modify_email.php">Change email</a>
+        <a href="desactivate.php">Disable notifications</a>
       </div>
     </div>
 
@@ -78,7 +79,7 @@ if(is_numeric($id) && !empty($active)){
         <a href="register.php">Register</a>
     </div>
     <div class="footer">
-        <p>Footer</p>
+        <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
     </div>
     <?php
 

@@ -115,6 +115,7 @@ if (isset($_GET['id'])) {
       <a href="modify_username.php">Change username</a>
       <a href="modify_password.php">Change password</a>
       <a href="modify_email.php">Change email</a>
+      <a href="desactivate.php">Disable notifications</a>
     </div>
   </div>
   <div class="mygallery">
@@ -159,7 +160,7 @@ if (isset($_GET['id'])) {
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
   <div class="footer">
-    <p>Footer</p>
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
 </body>
 </html>

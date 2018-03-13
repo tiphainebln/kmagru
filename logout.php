@@ -23,7 +23,7 @@ session_destroy();
     </div>
   </div>
   <div class="footer">
-    <p>Footer</p>
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
 
 </body>

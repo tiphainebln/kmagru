@@ -1,6 +1,7 @@
 <?php
     include 'config/database.php';
     session_start();
+    
     $changed = 0;
     $missmatch = 0;
     try {
@@ -17,7 +18,7 @@
             else
             {
               $hash = password_hash($cpass, PASSWORD_BCRYPT);
-              $query = $dbh->prepare("UPDATE users SET password='$pass', hash='$hash' WHERE id=$userid"); // DELETE PASSWORD
+              $query = $dbh->prepare("UPDATE users SET hash='$hash' WHERE id=$userid");
               $query->execute();
               $changed = 1;
             }
@@ -50,6 +51,7 @@
       <a href="modify_username.php">Change username</a>
       <a href="modify_password.php">Change password</a>
       <a href="modify_email.php">Change email</a>
+      <a href="desactivate.php">Disable notifications</a>
     </div>
   </div>
   <div class="mygallery">
@@ -99,7 +101,7 @@
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
   <div class="footer">
-    <p>Footer</p>
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
 </body>
 </html>

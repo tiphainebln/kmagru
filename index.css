@@ -136,6 +136,7 @@ span.psw {
     width: 100%;
     background-color: #c9d0d4;
     text-align: center;
+    padding: 20px;
 }
 
 .logout {

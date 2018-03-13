@@ -78,6 +78,7 @@ session_start();
         <a href="modify_username.php">Change username</a>
         <a href="modify_password.php">Change password</a>
         <a href="modify_email.php">Change email</a>
+        <a href="desactivate.php">Disable notifications</a>
       </div>
     </div>
 
@@ -94,8 +95,6 @@ session_start();
         Vous n'êtes pas censé être ici.
     </div>
   <?php } else { ?>
-
-    <a href="index.php"><h1>Camagru</h1></a>
     <div class="all">
        <a href="gallery.php">All</a>
     </div>
@@ -120,7 +119,7 @@ session_start();
 </div>
 <?php } ?>
 <div class="footer">
-    <p>Footer</p>
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
 </div>
 </body>
 </html>

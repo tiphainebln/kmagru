@@ -1,28 +1,26 @@
 <?php
 include 'config/database.php';
 session_start();
+
 $changed = 0;
 $missmatch = 0;
 try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
   if (isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $user = $_POST['newusername'];
-  $cuser = $_POST['newusernamebis'];
-  if($cuser !== $user)
-  {
-     $mismatch = 1;
-    echo "Sorry! Email Mismatch. ";
+    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $user = $_POST['newusername'];
+    $cuser = $_POST['newusernamebis'];
+    if($cuser !== $user)
+       $mismatch = 1;
+    else
+    {
+      $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=$userid");
+      $query->execute();
+      $changed = 1;
+    }
   }
-  else
-  {
-    $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=$userid");
-    $query->execute();
-    $changed = 1;
-  }
-}
 }
 catch(PDOException $e){
     echo $query . "<br>" . $e->getMessage();
@@ -50,6 +48,7 @@ catch(PDOException $e){
       <a href="modify_username.php">Change username</a>
       <a href="modify_password.php">Change password</a>
       <a href="modify_email.php">Change email</a>
+      <a href="desactivate.php">Disable notifications</a>
     </div>
   </div>
   <div class="mygallery">
@@ -102,9 +101,8 @@ catch(PDOException $e){
   </div>
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
-    <div class="footer">
-    <p>Footer</p>
+  <div class="footer">
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
-</body>
 </body>
 </html>

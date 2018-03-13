@@ -46,19 +46,19 @@ try {
     } catch (PDOException $e) {
         echo "ERROR CREATING TABLE: ".$e->getMessage();
     }
-// CREATE TABLE LIKE
+// CREATE TABLE LIKES
 try {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "CREATE TABLE `like` (
+        $sql = "CREATE TABLE `likes` (
           `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
           `userid` INT(11) NOT NULL,
           `galleryid` INT(11) NOT NULL,
-          `type` VARCHAR(1) NOT NULL,
+          `username` VARCHAR(50) NOT NULL, 
           FOREIGN KEY (userid) REFERENCES users(id)
         )";
         $dbh->exec($sql);
-        echo "Table like created.\n";
+        echo "Table likes created.\n";
     } catch (PDOException $e) {
         echo "ERROR CREATING TABLE: ".$e->getMessage();
     }
@@ -71,6 +71,7 @@ try {
           `userid` INT(11) NOT NULL,
           `galleryid` INT(11) NOT NULL,
           `comment` VARCHAR(255) NOT NULL,
+          `username` VARCHAR(50) NOT NULL,
           FOREIGN KEY (userid) REFERENCES users(id)
         )";
         $dbh->exec($sql);

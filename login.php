@@ -1,6 +1,9 @@
 <?php
 	include 'config/database.php';
 	session_start();
+
+    $wrong = 0;
+    $not_found = 0;
     try {
         if (isset($_POST['login'])) {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -12,7 +15,8 @@
         $data = $query->fetch(PDO::FETCH_ASSOC);
         if ($data == null){
             $query->closeCursor();
-            $e = "User $username not found.";
+            $not_found = 1;
+            $e = "User not found.";
            } else { 
                 if (password_verify($password, $data['hash']))
                 {
@@ -25,7 +29,7 @@
                 }
                 else
                 {
-                    echo "Wrong Password";
+                    $wrong = 1;
                 }
             }
         }
@@ -54,6 +58,7 @@
                 <a href="modify_username.php">Change username</a>
                 <a href="modify_password.php">Change password</a>
                 <a href="modify_email.php">Change email</a>
+                <a href="desactivate.php">Disable notifications</a>
               </div>
             </div>
 
@@ -95,26 +100,30 @@
             </span>
             <?php         
             if(isset($_GET['action'])){
-            //check the action
-            switch ($_GET['action']) {
-                case 'active':
-                    echo "<h2>Your account is now active you may now log in.</h2>";
+                //check the action
+                switch ($_GET['action']) {
+                    case 'active':
+                        echo "<h2>Your account is now active you may now log in.</h2>";
+                        break;
+                    case 'reset':
+                        echo "<h2>Please check your inbox for a reset link.</h2>";
+                        break;
+                    case 'resetAccount':
+                        echo "<h2>Password changed, you may now login.</h2>";
                     break;
-                case 'reset':
-                    echo "<h2>Please check your inbox for a reset link.</h2>";
-                    break;
-                case 'resetAccount':
-                    echo "<h2>Password changed, you may now login.</h2>";
-                break;
                     }
                 }
+            if ($wrong != 0)
+                echo "<h2>You entered the wrong Password.</h2>";
+            else if ($not_found != 0)
+                echo "<h2>User not found..</h2>";
             ?>
           </form>
   	   </div>
     </div>
     <?php } ?>
-	<div class="footer">
-		<p>Footer</p>
-	</div>
+    <div class="footer">
+        <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+    </div>
 </body>
 </html>

@@ -25,6 +25,7 @@ include 'config/database.php';
           <a href="modify_username.php">Change username</a>
           <a href="modify_password.php">Change password</a>
           <a href="modify_email.php">Change email</a>
+          <a href="desactivate.php">Disable notifications</a>
         </div>
       </div>
 
@@ -33,9 +34,6 @@ include 'config/database.php';
       </div>
       <div class="newcreation">
          <a href="main_section.php">New creation</a>
-      </div>
-      <div class="footer">
-        <p>Footer</p>
       </div>
 
       <form action="upload.php" method="post" enctype="multipart/form-data">
@@ -53,7 +51,6 @@ include 'config/database.php';
           </div>
 
     Select image to upload:
-<!--     <input type="hidden" name="MAX_FILE_SIZE" value="30000" /> -->
     <input type="file" name="fileToUpload" id="fileToUpload">
     <input type="submit" value="Upload Image" name="submit">
   </form>
@@ -69,6 +66,9 @@ include 'config/database.php';
 
       <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
+  <div class="footer">
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+  </div>
 </body>
 </html>
 

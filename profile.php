@@ -1,21 +1,8 @@
 <?php
-/* Displays user information and some useful messages */
+
 session_start();
 include 'config/database.php';
 
-// Check if user is logged in using the session variable
-if (isset($_SESSION['logged_in'])) {
-}
-else {
-  // header('Location : login.php');
-  
-    // the user can modify his password, his email and his name
-    // access to the main section
-    // logout must be visible everywhere
-    //   Lorsque une image reçoit un nouveau commentaire, l’auteur de cette image doit
-    // en être informé par mail. Cette préférence est activée par défaut, mais peut être
-    // désactivée dans les préférences de l’utilisateur
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,15 +46,13 @@ else {
   <?php } ?>
     <?php if (isset($_SESSION['logged_in'])) {
     echo "<h2>Thanks for registering</h2>";
-}
-
-else {
+} else {
    echo "<h2>You must log in before viewing your profile page!</h2>";} ?>
   </p>
   <div class="form">
 </div>
-  <div class="footer">
-    <p>Footer</p>
-  </div>
+<div class="footer">
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+</div>
 </body>
 </html>

@@ -4,18 +4,13 @@
 
     $invalid = 0;
     $already = 0;
-    if (isset($_GET["key"]))
-    {
-        echo $_GET["key"];
-    }
-
+    $short = 0;
     try {
       $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
       $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $query = $dbh->prepare('SELECT resetToken, resetComplete FROM users WHERE resetToken = :token');
       $query->execute(array(':token' => $_GET['key']));
       $row = $query->fetch(PDO::FETCH_ASSOC);
-      echo $row['resetToken'];
       //if no token from db then kill the page
       if (empty($row['resetToken'])){
         $invalid = 1;
@@ -23,31 +18,22 @@
       else if ($row['resetComplete'] == 'Yes') {
         $already = 1;
       }
-      // if(isset($_POST['submit'])){
-      //     //basic validation
-      //     if(strlen($_POST['password']) < 3){
-      //         $error[] = 'Password is too short.';
-      //     }
-      //     if($_POST['password'] != $_POST['passwordConfirm']){
-      //        $error[] = 'Passwords do not match.';
-      //     }
-      // }
+      else if ($_POST['submit'] && strlen($_POST['password']) < 3){
+          $short = 1;
+        }
       //if no errors have been created carry on
       else if ($_POST['password']) {
-          $query = $dbh->prepare("UPDATE users SET password = :pass, resetComplete = 'Yes', hash = :hash  WHERE resetToken = :token");
-          $query->execute(array(
-          ':pass' => $_POST['password'], // DELETE
-          ':token' => $row['resetToken'],
-          ':hash' =>  password_hash($_POST['password'], PASSWORD_BCRYPT)
-          ));
-          //redirect to index page
-          header('Location: login.php?action=resetAccount');
-          exit;
-          //else catch the exception and show the error.
+      $query = $dbh->prepare("UPDATE users SET resetComplete = 'Yes', hash = :hash  WHERE resetToken = :token");
+      $query->execute(array(
+      ':token' => $row['resetToken'],
+      ':hash' =>  password_hash($_POST['password'], PASSWORD_BCRYPT)
+      ));
+      //redirect to index page
+      header('Location: login.php?action=resetAccount');
+      exit;
+      //else catch the exception and show the error.
       }
     }
-
-
     catch(PDOException $e) {
       $error[] = $e->getMessage();
       print_r( $e );
@@ -73,6 +59,7 @@
       <a href="modify_username.php">Change username</a>
       <a href="modify_password.php">Change password</a>
       <a href="modify_email.php">Change email</a>
+      <a href="desactivate.php">Disable notifications</a>
     </div>
   </div>
   <div class="all">
@@ -102,7 +89,7 @@
         </label>
 
         <input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="" />
-         <button type="submit" class="registerbtn" value="ok"> submit </button>
+         <button name="submit" type="submit" class="registerbtn" value="ok"> submit </button>
       </form>
     </div>
   </div>
@@ -113,12 +100,16 @@
   }
   else if ($already != 0)
   {
-    echo "<h2>Your password has already been changed!.</h2>";
+    echo "<h2>Your password has already been changed!</h2>";
+  }
+  else if ($short != 0)
+  {
+    echo "<h2>Your password is too short!</h2>";
   }
   ?>
   <?php } ?>
   <div class="footer">
-    <p>Footer</p>
+    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
 
 </body>
