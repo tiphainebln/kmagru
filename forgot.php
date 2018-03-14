@@ -1,14 +1,12 @@
 <?php
+include 'config/setup.php';
 session_start();
-    require('config/database.php');
 
     try {
         //email validation
         if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
             $error[] = 'Please enter a valid email address';
         } else {
-            $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $query = $dbh->prepare('SELECT email FROM users WHERE email = :email');
             $query->execute(array(':email' => $_POST['email']));
             $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -20,8 +18,6 @@ session_start();
         //create the activation code
         $token = md5(uniqid(rand(),true));
 
-        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = $dbh->prepare("UPDATE users SET resetToken = :token, resetComplete='No' WHERE email = :email");
         $query->execute(array(
             ':email' => $row['email'],

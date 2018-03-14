@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-include "config/database.php";
+include 'config/setup.php';
 
-function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
+function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
   // function patch for respecting alpha work find on http://php.net/manual/fr/function.imagecopymerge.php
   $result = imagecreatetruecolor($src_w, $src_h);
   imagecopy($result, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
@@ -32,9 +32,8 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         $uploadOk = 0;
     }
     // Allow certain file formats
-    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-    && $imageFileType != "gif" ) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+        echo "Sorry, only JPG, JPEG & PNG files are allowed.";
         $uploadOk = 0;
     }
     // Check if $uploadOk is set to 0 by an error
@@ -42,8 +41,6 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
     } else {
-        $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $user = $_SESSION['userid'];
         $filename = $_SESSION['username'].'_'. mktime() . '.' . $imageFileType;
@@ -55,7 +52,7 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         else if ($imageFileType == 'png')
           $upload = imagecreatefrompng('img/'. $filename);
         $imgpng = imagecreatefrompng('img/'.$_POST['img'].'.png');
-        imagecopymerge_alpha($upload, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
+        merge_images($upload, $imgpng, 0, 0, 0, 0, imagesx($imgpng), imagesy($imgpng), 100);
         imagepng($upload,'img/'. $filename);
         // free memory
         imagedestroy($upload);

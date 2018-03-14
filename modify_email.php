@@ -1,6 +1,6 @@
-s<?php
+<?php
 session_start();
-include 'config/database.php';
+include 'config/setup.php';
 
 $mismatch = 0;
 $wrong = 0;
@@ -9,8 +9,6 @@ try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
   if (isset($_POST['email']) && isset($_POST['newemail']) && isset($_POST['newemailbis'])){
-    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $mail = $_POST['newemail'];
     $cmail = $_POST['newemailbis'];
     if($cmail !== $mail){
@@ -21,8 +19,10 @@ try {
     }
     else
     {
-      $query = $dbh->prepare("UPDATE users SET email='$mail' WHERE id=$userid");
-      $query->execute();
+      $query = $dbh->prepare("UPDATE users SET email=':mail' WHERE id=:userid");
+      $query->execute(array(
+        ':email' => $email,
+        ':id' => $userid));
       $changed = 1;
     }
   }

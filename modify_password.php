@@ -1,25 +1,36 @@
 <?php
-    include 'config/database.php';
+    include 'config/setup.php';
     session_start();
     
     $changed = 0;
     $missmatch = 0;
+    $no_digit = 0;
+    $short = 0;
     try {
         $userid = $_SESSION['userid'];
         if (isset($_POST['password']) && isset($_POST['newpassword']) && isset($_POST['newpasswordbis'])){
-            $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $pass = $_POST['newpassword'];
             $cpass = $_POST['newpasswordbis'];
             if ($pass !== $cpass)
             {
+              $error = 'Mismatch.';
               $mismatch = 1;
             }
-            else
+            if (strlen($_POST['newpassword']) < 3){
+              $error = 'Your password is too short.';
+              $short = 1;
+            }
+            if (ctype_alpha($_POST['newpassword']) || ctype_digit($_POST['newpassword'])){
+              $error = 'Your password must contain at least one digit and one letter.';
+              $no_digit = 1;
+            } 
+            if (!isset($error))
             {
               $hash = password_hash($cpass, PASSWORD_BCRYPT);
-              $query = $dbh->prepare("UPDATE users SET hash='$hash' WHERE id=$userid");
-              $query->execute();
+              $query = $dbh->prepare("UPDATE users SET hash=':hash' WHERE id=:userid");
+              $query->execute(array(
+                ':hash' => $hash,
+                ':id' => $userid));
               $changed = 1;
             }
         }
@@ -84,11 +95,19 @@
     <?php 
     if ($changed != 0)
     {
-     echo "<h2>Records updated successfully.</h2>";
+      echo "<h2>Records updated successfully.</h2>";
     }
-    else if ($mismatch != 0)
+    if ($mismatch != 0)
     {
-     echo "<h2>Sorry! Password Mismatch.</h2>";
+      echo "<h2>Sorry! Password Mismatch.</h2>";
+    }
+    if ($short != 0)
+    {
+      echo "<h2>Your password is too short.</h2>";
+    }
+    if ($no_digit != 0)
+    {
+      echo "<h2>Your password must contain at least one digit and one letter.</h2>";
     }
   ?>
   <?php } else { ?>

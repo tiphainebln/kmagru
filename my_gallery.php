@@ -1,13 +1,11 @@
 <?php
 session_start();
-include 'config/database.php';
+include 'config/setup.php';
 
 if (isset($_SESSION['logged_in'])) {
   $user = $_SESSION['userid'];
   if (isset($_GET['delete'])) {
     // recuperer l'image a supprimer
-    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $id = $dbh->quote($_GET['delete']);
     $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
     $image = $select->fetch();
@@ -20,8 +18,6 @@ if (isset($_SESSION['logged_in'])) {
   }
 
   $ppp = 5;
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
   $total_pic = $select->fetch();
   $nb_pic = $total_pic['total'];
@@ -43,8 +39,6 @@ if (isset($_SESSION['logged_in'])) {
 
   $first = ($cp-1) * $ppp;
 
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $user = $_SESSION['userid'];
   $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT $first, $ppp");
   $select->execute();

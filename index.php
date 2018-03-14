@@ -1,6 +1,8 @@
 <?php
-require 'config/database.php';
+include 'config/setup.php';
 session_start();
+
+var_dump("2");
 ?>
 
 <!DOCTYPE html>
@@ -11,13 +13,11 @@ session_start();
 </head>
 <body>
 <a href="index.php"><h1>Camagru</h1></a>
-  <div class="all">
-     <a href="gallery.php">All</a>
-  </div>
+<div id="menu_log" style="">
+  <a href="gallery.php">All</a>
   <?php if (isset($_SESSION['logged_in'])) { ?>
-    <div class="logout">
-      <a href="logout.php">Logout</a>
-    </div>
+    <a href="main_section.php">New creation</a>
+    <a href="my_gallery.php">My Gallery</a>
     <div class="dropdown">
       <a button class="admin">Settings</a>
       <div class="dropdown-content">
@@ -27,14 +27,8 @@ session_start();
         <a href="desactivate.php">Disable notifications</a>
       </div>
     </div>
-
-    <div class="mygallery">
-        <a href="my_gallery.php">My Gallery</a>
-    </div>
-    <div class="newcreation">
-       <a href="main_section.php">New creation</a>
-    </div>
-    <p>
+    <a href="logout.php">Logout</a>
+</div>
   <?php } else { ?>
     <div class="connect">
       <a href="login.php">Login</a>

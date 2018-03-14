@@ -25,6 +25,17 @@ p { color: #bbc3c8;
 	margin: 0;
 }
 
+
+#menu_log {
+    font-family: 'Georgia', serif;
+    font-style: italic; font-size: 1.125em;
+    line-height: 1.375em;
+    word-spacing: 10px;
+    padding: 10px 6px 8px;
+    position: absolute;
+    text-decoration: none;
+}
+
 .connect {
 	color: #bbc3c8;
 	background: #292929;
@@ -214,18 +225,11 @@ span.psw {
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: relative;
     display: inline-block;
     color: #bbc3c8;
     background: #292929;
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-size: 18px;
-    line-height: 22px;
-    left: 70%;
     padding: 10px 6px 8px;
     position: absolute;
-    top: 8%;
     text-decoration: none;
 }
 

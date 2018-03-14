@@ -1,14 +1,12 @@
 <?php
 session_start();
-require('config/database.php');
+include 'config/setup.php';
 
 //collect values from the url
 $id = trim($_GET['x']);
 $active = trim($_GET['y']);
 //if id is number and the active token is not empty carry on
 if(is_numeric($id) && !empty($active)){
-    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //update users record set the active column to Yes where the ID and active value match the ones provided in the array
     $query = $dbh->prepare("UPDATE users SET active = 'Yes' WHERE id = :id AND active = :active");
     $query->execute(array(

@@ -1,38 +1,57 @@
 <?php
-	include 'config/database.php';
+	include 'config/setup.php';
 	session_start();
 
 	$already = 0;
 	$invalid = 0;
 	$email_already = 0;
+	$short = 0;
+	$no_digit = 0;
+	$alpha = 0;
+	$shortusername = 0;
 	try {
     	if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])){
 			$email = ($_POST['email']);
 			$username = ($_POST['username']);
 	    	$password = ($_POST['password']);
-	    	$dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-	    	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	    	
-	    	// check if user already exists
+	    	// check if user already exists, if it only contains letter and if is more than 3 characters
 	    	$query= $dbh->prepare("SELECT id FROM users WHERE username=:username");
 	    	$query->execute(array(':username' => $username));
 	        if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-	        	$error[] = 'user';
+	        	$error = 'user';
 	        	$already = 1;
 	    		$query->closeCursor();
 	    	}
+	    	if (!ctype_alpha($_POST['username'])){
+				$error = 'Your username must only contain letters';
+				$alpha = 1;
+			}
+			if (strlen($_POST['username']) < 3){
+	    		$error = 'Your username is too short.';
+          		$shortusername = 1;
+        	}
 
+	    	// check if password is more than 3 characters and if it contains a number
+	    	if (strlen($_POST['password']) < 3){
+	    		$error = 'Your password is too short.';
+          		$short = 1;
+        	}
+			if (ctype_alpha($_POST['password']) || ctype_digit($_POST['password'])){
+				$error = 'Your password must contain at least one digit and one letter.';
+				$no_digit = 1;
+			} 
 			// email validation
 			if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-			    $error[] = 'Please enter a valid email address';
+			    $error = 'Please enter a valid email address';
 			    $invalid = 1;
 			} 
 			else {
 			    $query = $dbh->prepare('SELECT email FROM users WHERE email = :email');
-			    $query->execute(array(':email' => $_PsOST['email']));
+			    $query->execute(array(':email' => $_POST['email']));
 			    $row = $query->fetch(PDO::FETCH_ASSOC);
 			    if(!empty($row['email'])){
-			        $error[] = 'Email provided is already in use.';
+			        $error = 'Email provided is already in use.';
 			        $email_already = 1;
 			    }
 			}
@@ -148,17 +167,32 @@
 	{
     	echo "<h2>Please enter a valid email address.</h2>";
     }
-    else if ($already != 0)
+    if ($already != 0)
 	{
     	echo "<h2>Data provided is already in use.</h2>";
     }
-     else if ($already != 0)
+    if ($already != 0)
 	{
 		echo "<h2>Email provided is already in use.</h2>";
 	}
-    
+    if ($short != 0)
+	{
+		echo "<h2>Your password is too short !</h2>";
+	}
+	if ($no_digit != 0)
+	{
+		echo "<h2>Sorry your password must contain at least one digit and one letter.</h2>";
+	}
+	if ($alpha != 0)
+	{
+		echo "<h2>Sorry your username must only contain letters.</h2>";
+	}
+	if ($shortusername != 0)
+	{
+		echo "<h2>Sorry your username is too short.</h2>";
+	}
 	?>
-	 <?php } ?>
+	<?php } ?>
 	<div class="footer">
     	<footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
 	</div>

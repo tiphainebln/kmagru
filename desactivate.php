@@ -1,21 +1,19 @@
 <?php
-  include "config/database.php";
+  include 'config/setup.php';
   session_start();
 
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $uid = $_SESSION['userid'];
   if (isset($_POST['submit']))
   {
     $checked = $_POST['check'];
     if (isset($checked)) {
-      $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=$uid");
-      $select->execute();
+      $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=:uid");
+      $select->execute(array(':id' => $uid));
     }
     else
     {
-      $select = $dbh->prepare("UPDATE users SET notification='0' WHERE id=$uid");
-      $select->execute();
+      $select = $dbh->prepare("UPDATE users SET notification='0' WHERE id=:uid");
+      $select->execute(array(':id' => $uid));
     }
   }
 

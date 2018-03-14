@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config/database.php';
+include 'config/setup.php';
 
 function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct){
   $result = imagecreatetruecolor($src_w, $src_h);
@@ -31,9 +31,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       // free memory
 
       // register the image in database
-      $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
       try {
           $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
           $req->execute(array(":user" => $user, ":filename" => $filename));
@@ -45,8 +42,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
     }
 
     if (isset($_SESSION['logged_in'])) {
-      $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $user = $_SESSION['userid'];
       $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC");
       $select->execute();
@@ -130,7 +125,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         </div>
 
         <form action="#" method="post" enctype="multipart/form-data"> 
-          <div class="pngs" style="margin-top: 5%; width: 70%;">
+          <div class="pngs" style="margin-top: 15%; width: 70%;">
            <div class="selection">
               <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" id="box1" onclick="validate()">
             </div>

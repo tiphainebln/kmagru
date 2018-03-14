@@ -1,10 +1,8 @@
 <?php
-	include "config/database.php";
+	include 'config/setup.php';
 	session_start();
 	try {
 	  if (isset($_GET['id'])) {
-	    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-	    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	    $galleryid = $_GET['id'];
 	    $my_userid = $_SESSION['userid'];
 

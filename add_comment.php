@@ -1,20 +1,16 @@
 <?php
-include "config/database.php";
+include 'config/setup.php';
 session_start();
 // Récupérer l'image
 
 if (isset($_GET['id'])) {
-  $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $galleryid = $_GET['id'];
-  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=$galleryid");
-  $select->execute();
+  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=:galleryid");
+  $select->execute(array(':galleryid' => $galleryid));
   $image = $select->fetch();
 
   if (isset($_GET['delete'])) {
     // recuperer le commentaire a supprimer
-    $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $id = $dbh->quote($_GET['delete']);
     $select = $dbh->query("SELECT userid, galleryid FROM comment WHERE id=$id");
     $comment = $select->fetch();
@@ -41,8 +37,8 @@ if (isset($_GET['id'])) {
 
         // get les commentaires
   try {
-      $querycomment = $dbh->prepare("SELECT comment, username, id FROM comment WHERE galleryid=$galleryid");
-      $querycomment->execute();
+      $querycomment = $dbh->prepare("SELECT comment, username, id FROM comment WHERE galleryid=:galleryid");
+      $querycomment->execute(array(':galleryid' => $galleryid));
   } catch (PDOException $e) {
     var_dump($e->getMessage());
     $_SESSION['error'] = "ERROR: ".$e->getMessage();
@@ -53,12 +49,12 @@ if (isset($_GET['id'])) {
     if (isset($_POST['content']) && isset($_POST['submit'])) {
       $for_this_user = $image['userid'];
 
-      $query = $dbh->prepare("SELECT email FROM users WHERE id=$for_this_user");
-      $query->execute();
+      $query = $dbh->prepare("SELECT email FROM users WHERE id=:for_this_user");
+      $query->execute(array(':id' => $for_this_user));
       $mail = $query->fetch();
 
-      $query = $dbh->prepare("SELECT notification FROM users WHERE id=$for_this_user");
-      $query->execute();
+      $query = $dbh->prepare("SELECT notification FROM users WHERE id=:for_this_user");
+      $query->execute(array(':id' => $for_this_user));
       $toggle = $query->fetch()['notification'];
 
       if ($toggle == 1)

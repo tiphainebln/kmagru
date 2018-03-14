@@ -1,39 +1,47 @@
 <?php
-    require('config/database.php');
+    include 'config/setup.php';
     session_start();
 
     $invalid = 0;
     $already = 0;
     $short = 0;
+    $no_digit = 0;
     try {
-      $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $query = $dbh->prepare('SELECT resetToken, resetComplete FROM users WHERE resetToken = :token');
-      $query->execute(array(':token' => $_GET['key']));
-      $row = $query->fetch(PDO::FETCH_ASSOC);
-      //if no token from db then kill the page
-      if (empty($row['resetToken'])){
-        $invalid = 1;
-      }
-      else if ($row['resetComplete'] == 'Yes') {
-        $already = 1;
-      }
-      else if ($_POST['submit'] && strlen($_POST['password']) < 3){
-          $short = 1;
+      if (isset($_POST['password'])) {
+        $query = $dbh->prepare('SELECT resetToken, resetComplete FROM users WHERE resetToken = :token');
+        $query->execute(array(':token' => $_GET['key']));
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        //if no token from db then kill the page
+        if (empty($row['resetToken'])){
+          $error = 'Invalid token provided.';
+          $invalid = 1;
         }
-      //if no errors have been created carry on
-      else if ($_POST['password']) {
-      $query = $dbh->prepare("UPDATE users SET resetComplete = 'Yes', hash = :hash  WHERE resetToken = :token");
-      $query->execute(array(
-      ':token' => $row['resetToken'],
-      ':hash' =>  password_hash($_POST['password'], PASSWORD_BCRYPT)
-      ));
-      //redirect to index page
-      header('Location: login.php?action=resetAccount');
-      exit;
-      //else catch the exception and show the error.
-      }
+        else if ($row['resetComplete'] == 'Yes') {
+          $error = 'Reset already complete.';
+          $already = 1;
+        }
+        // check if password is more than 3 characters and if it countains a number
+        if (strlen($_POST['password']) < 3){
+            $error = 'Your password is too short.';
+            $short = 1;
+        }
+        if (ctype_alpha($_POST['password']) || ctype_digit($_POST['password'])){
+            $error = 'Your password must contain at least one digit and one letter.';
+            $no_digit = 1;
+        } 
+        //if no errors have been created carry on
+        if (isset($_POST['password']) && !isset($error)) {
+          $query = $dbh->prepare("UPDATE users SET resetComplete = 'Yes', hash = :hash  WHERE resetToken = :token");
+          $query->execute(array(
+          ':token' => $row['resetToken'],
+          ':hash' =>  password_hash($_POST['password'], PASSWORD_BCRYPT)
+          ));
+          //redirect to index page
+          header('Location: login.php?action=resetAccount');
+          exit;
+        }
     }
+  }
     catch(PDOException $e) {
       $error[] = $e->getMessage();
       print_r( $e );
@@ -89,7 +97,7 @@
         </label>
 
         <input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="" />
-         <button name="submit" type="submit" class="registerbtn" value="ok"> submit </button>
+         <button name="submit" type="submit" class="registerbtn"> submit </button>
       </form>
     </div>
   </div>
@@ -98,13 +106,17 @@
   {
     echo "<h2>Invalid token provided, please use the link provided in the reset email.</h2>";
   }
-  else if ($already != 0)
+  if ($already != 0)
   {
     echo "<h2>Your password has already been changed!</h2>";
   }
-  else if ($short != 0)
+  if ($short != 0)
   {
     echo "<h2>Your password is too short!</h2>";
+  }
+  if ($no_digit != 0)
+  {
+    echo "<h2>Your password must contain at least one digit and one letter!</h2>";
   }
   ?>
   <?php } ?>
