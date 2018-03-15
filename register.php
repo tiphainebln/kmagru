@@ -107,94 +107,72 @@
 <head>
 	<title>Camagru</title>
 	<link rel="stylesheet" href="index.css" charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<a href="index.php"><h1>Camagru</h1></a>
-	<div class="all">
-		<a href="gallery.php">All</a>
-  	</div>
-	<?php if (isset($_SESSION['logged_in'])) { ?>
-	<div class="logout">
-		<a href="logout.php">Logout</a>
-	</div>
-	<div class="dropdown">
-		<a button class="admin">Settings</a>
-		<div class="dropdown-content">
-			<a href="modify_username.php">Change username</a>
-            <a href="modify_password.php">Change password</a>
-            <a href="modify_email.php">Change email</a>
-            <a href="desactivate.php">Disable notifications</a>
-        </div>
-    </div>
-    <div class="mygallery">
-    	<a href="my_gallery.php">My Gallery</a>
-    </div>
-    <div class="newcreation">
-    	<a href="main_section.php">New creation</a>
-    </div>
-    <div class="container" id="login">
-    	Vous n'êtes pas censé être ici.
-    </div>
-    <?php } else { ?>
-	<div class="connect">
-		<a href="login.php">Login</a>
-	</div>
-	<div class="signin">
-		<a href="register.php">Register</a>
-	</div>
-	<div id="signup">
-		<div class="container">
-			<form method="post">		
-				<label>
-					Email
-				</label>
-				<input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="" />
+	<?php if (isset($_SESSION['logged_in'])) {
+		include 'includes/header_log.php'; ?>
+		<div class="container" id="login">
+    		Vous n'êtes pas censé être ici.
+    	</div>
+    	<?php } else {
+    	include 'includes/header.php';
+    	?>
+
+		<!-- FORMULAIRE -->
+		<div id="signup">
+			<div class="container">
+				<form method="post">		
 					<label>
-						Username
+						Email
 					</label>
-				<input type="text" placeholder="Enter Username" name="username" autocomplete="off" value="" />
-					<label>
-						Password
-					</label>
-				<input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="" />
-				
-				<button type="submit" class="registerbtn" value="ok"> Register </button>
-			</form>
+					<input type="text" placeholder="Enter Email" name="email" autocomplete="off" value="" />
+						<label>
+							Username
+						</label>
+					<input type="text" placeholder="Enter Username" name="username" autocomplete="off" value="" />
+						<label>
+							Password
+						</label>
+					<input type="password" placeholder="Enter Password" name="password" autocomplete="off" value="" />
+					
+					<button type="submit" class="registerbtn" value="ok"> Register </button>
+				</form>
+			</div>
 		</div>
-	</div>
-	<?php
-	if ($invalid != 0)
-	{
-    	echo "<h2>Please enter a valid email address.</h2>";
-    }
-    if ($already != 0)
-	{
-    	echo "<h2>Data provided is already in use.</h2>";
-    }
-    if ($already != 0)
-	{
-		echo "<h2>Email provided is already in use.</h2>";
-	}
-    if ($short != 0)
-	{
-		echo "<h2>Your password is too short !</h2>";
-	}
-	if ($no_digit != 0)
-	{
-		echo "<h2>Sorry your password must contain at least one digit and one letter.</h2>";
-	}
-	if ($alpha != 0)
-	{
-		echo "<h2>Sorry your username must only contain letters.</h2>";
-	}
-	if ($shortusername != 0)
-	{
-		echo "<h2>Sorry your username is too short.</h2>";
-	}
-	?>
-	<?php } ?>
+		<?php
+		if ($invalid != 0)
+		{
+	    	echo "<h2>Please enter a valid email address.</h2>";
+	    }
+	    if ($already != 0)
+		{
+	    	echo "<h2>Data provided is already in use.</h2>";
+	    }
+	    if ($already != 0)
+		{
+			echo "<h2>Email provided is already in use.</h2>";
+		}
+	    if ($short != 0)
+		{
+			echo "<h2>Your password is too short !</h2>";
+		}
+		if ($no_digit != 0)
+		{
+			echo "<h2>Sorry your password must contain at least one digit and one letter.</h2>";
+		}
+		if ($alpha != 0)
+		{
+			echo "<h2>Sorry your username must only contain letters.</h2>";
+		}
+		if ($shortusername != 0)
+		{
+			echo "<h2>Sorry your username is too short.</h2>";
+		}
+		?>
+		<?php } ?>
 	<div class="footer">
-    	<footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+		<footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
 	</div>
 </body>
 </html>

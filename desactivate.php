@@ -7,13 +7,13 @@
   {
     $checked = $_POST['check'];
     if (isset($checked)) {
-      $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=:uid");
-      $select->execute(array(':id' => $uid));
+      $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=$uid");
+      $select->execute();
     }
     else
     {
-      $select = $dbh->prepare("UPDATE users SET notification='0' WHERE id=:uid");
-      $select->execute(array(':id' => $uid));
+      $select = $dbh->prepare("UPDATE users SET notification='0' WHERE id=$uid");
+      $select->execute();
     }
   }
 
@@ -24,32 +24,15 @@
 <head>
   <title>Camagru</title>
   <link rel="stylesheet" href="index.css" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <a href="index.php"><h1>Camagru</h1></a>
-  <div class="all">
-    <a href="gallery.php">All</a>
-  </div>
   <?php if (isset($_SESSION['logged_in'])) { ?>
-  <div class="logout">
-    <a href="logout.php">Logout</a>
-  </div>
-  <div class="dropdown">
-    <a button class="admin">Settings</a>
-    <div class="dropdown-content">
-      <a href="modify_username.php">Change username</a>
-      <a href="modify_password.php">Change password</a>
-      <a href="modify_email.php">Change email</a>
-      <a href="desactivate.php">Disable notifications</a>
-    </div>
-  </div>
-  <div class="mygallery">
-    <a href="my_gallery.php">My Gallery</a>
-  </div>
-  <div class="newcreation">
-    <a href="main_section.php">New creation</a>
-  </div>
-  <div class="container">
+<!--     MENU -->
+ <?php include 'includes/header_log.php'; ?>
+
+<!--   SWITCH -->
+  <div class="container" style="margin-top: 6%;">
     <form action="" method="post">
       Enable Notifications
       <label class="switch">
@@ -65,16 +48,11 @@
         <?php } ?>
           <span class="slider"></span>
       </label>
-      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit">Confirmer ?</button>
+      <button style="width: 200px; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit">Confirmer ?</button>
     </form>
   </div>
   <?php } else { ?>
-  <div class="connect">
-    <a href="login.php">Login</a>
-  </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
-  </div>
+   <?php include 'includes/header.php'; ?>
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
   <div class="footer">

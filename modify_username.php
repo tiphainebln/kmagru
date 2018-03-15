@@ -5,6 +5,8 @@ session_start();
 $changed = 0;
 $missmatch = 0;
 $alpha = 0;
+$shortusername = 0;
+$already = 0;
 try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
@@ -21,13 +23,25 @@ try {
        $error = 'Your username must only contain letters';
        $alpha = 1;
     }
+    if (strlen($_POST['username']) < 3){
+      $error = 'Your username is too short.';
+      $shortusername = 1;
+    }
     if (!isset($error))
     {
-       $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=:userid");
-       $query->execute(array(
-         ':username' => $user,
-         'id' => $userid));
-       $changed = 1;
+      // check if user already exists, if it only contains letter and if is more than 3 characters
+      $query= $dbh->prepare("SELECT * FROM users WHERE username=:username");
+      $query->execute(array(':username' => $user));
+      if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $error = 'user';
+        $already = 1;
+        $query->closeCursor();
+      }
+      else {
+        $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=$userid");
+        $query->execute();
+        $changed = 1;
+      }
     }
   }
 }
@@ -41,81 +55,62 @@ catch(PDOException $e){
 <head>
   <title>Camagru</title>
   <link rel="stylesheet" href="index.css" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <a href="index.php"><h1>Camagru</h1></a>
-  <div class="all">
-    <a href="gallery.php">All</a>
-  </div>
-  <?php if (isset($_SESSION['logged_in'])) { ?>
-  <div class="logout">
-    <a href="logout.php">Logout</a>
-  </div>
-  <div class="dropdown">
-    <a button class="admin">Settings</a>
-    <div class="dropdown-content">
-      <a href="modify_username.php">Change username</a>
-      <a href="modify_password.php">Change password</a>
-      <a href="modify_email.php">Change email</a>
-      <a href="desactivate.php">Disable notifications</a>
-    </div>
-  </div>
-  <div class="mygallery">
-    <a href="my_gallery.php">My Gallery</a>
-  </div>
-  <div class="newcreation">
-    <a href="main_section.php">New creation</a>
-  </div>
-  <div class="footer">
-    <p>Footer</p>
-  </div>
-  </div></div>
-  <div id="username">
+  <?php if (isset($_SESSION['logged_in'])) {
+    include 'includes/header_log.php'; ?>
+
+<!--   FORMULAIRE -->
+<div id="username">
   <div class="container">
-        <form method="post">
-          <label>
-            <b>Username</b>
-          </label>
-            <input type="text" placeholder="Enter your current username" name="username" autocomplete="off" required>
-            <label>
-             <b>New username</b>
-            </label>
-            <input type="text" placeholder="Enter your new username" name="newusername" autocomplete="off" required>
-            <label>
-             <b>Repeat new username</b>
-            </label>
-            <input type="text" placeholder="Enter your new username again" name="newusernamebis" autocomplete="off" required>
-            <button type="submit" name="changeusername">
-                Submit
-            </button>
-        </form>
-    </div>
+    <form method="post">
+      <label>
+        <b>Username</b>
+      </label>
+      <input type="text" placeholder="Enter your current username" name="username" autocomplete="off" required>
+      <label>
+        <b>New username</b>
+      </label>
+      <input type="text" placeholder="Enter your new username" name="newusername" autocomplete="off" required>
+      <label>
+        <b>Repeat new username</b>
+      </label>
+      <input type="text" placeholder="Enter your new username again" name="newusernamebis" autocomplete="off" required>
+      <button type="submit" name="changeusername">
+        Submit
+      </button>
+    </form>
   </div>
-  <?php 
-    if ($changed != 0)
-    {
-      echo "<h2>Records updated successfully.</h2>";
-    }
-    if ($mismatch != 0)
-    {
-      echo "<h2>Sorry! Username Mismatch.</h2>";
-    }
-    if ($alpha != 0)
-    {
-      echo "<h2>Your username must only contain letters.</h2>";
-    }
-  ?>
-  <?php } else { ?>
-  <div class="connect">
-    <a href="login.php">Login</a>
-  </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
-  </div>
-  <div class="container" id="login">  You're not supposed to see this. </div>
-  <?php } ?>
-  <div class="footer">
-    <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
-  </div>
+</div>
+<?php 
+  if ($changed != 0)
+  {
+    echo "<h2>Records updated successfully.</h2>";
+  }
+  if ($mismatch != 0)
+  {
+    echo "<h2>Sorry! Username Mismatch.</h2>";
+  }
+  if ($alpha != 0)
+  {
+    echo "<h2>Your username must only contain letters.</h2>";
+  }
+  if ($shortusername != 0)
+  {
+    echo "<h2>Your username is too short.</h2>";
+  }
+  if ($already != 0)
+  {
+    echo "<h2>Sorry, this username is already taken, please choose another one.</h2>";
+  }
+} else {
+  include 'includes/header.php';
+?>
+<div class="container" id="login">  You're not supposed to see this. </div>
+<?php } ?>
+<div class="footer">
+  <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+</div>
 </body>
 </html>

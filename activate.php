@@ -32,62 +32,29 @@ if(is_numeric($id) && !empty($active)){
 <head>
     <title>Camagru</title>
     <link rel="stylesheet" href="index.css" charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <a href="index.php"><h1>Camagru</h1></a>
-    <div class="all">
-        <a href="gallery.php">All</a>
-    </div>
   <?php if (isset($_SESSION['logged_in'])) { ?>
-    <div class="logout">
-      <a href="logout.php">Logout</a>
-    </div>
-    <div class="dropdown">
-      <a button class="admin">Settings</a>
-      <div class="dropdown-content">
-        <a href="modify_username.php">Change username</a>
-        <a href="modify_password.php">Change password</a>
-        <a href="modify_email.php">Change email</a>
-        <a href="desactivate.php">Disable notifications</a>
-      </div>
-    </div>
 
-    <div class="all">
-       <a href="gallery.php">All</a>
-    </div>
-    <div class="mygallery">
-        <a href="my_gallery.php">My Gallery</a>
-    </div>
-    <div class="newcreation">
-       <a href="main_section.php">New creation</a>
-    </div>
+  <?php include 'includes/header_log.php'; ?>
+  
     <div class="container" id="login">
         Vous n'êtes pas censé être ici.
     </div>
-  <?php } else { ?>
-
-    <a href="index.php"><h1>Camagru</h1></a>
-    <div class="all">
-       <a href="gallery.php">All</a>
-    </div>
-    <div class="connect">
-        <a href="login.php">Login</a>
-    </div>
-    <div class="signin">
-        <a href="register.php">Register</a>
-    </div>
-    <div class="footer">
-        <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
-    </div>
-    <?php
-
-        if (isset($active)) {
-            echo  "<h2>Your account is activated.</h2>";
-        }
-        else if (isset($error)) {
-            echo "<h2>Your account could not be activated.</h2>";
-        }
-    }
-    ?>
+  <?php } else {
+    include 'includes/header.php'; ?>
+  <div class="footer">
+      <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
+  </div>
+  <?php
+  if (isset($active)) {
+      echo  "<h2>Your account is activated.</h2>";
+  }
+  else if (isset($error)) {
+      echo "<h2>Your account could not be activated.</h2>";
+  }
+}
+?>
 </body>
 </html>

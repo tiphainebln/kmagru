@@ -5,6 +5,7 @@ include 'config/setup.php';
 $mismatch = 0;
 $wrong = 0;
 $changed = 0;
+$already = 0;
 try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
@@ -13,17 +14,26 @@ try {
     $cmail = $_POST['newemailbis'];
     if($cmail !== $mail){
       $mismatch = 1;
+      $error = 1;
     }
-    else if (!filter_var($_POST['newemail'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['newemailbis'], FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($_POST['newemail'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['newemailbis'], FILTER_VALIDATE_EMAIL)) {
       $wrong = 1;
+      $error = 1;
     }
-    else
+    else if (!isset($error))
     {
-      $query = $dbh->prepare("UPDATE users SET email=':mail' WHERE id=:userid");
-      $query->execute(array(
-        ':email' => $email,
-        ':id' => $userid));
-      $changed = 1;
+      // check if user already exists, if it only contains letter and if is more than 3 characters
+      $query= $dbh->prepare("SELECT * FROM users WHERE email=:email");
+      $query->execute(array(':email' => $mail));
+      if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $error = 'taken';
+        $already = 1;
+        $query->closeCursor();
+      } else {
+        $query = $dbh->prepare("UPDATE users SET email='$mail' WHERE id=$userid");
+        $query->execute();
+        $changed = 1;
+      }
     }
   }
 }
@@ -37,39 +47,16 @@ catch(PDOException $e){
 <head>
   <title>Camagru</title>
   <link rel="stylesheet" href="index.css" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <a href="index.php"><h1>Camagru</h1></a>
-  <div class="all">
-    <a href="gallery.php">All</a>
-  </div>
-  <?php if (isset($_SESSION['logged_in'])) { ?>
-  <div class="logout">
-    <a href="logout.php">Logout</a>
-  </div>
-  <div class="dropdown">
-    <a button class="admin">Settings</a>
-    <div class="dropdown-content">
-      <a href="modify_username.php">Change username</a>
-      <a href="modify_password.php">Change password</a>
-      <a href="modify_email.php">Change email</a>
-      <a href="desactivate.php">Disable notifications</a>
-    </div>
-  </div>
-  <div class="mygallery">
-    <a href="my_gallery.php">My Gallery</a>
-  </div>
-  <div class="newcreation">
-    <a href="main_section.php">New creation</a>
-  </div>
-  </div></div>
+  <?php if (isset($_SESSION['logged_in'])) { 
+  include 'includes/header_log.php';
+    ?>
+<!--   FORMULAIRE -->
   <div id="username">
   <div class="container">
         <form method="post">
-          <label>
-            <b>Username</b>
-          </label>
-            <input type="text" placeholder="Enter your username" name="username" autocomplete="off" required>
           <label>
             <b>Current Email</b>
           </label>
@@ -93,22 +80,20 @@ catch(PDOException $e){
     {
      echo "<h2>Records updated successfully.</h2>";
     }
-    else if ($mismatch != 0)
+    if ($mismatch != 0)
     {
      echo "<h2>Sorry! Email Mismatch.</h2>";
     }
-    else if ($wrong != 0)
+    if ($wrong != 0)
     {
      echo "<h2>Please enter a valid email address</h2>";
     }
-  ?>
-    <?php } else { ?>
-  <div class="connect">
-    <a href="login.php">Login</a>
-  </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
-  </div>
+    if ($already != 0)
+    {
+     echo "<h2>This email is already taken.</h2>";
+    }
+  } else {
+    include 'includes/header.php'; ?>
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
   <div class="footer">

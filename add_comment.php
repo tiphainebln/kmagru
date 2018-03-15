@@ -5,8 +5,8 @@ session_start();
 
 if (isset($_GET['id'])) {
   $galleryid = $_GET['id'];
-  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=:galleryid");
-  $select->execute(array(':galleryid' => $galleryid));
+  $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=$galleryid");
+  $select->execute();
   $image = $select->fetch();
 
   if (isset($_GET['delete'])) {
@@ -37,8 +37,8 @@ if (isset($_GET['id'])) {
 
         // get les commentaires
   try {
-      $querycomment = $dbh->prepare("SELECT comment, username, id FROM comment WHERE galleryid=:galleryid");
-      $querycomment->execute(array(':galleryid' => $galleryid));
+      $querycomment = $dbh->prepare("SELECT comment, username, id FROM comment WHERE galleryid=$galleryid");
+      $querycomment->execute();
   } catch (PDOException $e) {
     var_dump($e->getMessage());
     $_SESSION['error'] = "ERROR: ".$e->getMessage();
@@ -49,12 +49,12 @@ if (isset($_GET['id'])) {
     if (isset($_POST['content']) && isset($_POST['submit'])) {
       $for_this_user = $image['userid'];
 
-      $query = $dbh->prepare("SELECT email FROM users WHERE id=:for_this_user");
-      $query->execute(array(':id' => $for_this_user));
+      $query = $dbh->prepare("SELECT email FROM users WHERE id=$for_this_user");
+      $query->execute();
       $mail = $query->fetch();
 
-      $query = $dbh->prepare("SELECT notification FROM users WHERE id=:for_this_user");
-      $query->execute(array(':id' => $for_this_user));
+      $query = $dbh->prepare("SELECT notification FROM users WHERE id=$for_this_user");
+      $query->execute();
       $toggle = $query->fetch()['notification'];
 
       if ($toggle == 1)
@@ -95,31 +95,15 @@ if (isset($_GET['id'])) {
 <head>
   <title>Camagru</title>
   <link rel="stylesheet" href="index.css" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <a href="index.php"><h1>Camagru</h1></a>
-    <div class="all">
-     <a href="gallery.php">All</a>
-  </div>
   <?php if (isset($_SESSION['logged_in'])) { ?>
-  <div class="logout">
-    <a href="logout.php">Logout</a>
-  </div>
-  <div class="dropdown">
-    <a button class="admin">Settings</a>
-    <div class="dropdown-content">
-      <a href="modify_username.php">Change username</a>
-      <a href="modify_password.php">Change password</a>
-      <a href="modify_email.php">Change email</a>
-      <a href="desactivate.php">Disable notifications</a>
-    </div>
-  </div>
-  <div class="mygallery">
-    <a href="my_gallery.php">My Gallery</a>
-  </div>
-  <div class="newcreation">
-    <a href="main_section.php">New creation</a>
-  </div>
+<!--   MENU -->
+ <?php include 'includes/header_log.php'; ?>
+
+<!--     DISPLAY -->
+<div class="comment-display" style= "margin-top:  6%;">
   <div>
     <img src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
   </div>
@@ -132,7 +116,7 @@ if (isset($_GET['id'])) {
       <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Envoyer</button>
     </form>
   </div>
-
+</div>
   <div id="commentlist">
       <?php 
             $comment = $querycomment->fetch();
@@ -147,12 +131,7 @@ if (isset($_GET['id'])) {
 
   <?php 
    } else { ?>
-  <div class="connect">
-    <a href="login.php">Login</a>
-  </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
-  </div>
+    <?php include 'includes/header.php'; ?>
   <div class="container" id="login">  You're not supposed to see this. </div>
   <?php } ?>
   <div class="footer">

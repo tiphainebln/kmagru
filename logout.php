@@ -10,20 +10,13 @@ session_destroy();
 <head>
   <title>Camagru</title>
   <link rel="stylesheet" href="index.css" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <a href="index.php"><h1>Camagru</h1></a>
-  <div class="connect">
-    <a href="login.php">Login</a>
-  </div>
-  <div class="signin">
-    <a href="register.php">Register</a>
-  </div>
-      <p><?= 'Goodbye !!'; ?></p>
-    </div>
-  </div>
+   <?php include 'includes/header.php'; ?>
+  <h2 style="text-align: left;"><?= 'Goodbye !'; ?></h2>
   <div class="footer">
     <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
-
 </body>
+</html>
