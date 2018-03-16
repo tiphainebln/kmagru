@@ -92,8 +92,8 @@ try {
        <?php endforeach; ?>
    </ul>
 
-  <div class="paginate">
-    <p style="margin-top: 20%;"><?php
+  <br><div class="paginate" style=>
+    <p><?php
       if ($cp > 1) {
         echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp - 1) . '">previous</a>';
       } ?> [ <?php echo $cp; ?> ] <?php
