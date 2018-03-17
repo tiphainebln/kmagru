@@ -28,6 +28,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       $timestamp = mktime();
       $fullp = 'img/'.$timestamp.'.png';
       $filename = $timestamp.'.png';
+      var_dump($compare['img_name']);
       if ($filename != $compare['img_name']) {
         imagepng($destination, 'img/'.$filename);
         // register the image in database
