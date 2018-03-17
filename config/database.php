@@ -5,4 +5,3 @@ $DB_USER = "bd7c04b9e31925";
 $DB_PASSWORD = "abd3a680";
 ?>
 
-mysql://bd7c04b9e31925:abd3a680@us-cdbr-iron-east-05.cleardb.net/heroku_3d09aba4b2c36cd?reconnect=true

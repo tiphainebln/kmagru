@@ -5,9 +5,9 @@ include 'database.php';
 try {
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "CREATE DATABASE IF NOT EXISTS camagru";
+        $sql = "CREATE DATABASE IF NOT EXISTS heroku_3d09aba4b2c36cd";
         $dbh->exec($sql);
-        $sql = "USE camagru;
+        $sql = "USE heroku_3d09aba4b2c36cd;
         CREATE TABLE `users` (
           `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
           `username` VARCHAR(50) NOT NULL,
