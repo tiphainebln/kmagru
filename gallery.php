@@ -67,9 +67,9 @@ try {
 <?php include 'includes/header.php'; ?>
   <?php } ?>
 
-  <div class="display-images" style="width: 90%; margin-left: 10%;">
+  <div class="display-images" style="width: 90%; margin-left: 5%;">
     <?php foreach ($images as $image) : ?>
-      <div class="display" style="text-align:center; float:left; clear:right; margin-left: 0%;">
+      <div class="display" style="text-align:center; margin-left: 0%;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
           margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
          <?php
