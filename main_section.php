@@ -208,10 +208,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
             console.log("in");
             document.getElementById("startbutton").className = "make-background-grey"; 
             document.getElementById("startbutton").disabled = true;
-            document.getElementById('box1').checked == false;
-            document.getElementById('box2').checked == false;
-            document.getElementById('box3').checked == false;
-            document.getElementById('box4').checked == false;
             takepicture();
         }, false);
 
