@@ -24,6 +24,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       merge_images($destination, $source, 0, 0, 0, 0, imagesx($source), imagesy($source), 100);
       $user = $_SESSION['userid'];
       $req = $dbh->prepare("SELECT img_name FROM gallery ORDER BY galleryid DESC LIMIT 1;");
+      $req->execute();
       $compare = $req->fetch();
       $timestamp = mktime();
       $fullp = 'img/'.$timestamp.'.png';
