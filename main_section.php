@@ -205,9 +205,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         }
 
         startbutton.addEventListener('click', function(ev){
-                    document.getElementById("startbutton").disabled = true;
             takepicture();
-          document.getElementById("startbutton").disabled = false;
         }, false);
 
   })();
