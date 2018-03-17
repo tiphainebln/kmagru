@@ -102,8 +102,9 @@ try {
       }
     ?></p>
   </div>
+
+</body>
   <div class="footer">
     <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
-</body>
 </html>
