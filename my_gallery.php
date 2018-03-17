@@ -57,12 +57,12 @@ if (isset($_SESSION['logged_in'])) {
   <?php if (isset($_SESSION['logged_in'])) {
     include 'includes/header_log.php'; ?>
   <!--   DISPLAY -->
-  <div class="display-images" style="width: 90%; margin-left: 10%;">
+  <div class="display-images" style="width: 100%; text-align: center;">
     <?php foreach ($images as $image) : ?>
       <div class="imgandbutton">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
-    margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px"> <br>
-        | <a href="?delete=<?php echo $image['galleryid'];?>" onclick="alert('Supprimer ?')">Supprimer</a>
+    margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+        <a href="?delete=<?php echo $image['galleryid'];?>" onclick="alert('Supprimer ?')">Supprimer</a>
       </div>
     <?php endforeach; ?>
   </div>
