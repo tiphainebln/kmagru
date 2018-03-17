@@ -77,7 +77,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
             foreach ($result as $image) :
           ?>
           <div class="imgandbutton"";>
-            <img class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>"> <br>
+            <img class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>"> <br>
           </div>
           <?php
             endforeach;
