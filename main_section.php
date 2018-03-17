@@ -94,7 +94,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           ?>
           
           <div class="imgandbutton" style="text-align:center; display:inline-block; margin:0 10px 10px 0";>
-            <img class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100px" height="100px"> <br>
+            <img class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100px" height="100px"> <br>
           </div>
           <?php 
              if ($column_count == 3) {

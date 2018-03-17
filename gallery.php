@@ -71,7 +71,7 @@ try {
     <?php foreach ($images as $image) : ?>
       <div class="display" style="text-align:center; float:left; clear:right; margin-left: 0%;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
-          margin-top: 20px;" class="img" src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+          margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
          <?php
          if (isset($_SESSION['logged_in'])) { ?>
             <p><a  style="" href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Comment</a></p>
@@ -95,10 +95,10 @@ try {
   <br><div class="paginate" style=>
     <p><?php
       if ($cp > 1) {
-        echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp - 1) . '">previous</a>';
+        echo ' <a href="gallery.php?p='. ($cp - 1) . '">previous</a>';
       } ?> [ <?php echo $cp; ?> ] <?php
       if ($cp < $nb_page) {
-        echo ' <a href="http://localhost:8080/camagru/gallery.php?p='. ($cp + 1) . '">next</a>';
+        echo ' <a href="gallery.php?p='. ($cp + 1) . '">next</a>';
       }
     ?></p>
   </div>
