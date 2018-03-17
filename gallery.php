@@ -67,7 +67,7 @@ try {
 <?php include 'includes/header.php'; ?>
   <?php } ?>
 
-  <ul class="display-images" style="width: 90%; margin-left: 10%;">
+  <div class="display-images" style="width: 90%; margin-left: 10%;">
     <?php foreach ($images as $image) : ?>
       <div class="display" style="text-align:center; float:left; clear:right; margin-left: 0%;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
@@ -90,9 +90,9 @@ try {
          <?php $i = $i + 1; ?>
         <?php } ?>
        <?php endforeach; ?>
-   </ul>
+   </div>
 
-  <br><div class="paginate" style=>
+  <div class="paginate" style=>
     <p><?php
       if ($cp > 1) {
         echo ' <a href="gallery.php?p='. ($cp - 1) . '">previous</a>';
@@ -102,9 +102,8 @@ try {
       }
     ?></p>
   </div>
-
-</body>
   <div class="footer">
     <footer>Copyright &copy; 2018 - tbouline@student.42.fr</footer>
   </div>
+</body>
 </html>
