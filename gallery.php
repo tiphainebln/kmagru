@@ -67,7 +67,7 @@ try {
 <?php include 'includes/header.php'; ?>
   <?php } ?>
 
-  <div class="display-images" style="width: 90%; margin-left: 5%;">
+  <div class="display-images" style="width: 100%;">
     <?php foreach ($images as $image) : ?>
       <div class="display" style="text-align:center; margin-left: 0%;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
@@ -81,11 +81,11 @@ try {
             $checkalready = $dbh->query("SELECT id FROM likes WHERE galleryid=$galleryid AND userid=$userid");
             $alreadyone = $checkalready->fetch();
             if ($alreadyone['id']) { ?>
-              <p><a  style="" href="<?php echo 'cancel_like.php?id='.$image['galleryid'];?>">Unlike</a></p>
+              <p><a  style="text-indent: 0px;" href="<?php echo 'cancel_like.php?id='.$image['galleryid'];?>">Unlike</a></p>
             <?php } else { ?>
-              <p><a  style="" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
+              <p><a  style="text-indent: 0px;" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
            <?php } ?>
-            <p style="display: inline-block;"><?php echo $articles[$i]->countlikes ?> people like this.</p>
+            <p style="display: inline-block; text-indent: 0px;"><?php echo $articles[$i]->countlikes ?> people like this.</p>
          </div>
          <?php $i = $i + 1; ?>
         <?php } ?>
