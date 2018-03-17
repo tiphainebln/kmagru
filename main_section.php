@@ -29,8 +29,8 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
       $timestamp = mktime();
       $fullp = 'img/'.$timestamp.'.png';
       $filename = $timestamp.'.png';
-      var_dump($compare['img_name']);
-      if ($filename != $compare['img_name']) {
+      $comparedatabase = explode('.', $compare['img_name'])[0];
+      if (intval($timestamp) - intval($comparedatabase) > 5) {
         imagepng($destination, 'img/'.$filename);
         // register the image in database
         try {
@@ -41,6 +41,9 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         catch (PDOException $e) {
           echo $req . "<br>" . $e->getMessage();
         }
+      }
+      else {
+        imagedestroy($destination);
       }
     }
 
