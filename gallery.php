@@ -74,16 +74,16 @@ try {
           margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
          <?php
          if (isset($_SESSION['logged_in'])) { ?>
-            <p><a  style="" href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Comment</a></p>
+            <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Comment</a></p>
             <?php
             $galleryid = $image['galleryid'];
             $userid = $_SESSION['userid'];
             $checkalready = $dbh->query("SELECT id FROM likes WHERE galleryid=$galleryid AND userid=$userid");
             $alreadyone = $checkalready->fetch();
             if ($alreadyone['id']) { ?>
-              <p><a  style="text-indent: 0px;" href="<?php echo 'cancel_like.php?id='.$image['galleryid'];?>">Unlike</a></p>
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'cancel_like.php?id='.$image['galleryid'];?>">Unlike</a></p>
             <?php } else { ?>
-              <p><a  style="text-indent: 0px;" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
            <?php } ?>
             <p style="display: inline-block; text-indent: 0px;"><?php echo $articles[$i]->countlikes ?> people like this.</p>
          </div>
