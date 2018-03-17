@@ -23,21 +23,22 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
       merge_images($destination, $source, 0, 0, 0, 0, imagesx($source), imagesy($source), 100);
       $user = $_SESSION['userid'];
-      $timestamp = mktime() + rand();
+      $req = $dbh->prepare("SELECT img_name FROM gallery ORDER BY galleryid DESC LIMIT 1;");
+      $compare = $req->fetch();
+      $timestamp = mktime();
       $fullp = 'img/'.$timestamp.'.png';
       $filename = $timestamp.'.png';
-      imagepng($destination, 'img/'.$filename);
-
-      // free memory
-
-      // register the image in database
-      try {
-          $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
-          $req->execute(array(":user" => $user, ":filename" => $filename));
-                    header('Location:main_section.php');
-      }
-      catch (PDOException $e) {
-        echo $req . "<br>" . $e->getMessage();
+      if ($filename != $compare['img_name']) {
+        imagepng($destination, 'img/'.$filename);
+        // register the image in database
+        try {
+            $req = $dbh->prepare("INSERT INTO gallery (userid, img_name) VALUES (:user, :filename)");
+            $req->execute(array(":user" => $user, ":filename" => $filename));
+                      header('Location:main_section.php');
+        }
+        catch (PDOException $e) {
+          echo $req . "<br>" . $e->getMessage();
+        }
       }
     }
 
@@ -121,7 +122,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
             </div>
           </div>
           <input id="capture" type="hidden" name="capture">
-          <?php ?>
           <button type="submit" name="startbutton" id="startbutton">Prendre une photo</button>
         </form>
         <a style="margin-top: 5%;" href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a>
@@ -205,9 +205,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         }
 
         startbutton.addEventListener('click', function(ev){
-            console.log("in");
-            document.getElementById("startbutton").className = "make-background-grey"; 
-            document.getElementById("startbutton").disabled = true;
             takepicture();
         }, false);
 
