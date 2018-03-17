@@ -206,6 +206,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
         startbutton.addEventListener('click', function(ev){
             takepicture();
+            wait(5000);
         }, false);
 
   })();
