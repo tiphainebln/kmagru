@@ -23,7 +23,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
       merge_images($destination, $source, 0, 0, 0, 0, imagesx($source), imagesy($source), 100);
       $user = $_SESSION['userid'];
-      $timestamp = mktime();
+      $timestamp = mktime() + rand();
       $fullp = 'img/'.$timestamp.'.png';
       $filename = $timestamp.'.png';
       imagepng($destination, 'img/'.$filename);
