@@ -451,4 +451,21 @@ input:checked + .slider:before {
     display: block;
     text-align: left;
   }
+/*
+  #video {
+
+  }
+
+  #startbutton {
+
+  }
+
+  .picture {
+
+  }
+
+  .display-images {
+
+  }
+*/
 }
