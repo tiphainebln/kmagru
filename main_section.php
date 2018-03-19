@@ -78,7 +78,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         <canvas style="display:none" id="canvas"></canvas>
         <img id="photo" style="display:none" src="">
 
-         <div class="picture" style="width: 100%; margin-left: 42%; margin-top: -12%";>
+         <div class="picture">
           <?php
             foreach ($result as $image) :
           ?>

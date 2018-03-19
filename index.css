@@ -308,20 +308,29 @@ span.psw {
 
 
 #startbutton {
-    background-color: #c9d0d4;
-    color: #FF6A80;
-    padding: 14px 20px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    width: 17%;
-    margin-left: -38%;
-    margin-top: -8%;
-    position: absolute;
-    transition: .5s ease;
-    top: 50%;
-    left: 50%;
+  background-color: #c9d0d4;
+  color: #FF6A80;
+  /* padding: 14px 20px; */
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  width: 240px;
+  /* margin-left: -38%; */
+  /* margin-top: -8%; */
+  position: absolute;
+  transition: .5s ease;
+  top: 400px;
+  left: 10%;
+  margin-left: auto;
+}
 
+.picture {
+  width: 25%;
+  margin-left: 42%;
+  /* margin-top: -12%; */
+  position: absolute;
+  /* margin-top: -11%; */
+  top: 194px;
 }
 
 .selection {
@@ -329,8 +338,6 @@ span.psw {
     height: 120px;
     margin : 7%;
     display: inline;
-
-
 }
 
 /* resize images */
@@ -342,12 +349,11 @@ span.psw {
 }
 
 #video {
-/*    display: block;*/
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 4%;
-    width: 40%;
-
+  /* display: block; */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  width: 40%;
 }
 
 #bottom_form {
