@@ -308,20 +308,20 @@ span.psw {
 
 
 #startbutton {
-  background-color: #c9d0d4;
-  color: #FF6A80;
-  /* padding: 14px 20px; */
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  width: 240px;
-  /* margin-left: -38%; */
-  /* margin-top: -8%; */
-  position: absolute;
-  transition: .5s ease;
-  top: 400px;
-  left: 10%;
-  margin-left: auto;
+    background-color: #c9d0d4;
+    color: #FF6A80;
+    /* padding: 14px 20px; */
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 240px;
+    /* margin-left: -38%; */
+    /* margin-top: -8%; */
+    position: absolute;
+    transition: .5s ease;
+    top: 450px;
+    left: 10%;
+    margin-left: auto;
 }
 
 .picture {
@@ -349,11 +349,11 @@ span.psw {
 }
 
 #video {
-  /* display: block; */
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  width: 40%;
+    /* display: block; */
+    margin-left: 8.5%;
+    /* margin-right: auto; */
+    margin-top: 50px;
+    /* width: 40%; */
 }
 
 #bottom_form {
