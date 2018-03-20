@@ -73,7 +73,6 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
  <?php include 'includes/header_log.php'; ?>
 
 <!-- DISPLAY -->
-      <div>
         <video id="video"></video>
         <canvas style="display:none" id="canvas"></canvas>
         <img id="photo" style="display:none" src="">
@@ -110,7 +109,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
               endforeach;
           ?>
         </div>
-
+      <div class="wholeselection">
         <form action="#" method="post" enctype="multipart/form-data"> 
           <div class="pngs" style="margin-top: 15%; width: 70%;">
            <div class="selection">

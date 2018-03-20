@@ -105,7 +105,7 @@ if (isset($_GET['id'])) {
 <!--     DISPLAY -->
 <div class="comment-display" style= "margin-top:  6%;">
   <div>
-    <img src="<?php echo 'http://localhost:8080/camagru/img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
+    <img src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
   </div>
 
   <div>
@@ -113,7 +113,7 @@ if (isset($_GET['id'])) {
       <div>
         Comment: <textarea style="margin-top: 1%;" name="content" rows="5" cols="40"></textarea>
       </div>
-      <button style="width: 10%; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Envoyer</button>
+      <button style="width: 100px; margin-top: 1%; margin-left: 5%; padding: 9px 20px;" type="submit" name="submit" value="submit">Envoyer</button>
     </form>
   </div>
 </div>
