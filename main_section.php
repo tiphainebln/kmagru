@@ -111,7 +111,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         </div>
       <div class="wholeselection">
         <form action="#" method="post" enctype="multipart/form-data"> 
-          <div class="pngs" style="margin-top: 15%; width: 70%;">
+          <div class="pngs">
            <div class="selection">
               <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" id="box1" onclick="validate()">
             </div>
