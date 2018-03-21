@@ -76,7 +76,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         <video id="video"></video>
         <canvas style="display:none" id="canvas"></canvas>
         <img id="photo" style="display:none" src="">
-        <span><a href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a></span>
+
          <div class="picture">
           <?php
             foreach ($result as $image) :
@@ -133,7 +133,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           <button type="submit" name="startbutton" id="startbutton">Prendre une photo</button>
         </form>
       </div>
-
+      <span class="alternative"><a href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a></span>
       <script type="text/javascript">
         if (document.getElementById('box1').checked == false && document.getElementById('box2').checked == false && document.getElementById('box3').checked == false && document.getElementById('box4').checked == false) {
           console.log("in");
