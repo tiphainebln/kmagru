@@ -519,9 +519,9 @@ input:checked + .slider:before {
     top: -1120px;
   }
   .pngs {
-    top: -850px;
+    top: -945px;
   }
-  .altenrative {
-    top: -860px;
+  .alternative {
+    top: -925px;
   }
 }
