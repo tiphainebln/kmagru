@@ -484,7 +484,7 @@ input:checked + .slider:before {
     margin: 0;
   }
   .picture {
-    top: 320px;
+    top: 370px;
     display: block;
     margin-left: 0;
     position: relative;
@@ -502,7 +502,7 @@ input:checked + .slider:before {
     margin: 0;
   }
   .display-images {
-    top: 332px;
+    top: 400px;
     width: 100%;
     display: block;
     position: relative;
