@@ -470,7 +470,7 @@ input:checked + .slider:before {
     margin-left: 10%;
   }
   #startbutton {
-    top: -1350px;
+    top: -1000px;
     width: 75%;
     display: block;
     position: relative;
@@ -498,5 +498,12 @@ input:checked + .slider:before {
     display: block;
     position: relative;
     margin: 0;
+  }
+}
+
+
+@media screen and (max-width: 352px) {
+  #startbutton {
+    top: -1350px;
   }
 }
