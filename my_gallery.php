@@ -57,7 +57,7 @@ if (isset($_SESSION['logged_in'])) {
   <?php if (isset($_SESSION['logged_in'])) {
     include 'includes/header_log.php'; ?>
   <!--   DISPLAY -->
-  <div class="display-images" style="width: 100%; text-align: center;">
+  <div style="width: 100%; text-align: center;">
     <?php foreach ($images as $image) : ?>
       <div class="imgandbutton">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;

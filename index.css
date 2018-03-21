@@ -457,18 +457,18 @@ input:checked + .slider:before {
     text-align: left;
   }
   #video {
-    margin-top: 250px;
-    width: 100%;
+    margin-top: 15px;
+    width: 75%;
     display: block;
   }
   #startbutton {
     margin-top: 500px;
-    width: 100%;
+    width: 75%;
     display: block;
   }
   .picture {
     margin-top: 550px;
-    width: 100%;
+    width: 60%;
     display: block;
   }
   .pngs {
@@ -481,5 +481,4 @@ input:checked + .slider:before {
     width: 100%;
     display: block;
   }
-
 }
