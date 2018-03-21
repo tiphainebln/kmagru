@@ -187,7 +187,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
         video.addEventListener('canplay', function(ev){
           if (!streaming) {
-            height = video.videoHeight / (video.videoWidth/width);
+            height = 240;
             video.setAttribute('width', width);
             video.setAttribute('height', height);
             canvas.setAttribute('width', width);
