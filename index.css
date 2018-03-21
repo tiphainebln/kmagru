@@ -475,15 +475,18 @@ input:checked + .slider:before {
     width: 60%;
     display: block;
     margin-left: 0;
+    position: relative;
   }
   .pngs {
     margin-top: 800px;
     width: 100%;
     display: block;
+    position: relative;
   }
   .display-images {
     margin-top: 1450px;
     width: 100%;
     display: block;
+    position: relative;
   }
 }
