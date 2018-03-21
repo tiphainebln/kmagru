@@ -81,11 +81,17 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           <?php
             foreach ($result as $image) :
           ?>
-            <img class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
+            <img class="img" width="320px" height="240px" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
           <?php
             endforeach;
           ?>
         </div>
+
+
+
+
+
+
 
 
         <div class="display-images">
