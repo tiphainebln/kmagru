@@ -132,7 +132,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           <input id="capture" type="hidden" name="capture">
           <button type="submit" name="startbutton" id="startbutton">Prendre une photo</button>
         </form>
-        <span style="margin-top: 7%"><a href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a></span>
+        <span><a href="upload_menu.php">Or maybe you don't like to get your picture taken ?</a></span>
       </div>
 
       <script type="text/javascript">

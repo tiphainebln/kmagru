@@ -476,7 +476,7 @@ input:checked + .slider:before {
     margin-left: 10%;
   }
   #startbutton {
-    top: -800px;
+    top: -50px;
     width: 75%;
     display: block;
     position: relative;
@@ -495,7 +495,7 @@ input:checked + .slider:before {
     height: 240px;
   }
   .pngs {
-    top: 800px;
+    top: -1050px;
     width: 100%;
     display: block;
     position: relative;
@@ -512,6 +512,9 @@ input:checked + .slider:before {
 
 @media screen and (max-width: 352px) {
   #startbutton {
-    top: -1150px;
+    top: -250px;
+  }
+  .pngs {
+    top: -850px;
   }
 }
