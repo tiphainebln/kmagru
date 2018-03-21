@@ -470,6 +470,7 @@ input:checked + .slider:before {
     margin-top: 550px;
     width: 60%;
     display: block;
+    margin-left: 0;
   }
   .pngs {
     margin-top: 800px;
