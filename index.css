@@ -512,6 +512,6 @@ input:checked + .slider:before {
 
 @media screen and (max-width: 352px) {
   #startbutton {
-    top: -1350px;
+    top: -1150px;
   }
 }
