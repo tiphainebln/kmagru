@@ -119,15 +119,12 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
            <div class="selection">
               <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" id="box1" onclick="validate()">
             </div>
-            <br>
             <div class="selection">
               <img src="img/imgtest2.png"><input type="radio" name="img" value="imgtest2" id="box2" onclick="validate()">
             </div>
-            <br>
             <div class="selection">
               <img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3" id="box3" onclick="validate()">
             </div>
-            <br>
             <div class="selection">
               <img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest4" id="box4" onclick="validate()">
             </div>
