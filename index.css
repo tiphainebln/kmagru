@@ -508,6 +508,10 @@ input:checked + .slider:before {
     position: relative;
     margin: 0;
   }
+  .alternative {
+    top: -600px;
+    position: relative;
+  }
 }
 
 @media screen and (max-width: 352px) {
@@ -516,5 +520,8 @@ input:checked + .slider:before {
   }
   .pngs {
     top: -850px;
+  }
+  .altenrative {
+    top: -860px;
   }
 }
