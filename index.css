@@ -325,7 +325,6 @@ span.psw {
 }
 
 .picture {
-  width: 25%;
   margin-left: 42%;
   /* margin-top: -12%; */
   position: absolute;
@@ -417,6 +416,10 @@ span.psw {
   transition: .4s;
 }
 
+body {
+    overflow-x:hidden;
+}
+
 input:checked + .slider {
   background-color: #2196F3;
 }
@@ -479,11 +482,14 @@ input:checked + .slider:before {
   }
   .picture {
     top: 550px;
-    width: 60%;
     display: block;
     margin-left: 0;
     position: relative;
+    width: 320px;
     margin: 0;
+    padding: 0;
+    border: 0;
+    height: 240px;
   }
   .pngs {
     top: 800px;
