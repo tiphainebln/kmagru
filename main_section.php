@@ -88,7 +88,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         </div>
 
 
-        <div class="display-images" style="width: 20%; right: 0; top: 200px; position: absolute;">
+        <div class="display-images">
           <p style="font-family: 'Georgia', serif;">Last pictures :</p>
           <?php 
               $column_count = 0;
