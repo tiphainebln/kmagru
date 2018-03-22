@@ -475,7 +475,7 @@ input:checked + .slider:before {
   }
   #startbutton {
 /*    top: -450px;*/
-    top: -560px;
+    top: -600px;
     width: 75%;
     display: block;
     position: relative;
@@ -495,7 +495,7 @@ input:checked + .slider:before {
   }
   .pngs {
 /*    top: -250px;*/
-    top: -370px;
+    top: -430px;
     width: 100%;
     display: block;
     position: relative;
@@ -510,7 +510,7 @@ input:checked + .slider:before {
   }
   .alternative {
 /*    top: -250px;*/
-    top: -380px;
+    top: -470px;
     position: relative;
   }
 }
