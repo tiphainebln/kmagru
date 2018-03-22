@@ -17,7 +17,7 @@
             $not_found = 1;
             $e = "User not found.";
            } else { 
-                if ($password == $data['hash'])
+                if (password_verify($password, $data['hash']))
                 {
                     $_SESSION['userid'] = $data['id'];
                     $_SESSION['username'] = $data['username'];

@@ -447,8 +447,6 @@ input:checked + .slider:before {
 }
 
 
-
-
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 1024px) {
@@ -476,7 +474,8 @@ input:checked + .slider:before {
     margin-left: 10%;
   }
   #startbutton {
-    top: -800px;
+/*    top: -450px;*/
+    top: -560px;
     width: 75%;
     display: block;
     position: relative;
@@ -495,7 +494,8 @@ input:checked + .slider:before {
     height: 240px;
   }
   .pngs {
-    top: -600px;
+/*    top: -250px;*/
+    top: -370px;
     width: 100%;
     display: block;
     position: relative;
@@ -509,19 +509,23 @@ input:checked + .slider:before {
     margin: 0;
   }
   .alternative {
-    top: -600px;
+/*    top: -250px;*/
+    top: -380px;
     position: relative;
   }
 }
 
 @media screen and (max-width: 352px) {
   #startbutton {
-    top: -1120px;
+/*    top: -450px;*/
+    top: -650px;
   }
   .pngs {
-    top: -945px;
+/*    top: -250px;*/
+    top: -500px;
   }
   .alternative {
-    top: -925px;
+/*    top: -150px;*/
+    top: -450px;
   }
 }

@@ -18,12 +18,12 @@ try {
        $error = "CE N'EST PAS LA MÊME CHOSE !";
        $mismatch = 1;
     }
-    if (!ctype_alpha($_POST['username']))
+    if (!ctype_alpha($_POST['username']) || !ctype_alpha($user))
     {
        $error = 'Your username must only contain letters';
        $alpha = 1;
     }
-    if (strlen($_POST['username']) < 3){
+    if (strlen($_POST['username']) < 3 || strlen($user) < 3){
       $error = 'Your username is too short.';
       $shortusername = 1;
     }
@@ -41,6 +41,7 @@ try {
         $query = $dbh->prepare("UPDATE users SET username='$user' WHERE id=$userid");
         $query->execute();
         $changed = 1;
+        $_SESSION['username'] = $user;
       }
     }
   }

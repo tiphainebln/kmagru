@@ -3,7 +3,6 @@
 session_start();
 include 'config/setup.php';
 
-var_dump("2");
 ?>
 
 <!DOCTYPE html>

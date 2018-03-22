@@ -25,19 +25,19 @@ if (isset($_SESSION['logged_in'])) {
   $nb_page = ceil($nb_pic / $ppp);
 
   if(isset($_GET['p'])) {
-    $cp = intval($_GET['p']);
+    $current_page = intval($_GET['p']);
 
-    if($cp > $nb_page) {
-      $cp=$nb_page;
-    } else if ($cp < 1) {
-      $cp = 1;
+    if($current_page > $nb_page) {
+      $current_page=$nb_page;
+    } else if ($current_page < 1) {
+      $current_page = 1;
     }
 
   } else {
-    $cp = 1;
+    $current_page = 1;
   }
 
-  $first = ($cp-1) * $ppp;
+  $first = ($current_page-1) * $ppp;
 
   $user = $_SESSION['userid'];
   $select = $dbh->prepare("SELECT * FROM gallery WHERE userid=$user ORDER BY date DESC LIMIT $first, $ppp");
@@ -69,11 +69,11 @@ if (isset($_SESSION['logged_in'])) {
 
   <div class="paginate">
     <p><?php
-      if ($cp > 1) {
-        echo ' <a href="my_gallery.php?p='. ($cp - 1) . '">previous</a>';
-      } ?> [ <?php echo $cp; ?> ] <?php
-      if ($cp < $nb_page) {
-        echo ' <a href="my_gallery.php?p='. ($cp + 1) . '">next</a>';
+      if ($current_page > 1) {
+        echo ' <a href="my_gallery.php?p='. ($current_page - 1) . '">previous</a>';
+      } ?> [ <?php echo $current_page; ?> ] <?php
+      if ($current_page < $nb_page) {
+        echo ' <a href="my_gallery.php?p='. ($current_page + 1) . '">next</a>';
       }
     ?></p>
   </div>
