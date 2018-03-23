@@ -34,7 +34,7 @@ $images = $select->fetchAll();
 
 // likes
 try {
-      $req = $dbh->query("SELECT gallery.galleryid, gallery.img_name,
+      $req = $dbh->prepare("SELECT gallery.galleryid, gallery.img_name,
                               COUNT(likes.id) AS countlikes
                               FROM gallery
                               LEFT JOIN likes
@@ -42,6 +42,7 @@ try {
                               GROUP BY galleryid 
                               ORDER BY date DESC LIMIT $first, $ppp
                               ");
+      $req->execute();
       while ($row = $req->fetchObject()) {
         $articles[] = $row;
       }
@@ -71,21 +72,21 @@ try {
     <?php foreach ($images as $image) : ?>
       <div class="display" style="text-align:center; margin-left: 0%;">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
-          margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
+          margin-top: 20px;" class="img" src="<?php echo 'img/' . htmlspecialchars($image['img_name']); ?>" title="<?php echo htmlspecialchars($image['img_name']); ?>" width="240px" height="240px">
          <?php
          if (isset($_SESSION['logged_in'])) { ?>
-            <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_comment.php?id='.$image['galleryid'];?>">Comment</a></p>
+            <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_comment.php?id='.htmlspecialchars($image['galleryid']);?>">Comment</a></p>
             <?php
             $galleryid = $image['galleryid'];
             $userid = $_SESSION['userid'];
             $checkalready = $dbh->query("SELECT id FROM likes WHERE galleryid=$galleryid AND userid=$userid");
             $alreadyone = $checkalready->fetch();
             if ($alreadyone['id']) { ?>
-              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'cancel_like.php?id='.$image['galleryid'];?>">Unlike</a></p>
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'cancel_like.php?id='.htmlspecialchars($image['galleryid']);?>">Unlike</a></p>
             <?php } else { ?>
-              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_like.php?id='.$image['galleryid'];?>">Like</a></p>
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_like.php?id='.htmlspecialchars($image['galleryid']);?>">Like</a></p>
            <?php } ?>
-            <p style="display: inline-block; text-indent: 0px;"><?php echo $articles[$i]->countlikes ?> people like this.</p>
+            <p style="display: inline-block; text-indent: 0px;"><?php echo htmlspecialchars($articles[$i]->countlikes) ?> people like this.</p>
          </div>
          <?php $i = $i + 1; ?>
         <?php } ?>
@@ -95,10 +96,10 @@ try {
   <div class="paginate" style=>
     <p><?php
       if ($current_page > 1) {
-        echo ' <a href="gallery.php?p='. ($current_page - 1) . '">previous</a>';
-      } ?> [ <?php echo $current_page; ?> ] <?php
+        echo ' <a href="gallery.php?p='. (htmlspecialchars($current_page) - 1) . '">previous</a>';
+      } ?> [ <?php echo htmlspecialchars($current_page); ?> ] <?php
       if ($current_page < $nb_page) {
-        echo ' <a href="gallery.php?p='. ($current_page + 1) . '">next</a>';
+        echo ' <a href="gallery.php?p='. (htmlspecialchars($current_page) + 1) . '">next</a>';
       }
     ?></p>
   </div>

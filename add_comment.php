@@ -67,7 +67,7 @@ if (isset($_GET['id'])) {
             <title>New comment.</title>
           </head>
           <body>
-            <p>You received a comment from " . $_SESSION['username'] . " on <a href='http://localhost:8080/camagru/add_comment.php?id=" . $galleryid . "'>Your Picture</a> ! The message is :\n".$_POST['content']."</p>
+            <p>You received a comment from " . htmlspecialchars($_SESSION['username']) . " on <a href='http://localhost:8080/camagru/add_comment.php?id=" . htmlspecialchars($galleryid) . "'>Your Picture</a> ! The message is :\n".htmlspecialchars($_POST['content'])."</p>
           </body>
         </html>";
 
@@ -121,9 +121,9 @@ if (isset($_GET['id'])) {
       <?php 
             $comment = $querycomment->fetch();
             while ($comment) {
-                echo "<p style='margin-top:15px;' id='auteur'>" .$comment['username']. "</p><p id='comment'>" .$comment['comment']. "</p>";
+                echo "<p style='margin-top:15px;' id='auteur'>" .htmlspecialchars($comment['username']). "</p><p id='comment'>" .htmlspecialchars($comment['comment']). "</p>";
                 if ($comment['username'] == $_SESSION['username'])
-                  echo "<a href='add_comment.php?id=" .$galleryid. "&delete=" .$comment['id']. "'>Delete</a>";
+                  echo "<a href='add_comment.php?id=" .htmlspecialchars($galleryid). "&delete=" .htmlspecialchars($comment['id']). "'>Delete</a>";
                 $comment = $querycomment->fetch();
             }
       ?>

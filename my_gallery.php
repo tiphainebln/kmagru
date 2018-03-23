@@ -61,8 +61,8 @@ if (isset($_SESSION['logged_in'])) {
     <?php foreach ($images as $image) : ?>
       <div class="imgandbutton">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
-    margin-top: 20px;" class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="240px" height="240px">
-        <a href="?delete=<?php echo $image['galleryid'];?>" onclick="alert('Supprimer ?')">Supprimer</a>
+    margin-top: 20px;" class="img" src="<?php echo 'img/' . htmlspecialchars($image['img_name']); ?>" title="<?php echo htmlspecialchars($image['img_name']); ?>" width="240px" height="240px">
+        <a href="?delete=<?php echo htmlspecialchars($image['galleryid']);?>" onclick="alert('Supprimer ?')">Supprimer</a>
       </div>
     <?php endforeach; ?>
   </div>
@@ -70,10 +70,10 @@ if (isset($_SESSION['logged_in'])) {
   <div class="paginate">
     <p><?php
       if ($current_page > 1) {
-        echo ' <a href="my_gallery.php?p='. ($current_page - 1) . '">previous</a>';
-      } ?> [ <?php echo $current_page; ?> ] <?php
+        echo ' <a href="my_gallery.php?p='. htmlspecialchars(($current_page) - 1) . '">previous</a>';
+      } ?> [ <?php echo htmlspecialchars($current_page); ?> ] <?php
       if ($current_page < $nb_page) {
-        echo ' <a href="my_gallery.php?p='. ($current_page + 1) . '">next</a>';
+        echo ' <a href="my_gallery.php?p='. (htmlspecialchars($current_page) + 1) . '">next</a>';
       }
     ?></p>
   </div>

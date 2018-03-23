@@ -26,6 +26,23 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
             $uploadOk = 0;
         }
     }
+
+    //Check MIME type
+
+    // if (isset($_FILES["fileToUpload"]["name"]) {
+    //     $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    //     $mime = finfo_file($finfo, $_FILES["fileToUpload"]["name"]);
+    //     if ($mime == 'image/jpeg' || $mime == 'image/png') {
+    //         echo "OK";
+    //        $uploadOk = 1;
+    //     }
+    //     else {
+    //         echo "Please, upload a real image.";
+    //         echo finfo_file($finfo, $_FILES["fileToUpload"]["name"]);
+    //         $uploadOk = 0;
+    //     }
+    //     finfo_close($finfo);
+    // }
     // Check file size
     if ($_FILES["fileToUpload"]["size"] > 300000) {
         echo "Sorry, your file is too large.";
@@ -63,6 +80,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         catch (PDOException $e) {
           echo $req . "<br>" . $e->getMessage();
         }
+        finfo_close($finfo);
         header('Location: my_gallery.php');
     }
 

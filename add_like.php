@@ -7,12 +7,13 @@ try {
     $my_userid = $_SESSION['userid'];
 
     // Prevents articles that don't exists beeing added and users to like multiple times the same article
-    $req = $dbh->query("INSERT INTO likes (userid, galleryid)
+    $req = $dbh->prepare("INSERT INTO likes (userid, galleryid)
             SELECT {$_SESSION['userid']}, {$galleryid} FROM gallery
             WHERE EXISTS (SELECT galleryid FROM gallery WHERE galleryid={$galleryid})
             AND NOT EXISTS (SELECT id FROM likes WHERE userid={$_SESSION['userid']} AND galleryid={$galleryid})
             LIMIT 1
             ");
+    $req->execute();
     header('Location: gallery.php');
   }
 } catch (PDOException $e) {
