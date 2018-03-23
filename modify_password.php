@@ -58,7 +58,7 @@
         <label>
           <b>Password</b>
         </label>
-        <input type="text" placeholder="Enter your current password" name="password" autocomplete="off" required>
+        <input type="password" placeholder="Enter your current password" name="password" autocomplete="off" required>
         <label>
           <b>New password</b>
         </label>
