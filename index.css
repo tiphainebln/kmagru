@@ -446,6 +446,17 @@ input:checked + .slider:before {
   position: absolute;
 }
 
+#miniatures
+{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+}
+
+#lastmanstanding {
+    width: 320px;
+    height: 240px; 
+}
 
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
@@ -461,7 +472,16 @@ input:checked + .slider:before {
     right: 0;
     top: 0;
   }
-
+  #miniatures
+  {
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+  }
+  #lastmanstanding {
+    width: 160px;
+    height: 120px; 
+  }
   .topnav.responsive a {
     float: none;
     display: block;
@@ -474,16 +494,16 @@ input:checked + .slider:before {
     margin-left: 10%;
   }
   #startbutton {
-/*    top: -450px;*/
-    top: -600px;
+/*    top: -325px;*/
     width: 75%;
-    display: block;
+ /*   display: block;
     position: relative;
-    /* left: -14%; */
-    margin: 0;
+    margin: 0;*/
+    position: relative;
+    top: 15px;
   }
   .picture {
-    top: 370px;
+    top: 500px;
     display: block;
     margin-left: 0;
     position: relative;
@@ -494,12 +514,15 @@ input:checked + .slider:before {
     height: 240px;
   }
   .pngs {
-/*    top: -250px;*/
-    top: -430px;
+    /*top: -140px;*/
     width: 100%;
-    display: block;
+/*    display: block;
     position: relative;
-    margin: 0;
+    margin: 0;*/
+  }
+  .wholeselection {
+    top: -320px;
+    position: relative;
   }
   .display-images {
     top: 400px;
@@ -509,23 +532,20 @@ input:checked + .slider:before {
     margin: 0;
   }
   .alternative {
-/*    top: -250px;*/
-    top: -470px;
+    top: -100px;
+    float: right;
     position: relative;
+    width: 50%;
+    font-size: 12px;
+  }
+  .imgandbutton {
+    display: inline-block;
   }
 }
 
 @media screen and (max-width: 352px) {
-  #startbutton {
-/*    top: -450px;*/
-    top: -650px;
-  }
-  .pngs {
-/*    top: -250px;*/
-    top: -500px;
-  }
   .alternative {
 /*    top: -150px;*/
-    top: -450px;
+    top: -200px;
   }
 }

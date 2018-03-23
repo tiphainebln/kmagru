@@ -81,7 +81,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           <?php
             foreach ($result as $image) :
           ?>
-            <img class="img" width="320px" height="240px" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
+            <img class="img" id="lastmanstanding" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
           <?php
             endforeach;
           ?>
@@ -95,21 +95,14 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
 
         <div class="display-images">
-          <p style="font-family: 'Georgia', serif;">Last pictures :</p>
           <?php 
-              $column_count = 0;
               foreach ($images as $image) : 
-                $column_count++;
           ?>
           
-          <div class="imgandbutton" style="text-align:center;">
-            <img class="img" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>" width="100px" height="100px"> <br>
+          <div class="imgandbutton">
+            <img class="img" style="margin-bottom:20px;" id="miniatures" src="<?php echo 'img/' . $image['img_name']; ?>" title="<?php echo $image['img_name']; ?>">
           </div>
           <?php 
-             if ($column_count == 3) {
-                $column_count = 0;
-                echo '<br>';
-              }
               endforeach;
           ?>
         </div>
