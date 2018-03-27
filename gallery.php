@@ -18,7 +18,7 @@ if(isset($_GET['p'])) {
   if($current_page > $nb_page) {
       $current_page=$nb_page;
   } else if ($current_page < 1) {
-    $current_page = 1;
+      $current_page = 1;
   }
 
 } else {
