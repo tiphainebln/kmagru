@@ -15,8 +15,21 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    
     // Check if image file is a actual image or fake image
     if(isset($_POST["submit"])) {
+
+    if(!isset($_POST['token'])){
+      echo "No token !";
+      throw new Exception('No token found!');
+      exit;
+    }
+    if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+      echo "Mismatch token!";
+      throw new Exception('Mismatch Token !');
+      exit;
+    }
+
         $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
         if($check !== false) {
             echo "File is an image - " . $check["mime"] . ".";
@@ -25,24 +38,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
             echo "File is not an image.";
             $uploadOk = 0;
         }
-    }
 
-    //Check MIME type
-
-    // if (isset($_FILES["fileToUpload"]["name"]) {
-    //     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    //     $mime = finfo_file($finfo, $_FILES["fileToUpload"]["name"]);
-    //     if ($mime == 'image/jpeg' || $mime == 'image/png') {
-    //         echo "OK";
-    //        $uploadOk = 1;
-    //     }
-    //     else {
-    //         echo "Please, upload a real image.";
-    //         echo finfo_file($finfo, $_FILES["fileToUpload"]["name"]);
-    //         $uploadOk = 0;
-    //     }
-    //     finfo_close($finfo);
-    // }
     // Check file size
     if ($_FILES["fileToUpload"]["size"] > 300000) {
         echo "Sorry, your file is too large.";
@@ -80,8 +76,8 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
         catch (PDOException $e) {
           echo $req . "<br>" . $e->getMessage();
         }
-        finfo_close($finfo);
         header('Location: my_gallery.php');
     }
+}
 
 ?>

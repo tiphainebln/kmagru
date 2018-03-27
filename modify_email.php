@@ -10,6 +10,18 @@ try {
   $username = $_SESSION['username'];
   $userid = $_SESSION['userid'];
   if (isset($_POST['email']) && isset($_POST['newemail']) && isset($_POST['newemailbis'])){
+
+    if(!isset($_POST['token'])){
+      echo "No token !";
+      throw new Exception('No token found!');
+      exit;
+    }
+    if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+      echo "Mismatch token!";
+      throw new Exception('Mismatch Token !');
+      exit;
+    }
+
     $mail = $_POST['newemail'];
     $cmail = $_POST['newemailbis'];
     if($cmail !== $mail){
@@ -57,6 +69,7 @@ catch(PDOException $e){
   <div id="username">
   <div class="container">
         <form method="post">
+          <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
           <label>
             <b>Current Email</b>
           </label>

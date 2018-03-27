@@ -2,7 +2,17 @@
   include 'config/setup.php';
   session_start();
 try {
-  if (isset($_GET['id'])) {
+  if (isset($_GET['id']) && isset($_GET['token'])) {
+    if(!isset($_GET['token'])){
+        echo "No token !";
+        throw new Exception('No token found!');
+        exit;
+    }
+    if (strcasecmp($_GET['token'], $_SESSION['token']) != 0){
+        echo "Mismatch token!";
+        throw new Exception('Mismatch Token !');
+        exit;
+    }
     $galleryid = $_GET['id'];
     $my_userid = $_SESSION['userid'];
 

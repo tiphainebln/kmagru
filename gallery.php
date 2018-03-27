@@ -4,7 +4,8 @@
 
 // pagination
 $ppp = 5;
-$select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
+$select = $dbh->prepare('SELECT COUNT(*) AS total FROM gallery');
+$select->execute();
 $total_pic = $select->fetch();
 $nb_pic = $total_pic['total'];
 
@@ -28,7 +29,8 @@ if(isset($_GET['p'])) {
 $first = ($current_page-1) * $ppp;
 
 // affiche les images
-$select = $dbh->query("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
+$select = $dbh->prepare("SELECT * FROM gallery ORDER BY date DESC LIMIT $first, $ppp");
+$select->execute();
 $images = $select->fetchAll();
 
 
@@ -82,10 +84,13 @@ try {
             $checkalready = $dbh->query("SELECT id FROM likes WHERE galleryid=$galleryid AND userid=$userid");
             $alreadyone = $checkalready->fetch();
             if ($alreadyone['id']) { ?>
-              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'cancel_like.php?id='.htmlspecialchars($image['galleryid']);?>">Unlike</a></p>
-            <?php } else { ?>
-              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_like.php?id='.htmlspecialchars($image['galleryid']);?>">Like</a></p>
-           <?php } ?>
+            <form>
+              <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'cancel_like.php?id='.$image['galleryid']. '&token=' .$_SESSION['token'];?>">Unlike</a></p>
+              <?php } else { ?>
+              <p style="text-indent: 0px;"><a  style="" href="<?php echo 'add_like.php?id='.$image['galleryid']. '&token=' .$_SESSION['token'];?>">Like</a></p>
+              <?php } ?>
+            </form>
             <p style="display: inline-block; text-indent: 0px;"><?php echo htmlspecialchars($articles[$i]->countlikes) ?> people like this.</p>
          </div>
          <?php $i = $i + 1; ?>

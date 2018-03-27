@@ -38,7 +38,7 @@ session_start();
                     <title>Resetting password request.</title>
                 </head>
                 <body>
-                    <p>To reset your password, please click on this <a href='http://localhost:8080/camagru/reset_password.php?key=$token'>link.</a></p>
+                    <p>To reset your password, please click on this <a href='http://localhost:8080/tbouline/reset_password.php?key=$token'>link.</a></p>
                 </body>
                 </html>"; 
                 // To send HTML mail, the Content-type header must be set

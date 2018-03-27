@@ -79,7 +79,7 @@
 					<title>Thank you for registering at Camagru.</title>
 					</head>
 				<body>
-					<p>To activate your account, please click on this <a href='http://localhost:8080/camagru/activate.php?x=$id&y=$active'>link.</a></p>
+					<p>To activate your account, please click on this <a href='http://localhost:8080/tbouline/activate.php?x=$id&y=$active'>link.</a></p>
 
 					</body>
 				</html>";

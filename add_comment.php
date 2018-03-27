@@ -11,11 +11,23 @@ if (isset($_GET['id'])) {
 
   if (isset($_GET['delete'])) {
     // recuperer le commentaire a supprimer
+     if(!isset($_POST['token'])){
+        echo "No token !";
+        throw new Exception('No token found!');
+        exit;
+      }
+      if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+        echo "Mismatch token!";
+        throw new Exception('Mismatch Token !');
+        exit;
+      }
     $id = $dbh->quote($_GET['delete']);
-    $select = $dbh->query("SELECT userid, galleryid FROM comment WHERE id=$id");
+    $select = $dbh->prepare("SELECT userid, galleryid FROM comment WHERE id=$id");
+    $select->execute();
     $comment = $select->fetch();
     if ($comment['userid'] == $_SESSION['userid']) {
-      $dbh->query("DELETE FROM comment WHERE id=$id");
+      $req = $dbh->prepare("DELETE FROM comment WHERE id=$id");
+      $req->execute();
       header('Location: add_comment.php?id='.$comment['galleryid']);
       die();
     }
@@ -24,6 +36,16 @@ if (isset($_GET['id'])) {
         // enregistre le commentaire en db
   try {
     if (isset($_POST['content']) && isset($_POST['submit']) && $_POST['content'] != "") {
+      if(!isset($_POST['token'])){
+        echo "No token !";
+        throw new Exception('No token found!');
+        exit;
+      }
+      if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+        echo "Mismatch token!";
+        throw new Exception('Mismatch Token !');
+        exit;
+      }
       $my_userid = $_SESSION['userid'];
       $my_username = $_SESSION['username'];
       $comment = $_POST['content'];
@@ -67,7 +89,7 @@ if (isset($_GET['id'])) {
             <title>New comment.</title>
           </head>
           <body>
-            <p>You received a comment from " . htmlspecialchars($_SESSION['username']) . " on <a href='http://localhost:8080/camagru/add_comment.php?id=" . htmlspecialchars($galleryid) . "'>Your Picture</a> ! The message is :\n".htmlspecialchars($_POST['content'])."</p>
+            <p>You received a comment from " . htmlspecialchars($_SESSION['username']) . " on <a href='http://localhost:8080/tbouline/add_comment.php?id=" . htmlspecialchars($galleryid) . "'>Your Picture</a> ! The message is :\n".htmlspecialchars($_POST['content'])."</p>
           </body>
         </html>";
 
@@ -110,6 +132,7 @@ if (isset($_GET['id'])) {
 
   <div>
     <form action="" method="post">
+      <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
       <div>
         Comment: <textarea style="margin-top: 1%;" name="content" rows="5" cols="40"></textarea>
       </div>
@@ -123,7 +146,7 @@ if (isset($_GET['id'])) {
             while ($comment) {
                 echo "<p style='margin-top:15px;' id='auteur'>" .htmlspecialchars($comment['username']). "</p><p id='comment'>" .htmlspecialchars($comment['comment']). "</p>";
                 if ($comment['username'] == $_SESSION['username'])
-                  echo "<a href='add_comment.php?id=" .htmlspecialchars($galleryid). "&delete=" .htmlspecialchars($comment['id']). "'>Delete</a>";
+                  echo "<a href='add_comment.php?id=" .htmlspecialchars($galleryid). "&delete=" .htmlspecialchars($comment['id']). "&token=" .htmlspecialchars($_SESSION['token'])."'>Delete</a>";
                 $comment = $querycomment->fetch();
             }
       ?>

@@ -9,28 +9,38 @@
     try {
         $userid = $_SESSION['userid'];
         if (isset($_POST['password']) && isset($_POST['newpassword']) && isset($_POST['newpasswordbis'])){
-            $pass = $_POST['newpassword'];
-            $cpass = $_POST['newpasswordbis'];
-            if ($pass !== $cpass)
-            {
-              $error = 'Mismatch.';
-              $mismatch = 1;
-            }
-            if (strlen($_POST['newpassword']) < 3){
-              $error = 'Your password is too short.';
-              $short = 1;
-            }
-            if (ctype_alpha($_POST['newpassword']) || ctype_digit($_POST['newpassword'])){
-              $error = 'Your password must contain at least one digit and one letter.';
-              $no_digit = 1;
-            } 
-            if (!isset($error))
-            {
-              $hash = password_hash($cpass, PASSWORD_BCRYPT);
-              $query = $dbh->prepare("UPDATE users SET hash='$hash' WHERE id=$userid");
-              $query->execute();
-              $changed = 1;
-            }
+          if(!isset($_POST['token'])){
+            echo "No token !";
+            throw new Exception('No token found!');
+            exit;
+          }
+          if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+            echo "Mismatch token!";
+            throw new Exception('Mismatch Token !');
+            exit;
+          }
+          $pass = $_POST['newpassword'];
+          $cpass = $_POST['newpasswordbis'];
+          if ($pass !== $cpass)
+          {
+            $error = 'Mismatch.';
+            $mismatch = 1;
+          }
+          if (strlen($_POST['newpassword']) < 3){
+            $error = 'Your password is too short.';
+            $short = 1;
+          }
+          if (ctype_alpha($_POST['newpassword']) || ctype_digit($_POST['newpassword'])){
+            $error = 'Your password must contain at least one digit and one letter.';
+            $no_digit = 1;
+          } 
+          if (!isset($error))
+          {
+            $hash = password_hash($cpass, PASSWORD_BCRYPT);
+            $query = $dbh->prepare("UPDATE users SET hash='$hash' WHERE id=$userid");
+            $query->execute();
+            $changed = 1;
+          }
         }
     }
     catch(PDOException $e){
@@ -55,6 +65,7 @@
   <div id="username">
     <div class="container">
       <form method="post">
+      <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
         <label>
           <b>Password</b>
         </label>

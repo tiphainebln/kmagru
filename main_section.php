@@ -11,8 +11,7 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
 
     if (isset($_SESSION['logged_in']) && isset($_POST['img']) && isset($_POST['capture']) && $_POST['capture'] != "")
     {
-      
-      // get the content of the captured image from the webcam
+  // get the content of the captured image from the webcam
       list($type, $data) = explode(';', $_POST['capture']);
       list(, $data) = explode(',', $data);
       $data = base64_decode($data);
@@ -107,7 +106,8 @@ function merge_images($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, 
           ?>
         </div>
       <div class="wholeselection">
-        <form action="#" method="post" enctype="multipart/form-data"> 
+        <form action="#" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
           <div class="pngs">
            <div class="selection">
               <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" id="box1" onclick="validate()">

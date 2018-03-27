@@ -13,6 +13,16 @@ try {
   if (isset($_POST['username']) && isset($_POST['newusername']) && isset($_POST['newusernamebis'])){
     $user = $_POST['newusername'];
     $cuser = $_POST['newusernamebis'];
+    if(!isset($_POST['token'])){
+      echo "No token !";
+      throw new Exception('No token found!');
+      exit;
+    }
+    if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+      echo "Mismatch token!";
+      throw new Exception('Mismatch Token !');
+      exit;
+    }
     if($cuser !== $user)
     {
        $error = "CE N'EST PAS LA MÊME CHOSE !";
@@ -66,6 +76,7 @@ catch(PDOException $e){
 <div id="username">
   <div class="container">
     <form method="post">
+       <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
       <label>
         <b>Username</b>
       </label>

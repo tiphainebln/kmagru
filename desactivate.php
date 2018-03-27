@@ -5,6 +5,17 @@
   $uid = $_SESSION['userid'];
   if (isset($_POST['submit']))
   {
+    if(!isset($_POST['token'])){
+      echo "No token !";
+      throw new Exception('No token found!');
+      exit;
+    }
+    if (strcasecmp($_POST['token'], $_SESSION['token']) != 0){
+      echo "Mismatch token!";
+      throw new Exception('Mismatch Token !');
+      exit;
+    }
+
     $checked = $_POST['check'];
     if (isset($checked)) {
       $select = $dbh->prepare("UPDATE users SET notification='1' WHERE id=$uid");
@@ -34,6 +45,7 @@
 <!--   SWITCH -->
   <div class="container" style="margin-top: 6%;">
     <form action="" method="post">
+      <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
       Enable Notifications
       <label class="switch">
         <?php 

@@ -5,9 +5,22 @@ include 'config/setup.php';
 if (isset($_SESSION['logged_in'])) {
   $user = $_SESSION['userid'];
   if (isset($_GET['delete'])) {
+    
+    if(!isset($_GET['token'])){
+      echo "No token !";
+      throw new Exception('No token found!');
+      exit;
+    }
+    if (strcasecmp($_GET['token'], $_SESSION['token']) != 0){
+      echo "Mismatch token!";
+      throw new Exception('Mismatch Token !');
+      exit;
+    }
+
     // recuperer l'image a supprimer
     $id = $dbh->quote($_GET['delete']);
-    $select = $dbh->query("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
+    $select = $dbh->prepare("SELECT img_name, userid FROM gallery WHERE galleryid=$id");
+    $select->execute();
     $image = $select->fetch();
     if ($image['userid'] == $user) {
       unlink('img/' . $image['img_name']);
@@ -18,7 +31,8 @@ if (isset($_SESSION['logged_in'])) {
   }
 
   $ppp = 5;
-  $select = $dbh->query('SELECT COUNT(*) AS total FROM gallery');
+  $select = $dbh->prepare('SELECT COUNT(*) AS total FROM gallery');
+  $select->execute();
   $total_pic = $select->fetch();
   $nb_pic = $total_pic['total'];
 
@@ -62,7 +76,7 @@ if (isset($_SESSION['logged_in'])) {
       <div class="imgandbutton">
         <img style="list-style: none; text-decoration: none; display: inline-block; margin-right: 10px;
     margin-top: 20px;" class="img" src="<?php echo 'img/' . htmlspecialchars($image['img_name']); ?>" title="<?php echo htmlspecialchars($image['img_name']); ?>" width="240px" height="240px">
-        <a href="?delete=<?php echo htmlspecialchars($image['galleryid']);?>" onclick="alert('Supprimer ?')">Supprimer</a>
+        <a href="?delete=<?php echo htmlspecialchars($image['galleryid']);?>&token=<?php echo $_SESSION['token']?>">Supprimer</a>
       </div>
     <?php endforeach; ?>
   </div>

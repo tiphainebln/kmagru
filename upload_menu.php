@@ -16,7 +16,8 @@ include 'config/setup.php';
   <?php if (isset($_SESSION['logged_in'])) {
   include 'includes/header_log.php'; ?>
 <!--       FORMULAIRE -->
-  <form action="upload.php" method="post" enctype="multipart/form-data">  
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
     <div class="selection">
       <img src="img/imgtest1.png"><input type="radio" name="img" value="imgtest1" checked="checked">
     </div>
@@ -27,7 +28,7 @@ include 'config/setup.php';
       <img src="img/imgtest3.png"><input type="radio" name="img" value="imgtest3">
     </div>
     <div class="selection">
-      <img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest3"> 
+      <img src="img/imgtest4.png"><input type="radio" name="img" value="imgtest4"> 
     </div>
 
     <div style="margin-top: 7%; margin-left: 7%;"> 

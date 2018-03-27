@@ -1,5 +1,6 @@
 <?php
     include 'config/setup.php';
+    // include 'includes/csrf.php';
 	session_start();
 
     $wrong = 0;
@@ -16,9 +17,12 @@
             $query->closeCursor();
             $not_found = 1;
             $e = "User not found.";
-           } else { 
+           } else {
                 if (password_verify($password, $data['hash']))
                 {
+                    $myToken = md5(uniqid(rand(),true));
+                    $_SESSION['token'] = $myToken;
+
                     $_SESSION['userid'] = $data['id'];
                     $_SESSION['username'] = $data['username'];
                     $_SESSION['logged_in'] = true;
@@ -60,6 +64,8 @@
 <div id="login">
     <div class="container">
         <form method="post">
+
+            <input type="hidden" name="token" value="<?= $_SESSION['token']; ?>">
             <label>
                 <b>Username</b>
             </label>
